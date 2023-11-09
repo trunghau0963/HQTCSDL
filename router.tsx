@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as elements from "typed-html";
-import Navbar from "../../layouts/navbar";
+import Navbar from "./layouts/navbar";
 
 const indexRouter = Router();
 

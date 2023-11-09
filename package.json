@@ -2,10 +2,10 @@
   "name": "hqtcsdl",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000H\u0000Q\u0000T\u0000C\u0000S\u0000D\u0000L\u0000\r\u0000 \u0000",
-  "main": "index.js",
+  "main": "hmr.ts",
   "scripts": {
     "dev": "ts-node hmr.ts -e ts,tsx,jpg,png",
-    "watch": "node-sass --watch src/scss/index.scss src/public/css/index.css",
+    "watch": "node-sass index.scss public/index.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

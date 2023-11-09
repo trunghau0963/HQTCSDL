@@ -11,7 +11,7 @@ const BaseHtml = ({ children }: elements.Children) => {
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
-          <title>DMS</title>
+          <title>Quan ly phong kham nha khoa</title>
           <link href="/index.css" rel="stylesheet" />
           <link href="/favicon.png" rel="icon" type="image/x-icon" />
         </head>
