@@ -1,4 +1,3 @@
-
 --Nhap lieu
 GO
 INSERT INTO THUOC(MaLo, MaThuoc, TenThuoc, DonVi, ChiDinh, SoLuong, NgayHetHan, DonGia)
@@ -80,22 +79,22 @@ VALUES
     ('NS000002', '2023-11-08', '07:30:00'),
     ('NS000003', '2023-11-09', '15:30:00');
 
-INSERT INTO LICHKHAM (MAHEN, MABN, MANS, NGAYKHAM, GIOKHAM)
+INSERT INTO LICHKHAM (MABN, MANS, NGAYKHAM, GIOKHAM)
 VALUES
-    ('LK000001', 'A-000001', 'NS000001', '2023-11-07', '08:00:00'),
-    ('LK000002', 'C-000005', 'NS000002', '2023-11-08', '07:30:00'),
-    ('LK000003', 'E-000008', 'NS000003', '2023-11-09', '15:30:00'),
-    ('LK000004', 'F-000009', 'NS000001', '2023-11-08', '09:30:00'),
-    ('LK000005', 'K-000010', 'NS000002', '2023-11-07', '10:00:00');
+    ('A-000001', 'NS000001', '2023-11-07', '08:00:00'),
+    ('C-000005', 'NS000002', '2023-11-08', '07:30:00'),
+    ('E-000008', 'NS000003', '2023-11-09', '15:30:00'),
+    ('F-000009', 'NS000001', '2023-11-08', '09:30:00'),
+    ('K-000010', 'NS000002', '2023-11-07', '10:00:00');
 
 
-INSERT INTO HOADON (MAHD, MAHEN, TONGTIEN, CHANDOAN, TRIEUCHUNG)
+INSERT INTO HOADON (MAHD, MABN, MANS, NGAYKHAM, GIOKHAM, TONGTIEN, CHANDOAN, TRIEUCHUNG)
 VALUES
-    ('HD00000001', 'LK000001', 150000, N'Viêm họng', N'Sốt cao'),
-    ('HD00000002', 'LK000002', 200000, N'Cảm cúm', N'Đau họng, ho khan'),
-    ('HD00000003', 'LK000003', 180000, N'Tiêu chảy', N'Buồn nôn, đau bụng'),
-    ('HD00000004', 'LK000004', 220000, N'Viêm mũi', N'Sổ mũi, đau đầu'),
-    ('HD00000005', 'LK000005', 250000, N'Trẻ sơ sinh', N'Khóc nhiều, không ngủ');
+    ('HD00000001', 'A-000001', 'NS000001', '2023-11-07', '08:00:00', 150000, N'Viêm họng', N'Sốt cao'),
+    ('HD00000002', 'C-000005', 'NS000002', '2023-11-08', '07:30:00', 200000, N'Cảm cúm', N'Đau họng, ho khan'),
+    ('HD00000003', 'E-000008', 'NS000003', '2023-11-09', '15:30:00', 180000, N'Tiêu chảy', N'Buồn nôn, đau bụng'),
+    ('HD00000004', 'F-000009', 'NS000001', '2023-11-08', '09:30:00', 220000, N'Viêm mũi', N'Sổ mũi, đau đầu'),
+    ('HD00000005', 'K-000010', 'NS000002', '2023-11-07', '10:00:00', 250000, N'Trẻ sơ sinh', N'Khóc nhiều, không ngủ');
 
 INSERT INTO DICHVUCHIDINH (MAHD, MADV, THANHTIEN)
 VALUES
