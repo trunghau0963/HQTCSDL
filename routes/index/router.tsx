@@ -5,6 +5,8 @@ import Home from "../../components/home/home";
 import Login from "../../components/login/login";
 import Signup from "../../components/signup/signup";
 import Thuoc from "../../components/thuoc/thuoc";
+import Info from "../../components/info/info";
+import Kham from "../../components/kham/kham";
 
 const indexRouter = Router();
 
@@ -39,6 +41,18 @@ indexRouter.get("/signup", async (req, res) => {
 indexRouter.get("/thuoc", async (req, res) => {
   return res.send(
     <Thuoc/>
+  );
+});
+
+indexRouter.get("/info", async (req, res) => {
+  return res.send(
+    <Info/>
+  );
+});
+
+indexRouter.get("/kham", async (req, res) => {
+  return res.send(
+    <Kham/>
   );
 });
 
