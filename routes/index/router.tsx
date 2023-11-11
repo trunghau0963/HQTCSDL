@@ -7,6 +7,7 @@ import Signup from "../../components/signup/signup";
 import Thuoc from "../../components/thuoc/thuoc";
 import Info from "../../components/info/info";
 import Kham from "../../components/kham/kham";
+import Checkappointment from "../../components/checkappointment/checkappointment";
 
 const indexRouter = Router();
 
@@ -53,6 +54,12 @@ indexRouter.get("/info", async (req, res) => {
 indexRouter.get("/kham", async (req, res) => {
   return res.send(
     <Kham/>
+  );
+});
+
+indexRouter.get("/checkappointment", async (req, res) => {
+  return res.send(
+    <Checkappointment/>
   );
 });
 
