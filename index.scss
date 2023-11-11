@@ -82,3 +82,9 @@
 .max-h-xl {
   max-height: 32rem !important;
 }
+
+.dark-background {
+  background-color: #343a40; /* Set the desired dark background color */
+  height: 100vh; /* Make sure the container covers the entire viewport height */
+  width: 100%; /* Make sure the container covers the entire viewport width */
+}
