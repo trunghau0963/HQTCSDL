@@ -13,6 +13,8 @@ const BaseHtml = ({ children }: elements.Children) => {
           />
           <title>Quan ly phong kham nha khoa</title>
           <link href="/index.css" rel="stylesheet" />
+          <link href="/output.css" rel="stylesheet"/>
+          <link href="/style.css" rel="stylesheet"/>
           <link href="/favicon.png" rel="icon" type="image/x-icon" />
         </head>
         <body class="min-vh-100">{children}</body>
