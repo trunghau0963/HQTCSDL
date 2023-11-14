@@ -8,12 +8,12 @@ import Footer from "./footer";
 const LandingPage = ({ children }: elements.Children) => {
   return (
     <BaseHtml>
-    <Topbar/>
       <div class="h-full w-full">
+        <Topbar />
         <Hero />
         {children}
+        <Footer />
       </div>
-      <Footer/>
     </BaseHtml>
   );
 };

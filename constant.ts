@@ -5,20 +5,21 @@ export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
     title: "dashboard",
     icon: "/icons/dashboard.svg",
     url: `${baseUrl}/dashboard`,
+    color: "btn btn-outline-warning",
     slug: "dashboard",
   },
   {
     title: "home",
     icon: "/icons/home.svg",
     url: `${baseUrl}/home`,
-    color: "bg-blue-500",
+    color: "btn btn-outline-info",
     slug: "home",
   },
   {
     title: "schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,
-    color: "bg-green-500",
+    color: "btn btn-outline-primary",
     slug: "schedule",
   },
 ];
@@ -27,16 +28,16 @@ export const PATIENTNAVIGATIONS = (baseUrl: string) => [
   ...TOOLS(baseUrl),
   {
     title: "orders",
-    icon: "/icons/orders.svg",
-    url: `${baseUrl}/orders`,
-    color: "bg-amber-500",
-    slug: "orders",
+    icon: "/icons/drug.svg",
+    url: `${baseUrl}/drug`,
+    color: "btn btn-outline-danger",
+    slug: "drug",
   },
   {
     title: "dentist",
     icon: "/icons/dentist.svg",
     url: `${baseUrl}/dentist`,
-    color: "bg-orange-500",
+    color: "btn btn-outline-success",
     slug: "dentist",
   },
 ];
@@ -47,7 +48,7 @@ export const DENTISTNAVIGATIONS = (baseUrl: string) => [
     title: "patient",
     icon: "/icons/patient.svg",
     url: `${baseUrl}/patient`,
-    color: "bg-amber-500",
+    color: "btn btn-outline-success",
     slug: "patient",
   },
 ];
@@ -58,7 +59,7 @@ export const NAVIGATIONS = (baseUrl: string) => [
     title: "drug",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
-    color: "bg-amber-500",
+    color: "btn btn-outline-danger",
     slug: "drug",
   },
 ];

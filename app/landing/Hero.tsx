@@ -23,24 +23,25 @@ const Hero = () => {
               </div>
             </div>
             <div class="text-center">
-              <h1 class="text-4xl leading-8 font-bold tracking-tight text-white sm:text-6xl">
-                Ultimate AI
+              <h1 class="text-4xl leading-8 font-bold tracking-tight text-white sm:text-6xl shadow-text text-shadow">
+                Ultimate Hospital Management Systems
               </h1>
-              <p class="mt-6 text-lg leading-8 text-gray-300">
-                All-in-one platform to generate AI content and start making
-                money in minutes.
+              <p class="mt-6 text-lg leading-8 text-gray-400">
+                Welcome to our advanced Dental Management System, a cutting-edge
+                solution designed to streamline and enhance the efficiency of
+                dental practice operations.
               </p>
               <div class="mt-10 lg:flex items-center justify-center gap-x-6">
                 <a href="/patient/dashboard">
                   <button class="btn btn-dark text-white gradient-btn w-full lg:w-auto mb-8 lg:mb-0">
-                    Try Brainfast Free
+                    Try Scheduler Free
                   </button>
                 </a>
                 <a
                   href="#features"
                   class="text-sm font-semibold leading-6 text-gray-400"
                 >
-                  Discover Scheduler <span aria-hidden="true">→</span>
+                  Discover More <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>

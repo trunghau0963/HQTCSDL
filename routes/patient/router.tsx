@@ -6,6 +6,7 @@ import PatientPage from "../../app/patient/patient";
 import Dashboard from "../../app/patient/Dashboard/Dashboard";
 import Dentist from "../../app/patient/Dentist/Dentist";
 import Schedule from "../../app/patient/Schedule/Schedule";
+import Profile from "../../app/patient/Profile/Profile";
 
 const patientRouter = Router();
 
@@ -28,7 +29,7 @@ patientRouter.get("/home", async (req, res) => {
 });
 
 
-patientRouter.get("/orders", async (req, res) => {
+patientRouter.get("/drug", async (req, res) => {
   return res.send(
     <Drug/>
   );
@@ -44,6 +45,12 @@ patientRouter.get("/dentist", async (req, res) => {
 patientRouter.get("/schedule", async (req, res) => {
   return res.send(
     <Schedule/>
+  );
+});
+
+patientRouter.get("/information", async (req, res) => {
+  return res.send(
+    <Profile/>
   );
 });
 

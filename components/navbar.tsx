@@ -24,62 +24,65 @@ const Navbar = ({ children, url, NAVIGATIONS }: NavbarProps) => {
           <hr />
           <ul class="nav nav-pills flex-column mb-auto">
             {NAVIGATIONS(url).map((nav: ToolItemsProps) => (
-              <li class="nav-item mb-2">
+              <li class="nav-item mb-2 border-bottom">
                 <a
                   href={nav.url}
-                  class="nav-link d-flex align-items-center gap-2"
+                  class={`${nav.color} nav-link d-flex align-items-center gap-2`}
                 >
-                  <div class="flex items-center py-1 rounded-lg px-5 opacity-50 hover:opacity-100">
+                  <div class="flex items-center rounded-lg px-5 opacity-50 hover:opacity-100">
                     <div class="flex items-center p-2">
-                      <img src={nav.icon} alt="" />
-                      {nav.title}
+                      <img
+                        src={nav.icon}
+                        alt=""
+                        style="width: 2rem; height: 2rem;"
+                      />
+                      <div class="mx-3">{nav.title}</div>
                     </div>
                   </div>
                 </a>
               </li>
             ))}
           </ul>
-          <hr />
-          <div class="dropdown">
-            <a
-              href="#"
-              class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                src="https://github.com/mdo.png"
-                alt=""
-                class="rounded-circle me-2 icon-w-sm icon-h-sm"
-              />
-              <strong>Dank</strong>
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-              <li>
-                <a class="dropdown-item" href="#">
-                  New project...
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  Profile
-                </a>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  Sign out
-                </a>
-              </li>
-            </ul>
-          </div>
+          {/* <div class="dropdown">
+              <a
+                href="#"
+                class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="https://github.com/mdo.png"
+                  alt=""
+                  class="rounded-circle me-2 icon-w-sm icon-h-sm"
+                />
+                <strong>Dank</strong>
+              </a>
+              <ul class="dropdown-menu text-small shadow">
+                <li>
+                  <a class="dropdown-item" href="#">
+                    New project...
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">
+                    Settings
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">
+                    Profile
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">
+                    Sign out
+                  </a>
+                </li>
+              </ul>
+            </div> */}
         </div>
       </div>
     </BaseHtml>

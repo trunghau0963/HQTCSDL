@@ -26,7 +26,7 @@ const Drug = () => {
             <p class="float-left fs-2">Các loại thuốc tiêu biểu</p>
 
             <div class="d-flex">
-                <div class="d-flex flex-column m-3">
+                <div class="d-flex flex-column m-3 rounded">
                     <img src="https://placehold.co/150x100"/>
                     <ul class="list-unstyled mt-2">
                         <li>Tên thuốc:</li>
