@@ -4,7 +4,7 @@ import PatientPage from "../patient";
 const Drug = () => {
   return (
     <PatientPage>
-      <div class="d-flex flex-column align-items-center text-primary">
+      <div class="d-flex flex-column align-items-center text-primary" style="height:100vh">
         <h2 class="text-center my-3">Bảng thuốc</h2>
         <div class="input-group m-3 mt-5 w-25">
               <input

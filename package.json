@@ -5,7 +5,7 @@
   "main": "hmr.ts",
   "scripts": {
     "dev": "ts-node hmr.ts -e ts,tsx,jpg,png",
-    "watch": "node-sass --w index.scss public/index.css",
+    "watch": "node-sass --watch index.scss public/index.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -1,10 +1,13 @@
 import * as elements from "typed-html";
 import PatientPage from "../patient";
+import Appointment from "../../../components/Appointment/appointment";
 
 const Schedule = () => {
   return (
     <PatientPage>
-      <div>Schedule</div>
+      <div style="height:100vh">
+        <Appointment />
+      </div>
     </PatientPage>
   );
 };

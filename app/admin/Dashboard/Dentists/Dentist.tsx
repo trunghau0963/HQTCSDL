@@ -1,12 +1,14 @@
 import * as elements from "typed-html";
 import DashBoard from "../Dashboard";
+import Dentist from "../../../../components/Dentist/dentist";
+import AdminPage from "../../admin";
 
-const Dentist = () => {
+const DentistPage = () => {
   return (
-    <DashBoard>
-      <div>Dentist</div>
-    </DashBoard>
+    <AdminPage>
+      <Dentist/>
+    </AdminPage>
   );
 };
 
-export default Dentist;
+export default DentistPage;

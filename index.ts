@@ -13,6 +13,7 @@ import patientRouter from "./routes/patient/router";
 import dentistRouter from "./routes/dentist/router";
 import staffRouter from "./routes/staff/router";
 import adminRouter from "./routes/admin/router";
+import testRouter from "./routes/test/router";
 
 config();
 
@@ -48,5 +49,6 @@ app.use("/patient", patientRouter);
 app.use("/dentist", dentistRouter);
 app.use("/staff", staffRouter);
 app.use("/admin", adminRouter);
+app.use("/test", testRouter);
 
 export default app;

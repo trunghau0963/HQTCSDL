@@ -1,91 +1,221 @@
 import * as elements from "typed-html";
-
-import BaseHtml from "../layouts/baseHtml";
-import Logo from "./Logo";
 import { NavbarProps } from "../config/model";
 import { ToolItemsProps } from "../config/model";
-const Navbar = ({ children, url, NAVIGATIONS }: NavbarProps) => {
-  // const currentUrl = window.location.href;
+const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
   return (
-    <BaseHtml>
-      <div class="d-flex">
-        <div class="d-flex flex-column p-3 bg-body-tertiary vh-100 w-100 max-w-xs">
-          <a
-            href="/"
-            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-          >
-            <div class="flex items-center">
-              <span class="fs-5">
-                <img src="logo.png" alt="" class="icon-w-lg rounded-circle" />
-              </span>
-              <span class="ml-2 font-bold text-4xl mx-2"> HTV</span>
-            </div>
-          </a>
-          <hr />
-          <ul class="nav nav-pills flex-column mb-auto">
-            {NAVIGATIONS(url).map((nav: ToolItemsProps) => (
-              <li class="nav-item mb-2 border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary position-sticky top-0 z-3">
+      <div class="container-fluid">
+        <a href="/" class="logo navbar-brand">
+          <img src="/img/logo.png" width="35" height="35" alt="" />{" "}
+          <span>HTV Clinic</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <ul class="nav nav-pills mb-auto">
+              {NAVIGATIONS(url).map((nav: ToolItemsProps) => (
+                <li class="nav-item mb-2">
+                  <a
+                    href={nav.url}
+                    class="nav-link gap-2 btn btn-link"
+                    // aria-current="page"
+                  >
+                    <div class="mx-3">{nav.title}</div>
+                  </a>
+                </li>
+              ))}
+              <li class="nav-item dropdown d-none d-sm-block">
                 <a
-                  href={nav.url}
-                  class={`${nav.color} nav-link d-flex align-items-center gap-2`}
+                  href="#"
+                  class="dropdown-toggle nav-link"
+                  data-toggle="dropdown"
                 >
-                  <div class="flex items-center rounded-lg px-5 opacity-50 hover:opacity-100">
-                    <div class="flex items-center p-2">
-                      <img
-                        src={nav.icon}
-                        alt=""
-                        style="width: 2rem; height: 2rem;"
-                      />
-                      <div class="mx-3">{nav.title}</div>
-                    </div>
+                  <i class="bi bi-bell-fill"></i>
+                  <span class="badge badge-pill bg-danger float-right">3</span>
+                </a>
+                <div class="dropdown-menu notifications">
+                  <div class="topnav-dropdown-header">
+                    <span>Notifications</span>
                   </div>
+                  <div class="drop-scroll">
+                    <ul class="notification-list">
+                      <li class="notification-message">
+                        <a href="activities.html">
+                          <div class="media">
+                            <span class="avatar">
+                              <img
+                                alt="John Doe"
+                                src="/img/user.jpg"
+                                class="img-fluid"
+                              />
+                            </span>
+                            <div class="media-body">
+                              <p class="noti-details">
+                                <span class="noti-title">John Doe</span> added
+                                new task{" "}
+                                <span class="noti-title">
+                                  Patient appointment booking
+                                </span>
+                              </p>
+                              <p class="noti-time">
+                                <span class="notification-time">
+                                  4 mins ago
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="notification-message">
+                        <a href="activities.html">
+                          <div class="media">
+                            <span class="avatar">V</span>
+                            <div class="media-body">
+                              <p class="noti-details">
+                                <span class="noti-title">Tarah Shropshire</span>{" "}
+                                changed the task name{" "}
+                                <span class="noti-title">
+                                  Appointment booking with payment gateway
+                                </span>
+                              </p>
+                              <p class="noti-time">
+                                <span class="notification-time">
+                                  6 mins ago
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="notification-message">
+                        <a href="activities.html">
+                          <div class="media">
+                            <span class="avatar">L</span>
+                            <div class="media-body">
+                              <p class="noti-details">
+                                <span class="noti-title">Misty Tison</span>{" "}
+                                added{" "}
+                                <span class="noti-title">Domenic Houston</span>{" "}
+                                and <span class="noti-title">Claire Mapes</span>{" "}
+                                to project{" "}
+                                <span class="noti-title">
+                                  Doctor available module
+                                </span>
+                              </p>
+                              <p class="noti-time">
+                                <span class="notification-time">
+                                  8 mins ago
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="notification-message">
+                        <a href="activities.html">
+                          <div class="media">
+                            <span class="avatar">G</span>
+                            <div class="media-body">
+                              <p class="noti-details">
+                                <span class="noti-title">Rolland Webber</span>{" "}
+                                completed task{" "}
+                                <span class="noti-title">
+                                  Patient and Doctor video conferencing
+                                </span>
+                              </p>
+                              <p class="noti-time">
+                                <span class="notification-time">
+                                  12 mins ago
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="notification-message">
+                        <a href="activities.html">
+                          <div class="media">
+                            <span class="avatar">V</span>
+                            <div class="media-body">
+                              <p class="noti-details">
+                                <span class="noti-title">Bernardo Galaviz</span>{" "}
+                                added new task{" "}
+                                <span class="noti-title">
+                                  Private chat module
+                                </span>
+                              </p>
+                              <p class="noti-time">
+                                <span class="notification-time">
+                                  2 days ago
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="topnav-dropdown-footer">
+                    <a href="activities.html">View all Notifications</a>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item dropdown d-none d-sm-block">
+                <a
+                  // href="javascript:void(0);"
+                  id="open_msg_box"
+                  class="hasnotifications nav-link"
+                >
+                  <i class="bi bi-chat-left-dots-fill"></i>
+                  <span class="badge badge-pill bg-danger float-right">8</span>
                 </a>
               </li>
-            ))}
-          </ul>
-          {/* <div class="dropdown">
-              <a
-                href="#"
-                class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  src="https://github.com/mdo.png"
-                  alt=""
-                  class="rounded-circle me-2 icon-w-sm icon-h-sm"
-                />
-                <strong>Dank</strong>
-              </a>
-              <ul class="dropdown-menu text-small shadow">
-                <li>
-                  <a class="dropdown-item" href="#">
-                    New project...
+              <li class="nav-item dropdown has-arrow end-0">
+                <a
+                  href="#"
+                  class="dropdown-toggle nav-link user-link"
+                  data-toggle="dropdown"
+                >
+                  <span class="user-img">
+                    <img
+                      class="rounded-circle"
+                      src="/img/user.jpg"
+                      width="24"
+                      alt="Admin"
+                    />
+                    <span class="status online"></span>
+                  </span>
+                  <span>ROLE</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="/home/profile">
+                    My Profile
                   </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Settings
+                  <a class="dropdown-item" href="/home/edit-profile">
+                    Edit Profile
                   </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Profile
+
+                  <a class="dropdown-item" href="/logout">
+                    Logout
                   </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Sign out
-                  </a>
-                </li>
-              </ul>
-            </div> */}
+                </div>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
-    </BaseHtml>
+    </nav>
   );
 };
 

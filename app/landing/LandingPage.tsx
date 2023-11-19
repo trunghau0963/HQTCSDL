@@ -4,14 +4,15 @@ import BaseHtml from "../../layouts/baseHtml";
 import Hero from "./Hero";
 import Topbar from "./topbar";
 import Footer from "./footer";
+import Feature from "./Feature";
 
-const LandingPage = ({ children }: elements.Children) => {
+const LandingPage = () => {
   return (
     <BaseHtml>
       <div class="h-full w-full">
         <Topbar />
         <Hero />
-        {children}
+        <Feature/>
         <Footer />
       </div>
     </BaseHtml>

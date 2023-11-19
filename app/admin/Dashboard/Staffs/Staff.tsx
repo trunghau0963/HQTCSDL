@@ -1,12 +1,14 @@
 import * as elements from "typed-html";
 import DashBoard from "../Dashboard";
+import Staff from "../../../../components/Staff/staff";
+import AdminPage from "../../admin";
 
-const Staff = () => {
+const StaffPage = () => {
   return (
-    <DashBoard>
-      <div>Staff</div>
-    </DashBoard>
+    <AdminPage>
+      <Staff />
+    </AdminPage>
   );
 };
 
-export default Staff;
+export default StaffPage;

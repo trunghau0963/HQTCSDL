@@ -1,18 +1,18 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-import Navbar from "../../components/navbar";
+import Navbar from "../../components/Navbar";
 import { DENTISTNAVIGATIONS } from "../../constant";
+import Footer from "../../components/Footer";
 const DentistPage = ({ children }: elements.Children) => {
   return (
     <BaseHtml>
-      <div class="d-flex">
-        <Navbar
-          children={children}
-          url={"/dentist"}
-          NAVIGATIONS={DENTISTNAVIGATIONS}
-        />
-        <div class="w-100">{children}</div>
-      </div>
+      <Navbar
+        children={children}
+        url={"/dentist"}
+        NAVIGATIONS={DENTISTNAVIGATIONS}
+      />
+      <div class="w-100">{children}</div>
+      <Footer/>
     </BaseHtml>
   );
 };

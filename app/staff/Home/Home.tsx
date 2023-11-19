@@ -1,10 +1,11 @@
 import * as elements from "typed-html";
 import StaffPage from "../staff";
+import HomeComponent from "../../../components/Home/Home";
 
 const Home = () => {
   return (
     <StaffPage>
-      <div>Home</div>
+      <HomeComponent/>
     </StaffPage>
   );
 };

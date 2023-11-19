@@ -2,21 +2,21 @@ import { ToolItemsProps } from "./config/model";
 
 export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
   {
-    title: "dashboard",
+    title: "Dashboard",
     icon: "/icons/dashboard.svg",
     url: `${baseUrl}/dashboard`,
     color: "btn btn-outline-warning",
     slug: "dashboard",
   },
   {
-    title: "home",
+    title: "Home",
     icon: "/icons/home.svg",
     url: `${baseUrl}/home`,
     color: "btn btn-outline-info",
     slug: "home",
   },
   {
-    title: "schedule",
+    title: "Schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,
     color: "btn btn-outline-primary",
@@ -27,14 +27,14 @@ export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
 export const PATIENTNAVIGATIONS = (baseUrl: string) => [
   ...TOOLS(baseUrl),
   {
-    title: "orders",
+    title: "Orders",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",
     slug: "drug",
   },
   {
-    title: "dentist",
+    title: "Dentist",
     icon: "/icons/dentist.svg",
     url: `${baseUrl}/dentist`,
     color: "btn btn-outline-success",
@@ -45,7 +45,7 @@ export const PATIENTNAVIGATIONS = (baseUrl: string) => [
 export const DENTISTNAVIGATIONS = (baseUrl: string) => [
   ...TOOLS(baseUrl),
   {
-    title: "patient",
+    title: "Patient",
     icon: "/icons/patient.svg",
     url: `${baseUrl}/patient`,
     color: "btn btn-outline-success",
@@ -56,7 +56,7 @@ export const DENTISTNAVIGATIONS = (baseUrl: string) => [
 export const NAVIGATIONS = (baseUrl: string) => [
   ...TOOLS(baseUrl),
   {
-    title: "drug",
+    title: "Drug",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",

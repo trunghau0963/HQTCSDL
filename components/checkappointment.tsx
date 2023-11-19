@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import BaseHtml from "../../layouts/baseHtml";
+import BaseHtml from "../layouts/baseHtml";
 
 const Checkappointment = () => {
   return (

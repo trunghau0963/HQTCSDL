@@ -4,7 +4,7 @@ import AdminPage from "../admin";
 const Home = () => {
   return (
     <AdminPage>
-      <div>Home</div>
+      <div class="h-100">Home</div>
     </AdminPage>
   );
 };

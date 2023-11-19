@@ -34,9 +34,19 @@ const TOOLS = (baseUrl: string): any[] => [
 const Dashboard = () => {
   return (
     <DentistPage>
-      <div class="d-flex align-items-center justify-content-center my-5">
-        <ToolNavigation NAVIGATIONS={TOOLS} title="Dashboard" />
+      <div
+        id="dashboard"
+        class="d-flex align-items-center justify-content-center"
+        style="height:30vh"
+      >
+        <div class="text-center mb-14">
+          <h1 class="fontweight-bold text-lg">HTV - Hospital Tooth Velocity</h1>
+          <h3 class="text-muted-foreground mt-2">Dentist</h3>
+        </div>
       </div>
+      <main id="main">
+        <ToolNavigation NAVIGATIONS={TOOLS} url="/dentist" numberOfOption={3} />
+      </main>
     </DentistPage>
   );
 };

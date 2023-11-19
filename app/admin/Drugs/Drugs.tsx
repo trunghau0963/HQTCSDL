@@ -4,7 +4,7 @@ import AdminPage from "../admin";
 const Drug = () => {
   return (
     <AdminPage>
-      <div>Drug</div>
+      <div class="h-100"  style="height:100vh">Drug</div>
     </AdminPage>
   );
 };

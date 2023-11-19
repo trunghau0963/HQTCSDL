@@ -1,7 +1,23 @@
-@import "./node_modules/bootstrap/scss/bootstrap";
+$secondary: #7790c5;
+$primary: #9EB8D9;
+$warning: #A25772;
+$muted: #EEF5FF;
+$min-contrast-ratio: 3;
 
-.card {
-  border: 0 !important;
+@import "./node_modules/bootstrap/scss/bootstrap.scss";
+
+body {
+  font-size: 0.875rem;
+  font-family: "Open Sans", sans-serif;
+  background-color: $muted;
+  overflow-x: hidden;
+	height: 100%;
+  // color: #A25772;
+}
+
+.datetime {
+  text-align: center;
+  font-weight: bold;
 }
 
 .position-absolute-center {
@@ -83,8 +99,27 @@
   max-height: 32rem !important;
 }
 
-.dark-background {
-  background-color: #343a40; /* Set the desired dark background color */
-  height: 100vh; /* Make sure the container covers the entire viewport height */
-  width: 100%; /* Make sure the container covers the entire viewport width */
+.max-w-xxl {
+  max-width: 64rem !important;
 }
+
+.max-h-xxl {
+  max-height: 64rem !important;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
