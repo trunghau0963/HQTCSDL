@@ -1,10 +1,14 @@
 /*
+lẤY THÔNG TIN TOÀN BỘ NHÂN VIÊN
+    GET_INFO_NHANVIEN
 LẤY THÔNG TIN NHÂN VIÊN BẰNG ID 
     GET_INFO_NHANVIEN_BY_ID @MANV CHAR(16)
 LẤY THÔNG TIN NHÂN VIÊN BẰNG TÊN
     GET_INFO_NHANVIEN_BY_NAME @HOTEN NVARCHAR(64)
 LẤY THÔNG TIN NHÂN VIÊN BẰNG SDT
     GET_INFO_NHANVIEN_BY_PHONENUMBER @DIENTHOAI CHAR(12)
+LẤY THÔNG TIN TOÀN BỘ NHA SĨ
+    GET_INFO_NHASI
 LẤY THÔNG TIN NHA SĨ BẰNG ID
     GET_INFO_NHASI_BY_ID @MANS CHAR(16)
 LẤY THÔNG TIN NHA SĨ BẰNG TÊN
@@ -35,6 +39,8 @@ LẤY THÔNG TIN DỊCH VỤ BẰNG NAME
     GET_INFO_DICHVU_BY_NAME @TENDV NVARCHAR(32)
 LẤY THÔNG TIN LỊCH KHÁM
     GET_LICHKHAM_DETAIL
+LẤY THÔNG TIN LỊCH KHÁM CỦA BỆNH NHÂN NÀO ĐÓ
+    GET_LICHKHAM_DETAIL_FOR_BENHNHAN @MABN CHAR(16)
 LẤY THÔNG TIN LỊCH KHÁM CỦA NHA SĨ NÀO ĐÓ
     GET_LICHKHAM_DETAIL_OF_NHASI @MANS CHAR(16)
 LẤY THÔNG TIN LỊCH KHÁM ĐÃ HOÀN THÀNH
@@ -124,27 +130,37 @@ XÓA DỊCH VỤ CHỈ ĐỊNH KHỎI HÓA ĐƠN
     DROP_DICHVUCHIDINH
         @MAHD CHAR(13),
         @MADV CHAR(9)
-XÓA DỊCH VỤ KHỎI DANH MỤC
-    INSERT_INTO_DICHVU @MADV CHAR(9)
-XÓA THUỐC KHỎI DANH MỤC
-    DELETE_THUOC
-        @MALO CHAR(12),
-        @MATHUOC CHAR(10)
-HỦY LỊCH KHÁM
-    DROP_LICHKHAM
-        @MANS CHAR(16), @NGAYKHAM DATE, @GIOKHAM TIME 
 XÓA THUỐC KHỎI HÓA ĐƠN
     DROP_THUOC_IN_TOATHUOC
         @MAHD CHAR(13),
         @MATHUOC NVARCHAR(32),
         @MALO CHAR(12)
+XÓA DỊCH VỤ KHỎI DANH MỤC
+    DROP_DICHVU @MADV NVARCHAR(9)
+XÓA THUỐC KHỎI DANH MỤC
+    DROP_THUOC
+        @MALO CHAR(12),
+        @MATHUOC CHAR(10)
+XÓA THUỐC HẾT HẠN KHỎI DANH MỤC
+    DROP_THUOC_EXPIRED
+        @MALO CHAR(12),
+        @MATHUOC CHAR(10)
+HỦY LỊCH KHÁM
+    DROP_LICHKHAM
+        @MANS CHAR(16), @NGAYKHAM DATE, @GIOKHAM TIME 
 XÓA LỊCH LÀM VIỆC
     DROP_LICHLAMVIEC 
         @MANS CHAR(16),
         @NGAYKHAM DATE, @GIOKHAM TIME 
 
 
-
+ĐỔI THÔNG TIN BỆNH NHÂN
+    UPDATE_INFO_BENHNHAN
+        @MABN CHAR(16),
+        @MATKHAU VARCHAR(32),
+        @HOTEN NVARCHAR(64),
+        @NGAYSINH DATE,
+        @DIACHI NVARCHAR(128)
 ĐỔI LỊCH KHÁM
     CHANGE_LICHKHAM
         @SODIENTHOAI CHAR(12),
@@ -181,6 +197,38 @@ KHÓA NHÂN VIÊN
 
 
 --FUNCTION
+GO
+CREATE OR ALTER PROC GET_INFO_NHANVIEN
+As
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(64)
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * FROM NHANVIEN NV)
+        BEGIN
+            SET @MSG = N'KHÔNG TÌM THẤY NHÂN VIÊN NÀO'
+            RAISERROR(@MSG, 16, 1);
+        END
+
+        SELECT MANV, HOTEN, DIENTHOAI
+        FROM NHANVIEN NV
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
 GO
 CREATE OR ALTER PROC GET_INFO_NHANVIEN_BY_ID @MANV CHAR(16)
 As
@@ -278,6 +326,39 @@ BEGIN TRAN
         WHERE NV.DIENTHOAI = @DIENTHOAI
     END TRY
     BEGIN CATCH
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+GO
+CREATE OR ALTER PROC GET_INFO_BENHNHAN
+As
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(64)
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * FROM BENHNHAN BN)
+        BEGIN
+            ROLLBACK
+            SET @MSG = N'KHÔNG TÌM THẤY BỆNH NHÂN NÀO'
+            RAISERROR(@MSG, 16, 1);
+        END
+
+        SELECT MABN, HOTEN, DIENTHOAI, NGAYSINH, DIACHI
+        FROM BENHNHAN BN
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
@@ -392,6 +473,38 @@ BEGIN TRAN
     END CATCH
 COMMIT TRAN
 
+
+GO
+CREATE OR ALTER PROC GET_INFO_NHASI
+As
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(128)
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * FROM NHASI NS)
+        BEGIN
+            SET @MSG = N'KHÔNG TÌM THẤY NHA SĨ NÀO'
+            RAISERROR(@MSG, 16, 1);
+        END
+
+        SELECT MANS, HOTEN, DIENTHOAI
+        FROM NHASI NS
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
 
 GO
 CREATE OR ALTER PROC GET_INFO_NHASI_BY_ID @MANS CHAR(16)
@@ -800,6 +913,40 @@ BEGIN TRAN
         JOIN NHASI NS ON NS.MANS = LK.MANS
         JOIN BENHNHAN BN ON BN.MABN = LK.MABN
         WHERE LK.MANS = @MANS
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+GO
+CREATE OR ALTER PROC GET_LICHKHAM_DETAIL_FOR_BENHNHAN @MABN CHAR(16)
+AS
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(64)
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * FROM LICHKHAM LK WHERE MABN = @MABN)
+        BEGIN
+            SET @MSG = N'KHÔNG TÌM THẤY LỊCH KHÁM NÀO'
+            RAISERROR(@MSG, 16, 1);
+        END
+        SELECT LK.MANS, NS.HOTEN, BN.DIENTHOAI, BN.HOTEN, LK.NGAYKHAM, LK.GIOKHAM
+        FROM LICHKHAM LK
+        JOIN NHASI NS ON NS.MANS = LK.MANS
+        JOIN BENHNHAN BN ON BN.MABN = LK.MABN
+        WHERE LK.MANS = @MABN
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000);
@@ -1921,12 +2068,19 @@ AS
 BEGIN TRAN
     DECLARE @MSG NVARCHAR(128)
     BEGIN TRY
-        IF NOT EXISTS(SELECT * FROM HOADON WHERE MAHD = @MAHD)
+        IF NOT EXISTS(SELECT * FROM DICHVUCHIDINH WHERE MAHD = @MAHD)
         BEGIN
             ROLLBACK
-            SET @MSG = 'KHÔNG TÌM THẤY HÓA ĐƠN CÓ MÃ ' + CONVERT(NVARCHAR, @MAHD, 64)
+            SET @MSG = 'HÓA ĐƠN CÓ MÃ ' + CONVERT(NVARCHAR, @MAHD, 64) + ' CHƯA ĐƯỢC CHỈ ĐỊNH DỊCH VỤ NÀO'
             RAISERROR(@MSG, 16, 1)
         END
+
+        IF NOT EXISTS(SELECT * FROM DICHVUCHIDINH WHERE MADV = @MADV) 
+        BEGIN
+            ROLLBACK
+            SET @MSG = 'KHÔNG TÌM THẤY TRONG HÓA ĐƠN TỒN TẠI DỊCH VỤ CÓ MÃ ' + CONVERT(NVARCHAR, @MADV, 64)
+            RAISERROR(@MSG, 16, 1)  
+        END 
 
         DELETE DICHVUCHIDINH
         WHERE @MAHD = MAHD AND MADV = @MADV
@@ -1976,14 +2130,21 @@ BEGIN TRAN
 COMMIT TRAN
 
 GO
-CREATE OR ALTER PROC INSERT_INTO_DICHVU
-    @TENDV NVARCHAR(64),
-    @DONGIA INT
+CREATE OR ALTER PROC DROP_DICHVU
+    @MADV CHAR(9)
 AS
 BEGIN TRAN
+    DECLARE @MSG NVARCHAR(128)
     BEGIN TRY
-        INSERT INTO DICHVU(TENDV, DONGIA)
-        VALUES (@TENDV, @DONGIA) 
+        IF NOT EXISTS(SELECT * FROM DICHVU WHERE MADV = @MADV) 
+        BEGIN
+            ROLLBACK
+            SET @MSG = 'KHÔNG TÌM THẤY DỊCH VỤ CÓ MÃ ' + CONVERT(NVARCHAR, @MADV, 64)
+            RAISERROR(@MSG, 16, 1)  
+        END 
+
+        DELETE DICHVU
+        WHERE MADV = @MADV
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000);
@@ -2034,7 +2195,7 @@ BEGIN TRAN
 COMMIT TRAN
 
 go
-CREATE OR ALTER PROC DELETE_THUOC
+CREATE OR ALTER PROC DROP_THUOC
     @MALO CHAR(12),
     @MATHUOC CHAR(10)
 AS
@@ -2055,6 +2216,38 @@ BEGIN TRAN
 
         DELETE THUOC
         WHERE MATHUOC = @MATHUOC AND MALO = @MALO
+
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+go
+CREATE OR ALTER PROC DROP_THUOC_EXPIRED
+AS
+BEGIN TRAN
+    BEGIN TRY
+        DECLARE @ErrorMessage NVARCHAR(4000);
+
+        IF NOT EXISTS(SELECT * FROM THUOC)
+        BEGIN
+            RAISERROR (N'KHÔNG TÌM THẤY THUỐC', 16, 1);
+        END
+
+        DELETE THUOC
+        WHERE NGAYHETHAN <= GETDATE() 
 
     END TRY
     BEGIN CATCH
@@ -2330,5 +2523,43 @@ BEGIN TRAN
         SET @MSG = N'KHÔNG TÌM THẤY NHÂN VIÊN CÓ ID ' + CONVERT(NVARCHAR, @MANV, 64)
         ROLLBACK
         RAISERROR(@MSG, 16, 1);
+    END CATCH
+COMMIT TRAN
+
+go
+CREATE OR ALTER PROC UPDATE_INFO_BENHNHAN
+    @MABN CHAR(16),
+    @MATKHAU VARCHAR(32),
+    @HOTEN NVARCHAR(64),
+    @NGAYSINH DATE,
+    @DIACHI NVARCHAR(128)
+AS
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(128)
+    BEGIN TRY
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        
+        IF @MABN IS NULL
+        BEGIN
+            RAISERROR ('MÃ BỆNH NHÂN KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
+        END
+
+        IF NOT EXISTS(SELECT * FROM BENHNHAN WHERE @MABN = MABN)
+        BEGIN
+            SET @MSG = N'KHÔNG TÌM THẤY BỆNH NHÂN CÓ ID ' + CONVERT(NVARCHAR, @MABN, 64)
+            ROLLBACK
+            RAISERROR(@MSG, 16, 1);
+        END
+
+        UPDATE BENHNHAN
+        SET @HOTEN = CASE WHEN @HOTEN IS NULL THEN HOTEN ELSE @HOTEN END,
+            @NGAYSINH = CASE WHEN @NGAYSINH IS NULL THEN NGAYSINH ELSE @NGAYSINH END,
+            @DIACHI = CASE WHEN @DIACHI IS NULL THEN DIACHI ELSE @DIACHI END
+        WHERE MABN = @MABN
+
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRAN
+        THROW
     END CATCH
 COMMIT TRAN
