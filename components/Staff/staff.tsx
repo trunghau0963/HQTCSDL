@@ -105,36 +105,8 @@ const Staff = () => {
                           )}
                         </td>
                         <td class="text-right">
-                          <div class="dropdown">
-                            <a
-                              class="btn btn-primary btn-rounded float-right dropdown-toggle"
-                              id="dropdownMenuButton"
-                              data-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
-                            >
-                              Action
-                            </a>
-                            <div
-                              class="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <div
-                                class="dropdown-item"
-                                // href="/appointment/edit_appointment/"
-                              >
-                                {/* <i class="bi bi-pencil-square"></i> Edit */}
-                                <EditStaffPage Data={data} />
-                              </div>
-                              <div
-                                class="dropdown-item"
-                                // href="http://localhost:3000/admin/Staff/delete_Staff"
-                              >
-                                {/* <i class="bi bi-eraser"></i> Delete */}
-                                <DeleteStaffPage Data={data} />
-                              </div>
-                            </div>
-                          </div>
+                          <EditStaffPage Data={data} />
+                          <DeleteStaffPage Data={data} />
                         </td>
                       </tr>
                     ))}

@@ -7,6 +7,7 @@ import Dashboard from "../../app/patient/Dashboard/Dashboard";
 import Dentist from "../../app/patient/Dentist/Dentist";
 import Schedule from "../../app/patient/Schedule/Schedule";
 import Profile from "../../app/patient/Profile/Profile";
+import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
 
 const patientRouter = Router();
 
@@ -51,6 +52,12 @@ patientRouter.get("/schedule", async (req, res) => {
 patientRouter.get("/information", async (req, res) => {
   return res.send(
     <Profile/>
+  );
+});
+
+patientRouter.get("/schedule/add_appointment", async (req, res) => {
+  return res.send(
+    <AddAppointment/>
   );
 });
 

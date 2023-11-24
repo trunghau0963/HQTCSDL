@@ -56,33 +56,40 @@ export type AdminProps = {
   address: string | null;
 };
 
-export type Appointment = {
+export type AppointmentProps = {
   idDentist: string;
   idPatient: string;
   date: Date;
 };
 
-export type scheduleOfDentist = {
+export type scheduleOfDentistProps = {
   idDentist: string;
   date: Date;
 };
 
-export type invoice = {
+export type invoiceProps = {
   id: string;
   idPatient: string;
   idDentist: string;
-  date: Date;
+  date: string;
   total: number;
-  decription: string;
+  description: string;
   symptom: string;
 };
 
-export type service = {
+export type serviceProps = {
   id: string;
   name: string;
   price: number;
 };
 
-// export type drug = {
+export type drugProps = {
+  idConsignment: string;
+  idDrug: string;
+  name: string;
+  chidinh: string;
+  quantity: number;
+  exp: string;
+  price: number;
+};
 
-// }

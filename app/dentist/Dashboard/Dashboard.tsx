@@ -17,13 +17,6 @@ const TOOLS = (baseUrl: string): any[] => [
     slug: "schedule",
   },
   {
-    title: "Orders",
-    icon: "/icons/drug.svg",
-    url: `${baseUrl}/drug`,
-    color: "btn btn-outline-danger",
-    slug: "drug",
-  },
-  {
     title: "Patient",
     icon: "/icons/patient.svg",
     url: `${baseUrl}/patient`,
@@ -45,7 +38,7 @@ const Dashboard = () => {
         </div>
       </div>
       <main id="main">
-        <ToolNavigation NAVIGATIONS={TOOLS} url="/dentist" numberOfOption={3} />
+        <ToolNavigation NAVIGATIONS={TOOLS} url="/dentist" numberOfOption={4} />
       </main>
     </DentistPage>
   );

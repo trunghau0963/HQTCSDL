@@ -5,6 +5,7 @@ import Dashboard from "../../app/dentist/Dashboard/Dashboard";
 import Home from "../../app/dentist/Home/Home";
 import Patient from "../../app/dentist/Patient/Patient";
 import Schedule from "../../app/dentist/Schedule/Schedule";
+import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
 
 const dentistRouter = Router();
 

@@ -1,7 +1,7 @@
 import * as elements from "typed-html";
 const DeleteAppointment = () => {
   return (
-    <div class="main-wrapper">
+    <div class="main-wrapper min-vh-100">
       <div class="page-wrapper">
         <div class="content">
           <div class="row">

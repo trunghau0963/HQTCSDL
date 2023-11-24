@@ -104,7 +104,7 @@ const Patient = () => {
                           )}
                         </td>
                         <td class="text-right">
-                          <div class="dropdown">
+                          {/* <div class="dropdown">
                             <a
                               class="btn btn-primary btn-rounded float-right dropdown-toggle"
                               id="dropdownMenuButton"
@@ -118,22 +118,12 @@ const Patient = () => {
                               class="dropdown-menu"
                               aria-labelledby="dropdownMenuButton"
                             >
-                              <div
-                                class="dropdown-item"
-                                // href="/appointment/edit_appointment/"
-                              >
-                                {/* <i class="bi bi-pencil-square"></i> Edit */}
-                                <EditPatientPage Data={data} />
-                              </div>
-                              <div
-                                class="dropdown-item"
-                                // href="http://localhost:3000/admin/patient/delete_patient"
-                              >
-                                {/* <i class="bi bi-eraser"></i> Delete */}
-                                <DeletePatientPage Data={data} />
-                              </div>
+                              <div class="dropdown-item"></div>
+                              <div class="dropdown-item"></div>
                             </div>
-                          </div>
+                          </div> */}
+                          <EditPatientPage Data={data} />
+                          <DeletePatientPage Data={data} />
                         </td>
                       </tr>
                     ))}

@@ -28,10 +28,7 @@ const Dentist = () => {
                       name="search"
                       placeholder="Search here..."
                     />
-                    <button
-                      type="submit"
-                      class="btn btn-primary"
-                    >
+                    <button type="submit" class="btn btn-primary">
                       Search
                     </button>
                   </div>
@@ -106,7 +103,7 @@ const Dentist = () => {
                           )}
                         </td>
                         <td class="text-right">
-                          <div class="dropdown">
+                          {/* <div class="dropdown">
                             <a
                               class="btn btn-primary btn-rounded float-right dropdown-toggle"
                               id="dropdownMenuButton"
@@ -120,22 +117,15 @@ const Dentist = () => {
                               class="dropdown-menu"
                               aria-labelledby="dropdownMenuButton"
                             >
-                              <div
-                                class="dropdown-item"
-                                // href="/appointment/edit_appointment/"
-                              >
-                                {/* <i class="bi bi-pencil-square"></i> Edit */}
+                              <div class="dropdown-item">
                                 <EditDentistPage Data={data} />
                               </div>
-                              <div
-                                class="dropdown-item"
-                                // href="http://localhost:3000/admin/dentist/delete_dentist"
-                              >
-                                {/* <i class="bi bi-eraser"></i> Delete */}
-                                <DeleteDentistPage Data={data} />
+                              <div class="dropdown-item">
                               </div>
-                            </div>
-                          </div>
+                              </div>
+                            </div> */}
+                          <DeleteDentistPage Data={data} />
+                          <EditDentistPage Data={data} />
                         </td>
                       </tr>
                     ))}

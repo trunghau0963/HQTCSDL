@@ -4,13 +4,6 @@ import ToolNavigation from "../../../components/Dashboard/tools-navigation";
 import ToolItems from "../../../components/Dashboard/tool-items";
 const TOOLS = (baseUrl: string): any[] => [
   {
-    title: "Home",
-    icon: "/icons/home.svg",
-    url: `${baseUrl}/home`,
-    color: "btn btn-outline-info",
-    slug: "home",
-  },
-  {
     title: "Schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,
@@ -23,6 +16,13 @@ const TOOLS = (baseUrl: string): any[] => [
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",
     slug: "drug",
+  },
+  {
+    title: "Services",
+    icon: "/icons/service.svg",
+    url: `${baseUrl}/service`,
+    color: "btn btn-outline-info",
+    slug: "home",
   },
   {
     title: "Dentist",

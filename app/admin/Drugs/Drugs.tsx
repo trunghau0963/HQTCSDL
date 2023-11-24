@@ -1,12 +1,14 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-
-const Drug = () => {
+import Drug from "../../../components/Drug/Drug/drug";
+import Invoice from "../../../components/Drug/Invoice/invoice";
+const DrugPage = () => {
   return (
     <AdminPage>
-      <div class="h-100"  style="height:100vh">Drug</div>
+      <Drug/>
+      <Invoice/>
     </AdminPage>
   );
 };
 
-export default Drug;
+export default DrugPage;

@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import Info from "../../components/info/info";
 import Kham from "../../components/kham/kham";
 import Checkappointment from "../../components/checkappointment";
+import Calendar from "../../components/Appointment/patientAppointment/calendar";
 
 const indexRouter = Router();
 
@@ -21,6 +22,12 @@ indexRouter.get("/info", async (req, res) => {
 indexRouter.get("/kham", async (req, res) => {
   return res.send(
     <Kham/>
+  );
+});
+
+indexRouter.get("/calendar", async (req, res) => {
+  return res.send(
+    <Calendar/>
   );
 });
 

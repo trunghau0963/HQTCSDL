@@ -6,7 +6,7 @@ const Signup = () => {
     <BaseHtml>
       <div class="main-wrapper  account-wrapper">
         <div class="d-flex flex-column align-items-center p-5 text-primary">
-          <div class="bg-light p-4 rounded" style="max-width: 600px; width: 100%;">
+          <div class="p-4 rounded" style="max-width: 600px; width: 100%;">
             <div class="container shadow rounded">
               <form action="" method="Post" class="form-signin mx-2 my-2">
                 <a class="account-logo flex items-center" href="/">

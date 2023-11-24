@@ -49,8 +49,8 @@ const AddAppointment = () => {
                       <label>Date</label>
                       <div class="cal-icon">
                         <input
-                          type="text"
-                          class="form-control datetimepicker"
+                          type="date"
+                          class="form-control"
                           name="date"
                         />
                       </div>
@@ -95,7 +95,7 @@ const AddAppointment = () => {
           </div>
         </div>
         <div>
-          <div class="msg-sidebar notifications msg-noti">
+          {/* <div class="msg-sidebar notifications msg-noti w-100">
             <div class="topnav-dropdown-header">
               <span>Messages</span>
             </div>
@@ -327,7 +327,7 @@ const AddAppointment = () => {
             <div class="topnav-dropdown-footer">
               <a href="chat.html">See all messages</a>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

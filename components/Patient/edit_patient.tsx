@@ -11,27 +11,30 @@ const EditPatient = ({ Data }: EditPatientProps) => {
         type="button"
         class="btn btn-link text-decoration-none"
         data-toggle="modal"
-        data-target=".edit-patient"
+        data-target="#edit-patient"
       >
         <i class="bi bi-pencil-square"></i> Edit
       </button>
 
       <div
-        class="modal fade edit-patient"
+        class="modal fade"
+        id="edit-patient"
         tabindex="-1"
-        role="dialog"
-        aria-labelledby="myLargeModalLabel"
+        aria-labelledby="edit-patientLabel"
         aria-hidden="true"
       >
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 page-title" id="edit-dentistLabel">
+                Edit Patient
+              </h1>
+              <button class="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
             <div>
               <div class="p-5">
-                <div class="row">
-                  <div class="col-lg-8 offset-lg-2">
-                    <h4 class="page-title">Edit Patient</h4>
-                  </div>
-                </div>
                 <div class="row">
                   <div class="col-lg-8 offset-lg-2">
                     <form method="POST">

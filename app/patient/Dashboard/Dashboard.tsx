@@ -25,11 +25,25 @@ const TOOLS = (baseUrl: string): any[] => [
     slug: "drug",
   },
   {
+    title: "Service",
+    icon: "/icons/service.svg",
+    url: `${baseUrl}/service`,
+    color: "btn btn-outline-danger",
+    slug: "drug",
+  },  
+  {
     title: "Dentist",
     icon: "/icons/dentist.svg",
     url: `${baseUrl}/dentist`,
     color: "btn btn-outline-success",
     slug: "dentist",
+  },
+  {
+    title: "Security",
+    icon: "/icons/about.svg",
+    url: `${baseUrl}/about`,
+    color: "btn btn-outline-warning",
+    slug: "about",
   },
 ];
 
@@ -46,8 +60,8 @@ const Dashboard = () => {
           <h3 class="text-muted-foreground mt-2">Patient View</h3>
         </div>
       </div>
-      <main id="main" style="height:70vh">
-        <ToolNavigation NAVIGATIONS={TOOLS} url="/patient" numberOfOption={3} />
+      <main id="main">
+        <ToolNavigation NAVIGATIONS={TOOLS} url="/patient" numberOfOption={4} />
       </main>
     </PatientPage>
   );
