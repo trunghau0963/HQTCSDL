@@ -8,6 +8,8 @@ import Dentist from "../../app/patient/Dentist/Dentist";
 import Schedule from "../../app/patient/Schedule/Schedule";
 import Profile from "../../app/patient/Profile/Profile";
 import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
+import Service from "../../app/patient/Service/Service";
+import Security from "../../app/patient/Security/Security";
 
 const patientRouter = Router();
 
@@ -60,6 +62,19 @@ patientRouter.get("/schedule/add_appointment", async (req, res) => {
     <AddAppointment/>
   );
 });
+
+patientRouter.get("/service", async (req, res) => {
+  return res.send(
+    <Service/>
+  );
+});
+
+patientRouter.get("/about", async (req, res) => {
+  return res.send(
+    <Security/>
+  );
+});
+
 
 
 export default patientRouter;

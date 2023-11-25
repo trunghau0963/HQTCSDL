@@ -5,6 +5,7 @@ import Dashboard from "../../app/staff/Dashboard/Dashboard";
 import Home from "../../app/staff/Home/Home";
 import Schedule from "../../app/staff/Schedule/Schedule";
 import Drug from "../../app/staff/Drug/Drug";
+import Service from "../../app/staff/Service/Service";
 
 const staffRouter = Router();
 
@@ -37,6 +38,12 @@ staffRouter.get("/drug", async (req, res) => {
 staffRouter.get("/schedule", async (req, res) => {
   return res.send(
     <Schedule/>
+  );
+});
+
+staffRouter.get("/service", async (req, res) => {
+  return res.send(
+    <Service/>
   );
 });
 
