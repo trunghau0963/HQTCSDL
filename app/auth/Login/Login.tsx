@@ -13,18 +13,18 @@ const Login = () => {
                   <span class="">
                     <img src="/logo.png" class="rounded-circle my-3" alt="" />
                   </span>
-                  <span class="ml-2 font-bold text-4xl mx-2"> HTV</span>
+                  <span class="ml-2 font-bold text-4xl mx-2 my-2"> HTV</span>
                 </a>
 
                 <div class="form-group">
-                  <label for="email" class="form-label">
-                    Email Address
+                  <label for="phone" class="form-label">
+                    Phone number
                   </label>
                   <input
-                    type="email"
+                    type="number"
                     class="form-control rounded"
-                    name="email"
-                    placeholder="example@example.com"
+                    name="phone"
+                    placeholder="example: 0903170414"
                   />
                 </div>
                 <div class="form-group">
@@ -55,7 +55,7 @@ const Login = () => {
                     type="submit"
                     onclick=""
                   >
-                    Signin
+                    Login
                   </button>
                 </div>
               </form>

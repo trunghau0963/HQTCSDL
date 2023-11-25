@@ -16,8 +16,8 @@ const Signup = () => {
                   <span class="ml-2 font-bold text-4xl mx-2"> HTV</span>
                 </a>
                 <div class="form-group">
-                  <label for="email" class="form-label">
-                    UserName
+                  <label for="user" class="form-label">
+                    User Name
                   </label>
                   <input
                     type="text"
@@ -27,14 +27,14 @@ const Signup = () => {
                   />
                 </div>
                 <div class="form-group">
-                  <label for="email" class="form-label">
-                    Email Address
+                  <label for="phone" class="form-label">
+                    Phone Number
                   </label>
                   <input
-                    type="email"
+                    type="number"
                     class="form-control rounded"
-                    name="email"
-                    placeholder="example@example.com"
+                    name="phone"
+                    placeholder="example: 0903170414"
                   />
                 </div>
                 <div class="form-group">
