@@ -1,33 +1,13 @@
---Phan quyen--
-
---Tao login
-EXEC SP_ADDLOGIN 'Login_1', 'AAAA@123'
-EXEC SP_ADDLOGIN 'Login_2', 'BBBB@123'
-EXEC SP_ADDLOGIN 'Login_3', 'CCCC@123'
-EXEC SP_ADDLOGIN 'Login_4', 'DDDD@123'
-EXEC SP_ADDLOGIN 'Login_5', 'EEEE@123'
-
---Tao user
-Create User user_1 From Login Login_1 with default_schema = QLPHONGKHAM
-Create User user_2 FROM Login Login_2 with default_schema = QLPHONGKHAM
-Create User user_3 FROM Login Login_3 with default_schema = QLPHONGKHAM
-Create User user_4 FROM Login Login_4 with default_schema = QLPHONGKHAM
-Create User user_5 FROM Login Login_5 with default_schema = QLPHONGKHAM
-
+--Phan quyen
 --Tao role
+GO
 EXEC SP_ADDROLE 'KHACH'
 EXEC SP_ADDROLE 'BENHNHAN'
 EXEC SP_ADDROLE 'NHASI'
 EXEC SP_ADDROLE 'QUANTRI'
 EXEC SP_ADDROLE 'NHANVIEN'
 
---Add rolve
-exec sp_addrolemember 'BENHNHAN','user_1'
-exec sp_addrolemember 'NHASI','user_2'
-exec sp_addrolemember 'QUANTRI','user_3'
-exec sp_addrolemember 'NHANVIEN','user_4'
-exec sp_addrolemember 'KHACH','user_5'
---Gan quyen
+GO
 --BENH NHAN CHUA CO TAI KHOAN
 GRANT select 
 ON NHASI(MANS, HOTEN)
@@ -153,8 +133,8 @@ GRANT SELECT, INSERT, DELETE, UPDATE
 ON NHASI
 TO QUANTRI
 
-GO
 --PHAN QUYEN EXEC
+GO
 GRANT EXEC ON GET_INFO_NHANVIEN TO KHACH 
 GRANT EXEC ON GET_INFO_NHANVIEN_BY_ID TO KHACH  
 GRANT EXEC ON GET_INFO_NHANVIEN_BY_NAME TO KHACH 
@@ -321,4 +301,3 @@ GRANT EXEC ON UPDATE_INFO_THUOC TO QUANTRI
 GRANT EXEC ON BLOCK_ACCOUNT_BENHNHAN TO QUANTRI  
 GRANT EXEC ON BLOCK_ACCOUNT_NHASI TO QUANTRI  
 GRANT EXEC ON BLOCK_ACCOUNT_NHANVIEN TO QUANTRI  
-
