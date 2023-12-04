@@ -3037,7 +3037,7 @@ EXEC SP_ADDROLE 'NHASI'
 EXEC SP_ADDROLE 'QUANTRI'
 EXEC SP_ADDROLE 'NHANVIEN'
 
---Add rolve
+--Add role
 exec sp_addrolemember 'BENHNHAN','user_1'
 exec sp_addrolemember 'NHASI','user_2'
 exec sp_addrolemember 'QUANTRI','user_3'
