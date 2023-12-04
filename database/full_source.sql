@@ -543,241 +543,6 @@ BEGIN
     DEALLOCATE CURSOR_p
 END;
 
-GO
-CREATE OR ALTER TRIGGER GRANT_BENHNHAN
-ON BENHNHAN
-AFTER INSERT
-AS
-BEGIN TRAN
-    DECLARE @MSG NVARCHAR(128)
-    BEGIN TRY
-        DECLARE @ErrorMessage NVARCHAR(4000);
-
-         -- Xử lý cho mỗi dòng dữ liệu trong inserted
-        DECLARE @DIENTHOAI CHAR(10);
-        DECLARE @NGAYSINH DATE;
-        DECLARE @MATKHAU VARCHAR(10);
-        DECLARE @PWD VARCHAR(10);
-
-        DECLARE CursorName CURSOR FOR
-        SELECT DIENTHOAI, NGAYSINH, MATKHAU
-        FROM inserted;
-
-        OPEN CursorName;
-
-        FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH, @MATKHAU;
-
-        WHILE @@FETCH_STATUS = 0
-        BEGIN
-            -- Lấy AccountID từ bản ghi mới được thêm vào
-            SET @PWD = REPLACE(CAST(@NGAYSINH AS VARCHAR(10)), '-','');
-            PRINT @PWD
-            -- Tạo User
-            DECLARE @USRNAME VARCHAR(MAX);
-            DECLARE @SqlLogin NVARCHAR(MAX);
-            SET @USRNAME = @DIENTHOAI + N'_BN'
-            SET @SqlLogin = 'CREATE LOGIN ' + QUOTENAME(@USRNAME) + ' WITH PASSWORD = ' + QUOTENAME(@PWD, '''');
-            EXEC sp_executesql @SqlLogin; -- Thiết lập mật khẩu mặc định, bạn có thể tùy chỉnh
-            
-            -- Tạo User trong cơ sở dữ liệu
-            DECLARE @SqlUser NVARCHAR(MAX);
-            SET @SqlUser = 'Create User [' + @USRNAME + '] From Login [' + @USRNAME + '] with default_schema = QLPHONGKHAM';
-            EXEC sp_executesql @SqlUser;
-
-            -- Phân quyền cho User
-            DECLARE @SqlRole NVARCHAR(MAX);
-            IF @MATKHAU IS NULL
-            BEGIN
-                SET @SqlRole = 'ALTER ROLE KHACH ADD MEMBER ' + QUOTENAME(@USRNAME);
-                EXEC sp_executesql @SqlRole;
-            END
-
-            ELSE
-            BEGIN
-                SET @SqlRole = 'ALTER ROLE BENHNHAN ADD MEMBER ' + QUOTENAME(@USRNAME);
-                EXEC sp_executesql @SqlRole;
-            END
-            FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH, @MATKHAU;
-        END
-        CLOSE CursorName;
-        DEALLOCATE CursorName;
-        
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRAN
-        RAISERROR(N'THÊM THẤT BẠI', 16, 1)
-    END CATCH
-COMMIT TRAN
-
-GO
-CREATE OR ALTER TRIGGER GRANT_NHANVIEN
-ON NHANVIEN
-AFTER INSERT
-AS
-BEGIN TRAN
-    DECLARE @MSG NVARCHAR(128)
-    BEGIN TRY
-        DECLARE @ErrorMessage NVARCHAR(4000);
-
-         -- Xử lý cho mỗi dòng dữ liệu trong inserted
-        DECLARE @DIENTHOAI CHAR(10);
-        DECLARE @NGAYSINH DATE;
-        DECLARE @PWD VARCHAR(10);
-
-        DECLARE CursorName CURSOR FOR
-        SELECT DIENTHOAI, NGAYSINH
-        FROM inserted;
-
-        OPEN CursorName;
-
-        FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH;
-
-        WHILE @@FETCH_STATUS = 0
-        BEGIN
-            -- Lấy AccountID từ bản ghi mới được thêm vào
-            SET @PWD = REPLACE(CAST(@NGAYSINH AS VARCHAR(10)), '-','');
-            PRINT @PWD
-            -- Tạo User
-            DECLARE @USRNAME VARCHAR(MAX);
-            DECLARE @SqlLogin NVARCHAR(MAX);
-            SET @USRNAME = @DIENTHOAI + N'_NV'
-            SET @SqlLogin = 'CREATE LOGIN ' + QUOTENAME(@USRNAME) + ' WITH PASSWORD = ' + QUOTENAME(@PWD, '''');
-            EXEC sp_executesql @SqlLogin; -- Thiết lập mật khẩu mặc định, bạn có thể tùy chỉnh
-            -- Tạo User trong cơ sở dữ liệu
-            DECLARE @SqlUser NVARCHAR(MAX);
-            SET @SqlUser = 'Create User [' + @USRNAME + '] From Login [' + @USRNAME + '] with default_schema = QLPHONGKHAM';
-            EXEC sp_executesql @SqlUser;
-
-            -- Phân quyền cho User
-            DECLARE @SqlRole NVARCHAR(MAX);
-            SET @SqlRole = 'ALTER ROLE NHANVIEN ADD MEMBER ' + QUOTENAME(@USRNAME);
-            EXEC sp_executesql @SqlRole;
-
-            FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH;
-        END
-        CLOSE CursorName;
-        DEALLOCATE CursorName;
-        
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRAN
-        RAISERROR(N'THÊM THẤT BẠI', 16, 1)
-    END CATCH
-COMMIT TRAN
-
-GO
-CREATE OR ALTER TRIGGER GRANT_QUANTRI
-ON QUANTRI
-AFTER INSERT
-AS
-BEGIN TRAN
-    DECLARE @MSG NVARCHAR(128)
-    BEGIN TRY
-        DECLARE @ErrorMessage NVARCHAR(4000);
-
-         -- Xử lý cho mỗi dòng dữ liệu trong inserted
-        DECLARE @DIENTHOAI CHAR(10);
-        DECLARE @NGAYSINH DATE;
-        DECLARE @PWD VARCHAR(10);
-
-        DECLARE CursorName CURSOR FOR
-        SELECT DIENTHOAI, NGAYSINH
-        FROM inserted;
-
-        OPEN CursorName;
-
-        FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH;
-
-        WHILE @@FETCH_STATUS = 0
-        BEGIN
-            -- Lấy AccountID từ bản ghi mới được thêm vào
-            SET @PWD = REPLACE(CAST(@NGAYSINH AS VARCHAR(10)), '-','');
-            PRINT @PWD
-            
-            -- Tạo User
-            DECLARE @USRNAME VARCHAR(MAX);
-            DECLARE @SqlLogin NVARCHAR(MAX);
-            SET @USRNAME = @DIENTHOAI + N'_QT'
-            SET @SqlLogin = 'CREATE LOGIN ' + QUOTENAME(@USRNAME) + ' WITH PASSWORD = ' + QUOTENAME(@PWD, '''');
-            EXEC sp_executesql @SqlLogin; -- Thiết lập mật khẩu mặc định, bạn có thể tùy chỉnh
-            
-            -- Tạo User trong cơ sở dữ liệu
-            DECLARE @SqlUser NVARCHAR(MAX);
-            SET @SqlUser = 'Create User [' + @USRNAME + '] From Login [' + @USRNAME + '] with default_schema = QLPHONGKHAM';
-            EXEC sp_executesql @SqlUser;
-
-            -- Phân quyền cho User
-            DECLARE @SqlRole NVARCHAR(MAX);
-            SET @SqlRole = 'ALTER ROLE QUANTRI ADD MEMBER ' + QUOTENAME(@USRNAME);
-            EXEC sp_executesql @SqlRole;
-            FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH;
-        END
-        CLOSE CursorName;
-        DEALLOCATE CursorName;
-        
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRAN
-        RAISERROR(N'TẠO LOGIN THẤT BẠI', 16, 1)
-    END CATCH
-COMMIT TRAN
-
-GO
-CREATE OR ALTER TRIGGER GRANT_NHASI
-ON NHASI
-AFTER INSERT
-AS
-BEGIN TRAN
-    DECLARE @MSG NVARCHAR(128)
-    BEGIN TRY
-        DECLARE @ErrorMessage NVARCHAR(4000);
-
-         -- Xử lý cho mỗi dòng dữ liệu trong inserted
-        DECLARE @DIENTHOAI CHAR(10);
-        DECLARE @NGAYSINH DATE;
-        DECLARE @PWD VARCHAR(10);
-
-        DECLARE CursorName CURSOR FOR
-        SELECT DIENTHOAI, NGAYSINH
-        FROM inserted;
-
-        OPEN CursorName;
-
-        FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH;
-
-        WHILE @@FETCH_STATUS = 0
-        BEGIN
-            -- Lấy AccountID từ bản ghi mới được thêm vào
-            SET @PWD = REPLACE(CAST(@NGAYSINH AS VARCHAR(10)), '-','');
-            PRINT @PWD
-            -- Tạo User
-            DECLARE @USRNAME VARCHAR(MAX);
-            DECLARE @SqlLogin NVARCHAR(MAX);
-            SET @USRNAME = @DIENTHOAI + N'_NS'
-            SET @SqlLogin = 'CREATE LOGIN ' + QUOTENAME(@USRNAME) + ' WITH PASSWORD = ' + QUOTENAME(@PWD, '''');
-            EXEC sp_executesql @SqlLogin; -- Thiết lập mật khẩu mặc định, bạn có thể tùy chỉnh
-
-            -- Tạo User trong cơ sở dữ liệu
-            DECLARE @SqlUser NVARCHAR(MAX);
-            SET @SqlUser = 'Create User [' + @USRNAME + '] From Login [' + @USRNAME + '] with default_schema = QLPHONGKHAM';
-            EXEC sp_executesql @SqlUser;
-
-            -- Phân quyền cho User
-            DECLARE @SqlRole NVARCHAR(MAX);
-            SET @SqlRole = 'ALTER ROLE NHASI ADD MEMBER ' + QUOTENAME(@USRNAME);
-            EXEC sp_executesql @SqlRole;
-
-            FETCH NEXT FROM CursorName INTO @DIENTHOAI, @NGAYSINH;
-        END
-        CLOSE CursorName;
-        DEALLOCATE CursorName;
-        
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRAN
-        RAISERROR(N'THÊM THẤT BẠI', 16, 1)
-    END CATCH
-COMMIT TRAN
 --FUNCTION
 GO
 CREATE OR ALTER PROC GET_INFO_NHANVIEN
@@ -3250,13 +3015,34 @@ BEGIN TRAN
 COMMIT TRAN
 
 --Phan quyen
---Tao role
+--Tao login
 GO
+EXEC SP_ADDLOGIN 'benhnhan', 'benhnhan'
+EXEC SP_ADDLOGIN 'nhasi', 'nhasi'
+EXEC SP_ADDLOGIN 'quantri', 'quantri'
+EXEC SP_ADDLOGIN 'nhanvien', 'nhanvien'
+EXEC SP_ADDLOGIN 'khach', 'khach'
+
+--Tao user
+Create User user_1 From Login benhnhan with default_schema = QLPHONGKHAM
+Create User user_2 FROM Login nhasi with default_schema = QLPHONGKHAM
+Create User user_3 FROM Login quantri with default_schema = QLPHONGKHAM
+Create User user_4 FROM Login nhanvien with default_schema = QLPHONGKHAM
+Create User user_5 FROM Login khach with default_schema = QLPHONGKHAM
+
+--Tao role
 EXEC SP_ADDROLE 'KHACH'
 EXEC SP_ADDROLE 'BENHNHAN'
 EXEC SP_ADDROLE 'NHASI'
 EXEC SP_ADDROLE 'QUANTRI'
 EXEC SP_ADDROLE 'NHANVIEN'
+
+--Add role
+exec sp_addrolemember 'BENHNHAN','user_1'
+exec sp_addrolemember 'NHASI','user_2'
+exec sp_addrolemember 'QUANTRI','user_3'
+exec sp_addrolemember 'NHANVIEN','user_4'
+exec sp_addrolemember 'KHACH','user_5'
 
 GO
 --BENH NHAN CHUA CO TAI KHOAN

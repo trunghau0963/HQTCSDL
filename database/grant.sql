@@ -1,11 +1,32 @@
 --Phan quyen
---Tao role
+--Tao login
 GO
+EXEC SP_ADDLOGIN 'benhnhan', 'benhnhan'
+EXEC SP_ADDLOGIN 'nhasi', 'nhasi'
+EXEC SP_ADDLOGIN 'quantri', 'quantri'
+EXEC SP_ADDLOGIN 'nhanvien', 'nhanvien'
+EXEC SP_ADDLOGIN 'khach', 'khach'
+
+--Tao user
+Create User user_1 From Login benhnhan with default_schema = QLPHONGKHAM
+Create User user_2 FROM Login nhasi with default_schema = QLPHONGKHAM
+Create User user_3 FROM Login quantri with default_schema = QLPHONGKHAM
+Create User user_4 FROM Login nhanvien with default_schema = QLPHONGKHAM
+Create User user_5 FROM Login khach with default_schema = QLPHONGKHAM
+
+--Tao role
 EXEC SP_ADDROLE 'KHACH'
 EXEC SP_ADDROLE 'BENHNHAN'
 EXEC SP_ADDROLE 'NHASI'
 EXEC SP_ADDROLE 'QUANTRI'
 EXEC SP_ADDROLE 'NHANVIEN'
+
+--Add role
+exec sp_addrolemember 'BENHNHAN','user_1'
+exec sp_addrolemember 'NHASI','user_2'
+exec sp_addrolemember 'QUANTRI','user_3'
+exec sp_addrolemember 'NHANVIEN','user_4'
+exec sp_addrolemember 'KHACH','user_5'
 
 GO
 --BENH NHAN CHUA CO TAI KHOAN
