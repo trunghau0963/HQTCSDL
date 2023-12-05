@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as elements from "typed-html";
-import { admin, dentist, patient, staff } from "../auth/temp";
+import { admin, dentist, patient, staff } from "../auth/router";
 // vd import file gì đó trong layout (Dentist) trong đây, m send dô cái file đó dô layout để code giao diện cho nó
 
 const usersRouter = Router();

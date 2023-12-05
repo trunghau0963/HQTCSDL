@@ -6,7 +6,7 @@ import { getDatabase, Role } from "./config/config";
 import path from "path";
 import morgan from "morgan";
 import indexRouter from "./routes/index/router";
-import authRouter, {getRole} from "./routes/auth/temp";
+import authRouter, {getRole} from "./routes/auth/router";
 import usersRouter from "./routes/users/router";
 import verifyRouter from "./routes/verify/router";
 import patientRouter from "./routes/patient/router";

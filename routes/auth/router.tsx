@@ -1,114 +1,228 @@
-import { Request, RequestHandler, response, Response } from "express";
-import Connection from "../../middleware/connection";
-import { loginSchema, registerSchema } from "../../middleware/useValidation";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { NextFunction, Request, Response, Router } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import mssql from "mssql";
+import { Role, getDatabase } from "../../config/config";
+import * as elements from "typed-html";
+import Signup from "../../app/auth/Signup/Signup";
+import Login from "../../app/auth/Login/Login";
+// import Warning from "../../components/warning";
+// import Topbar from "../../components/topbar";
+import { User } from "../../config/model";
 
-const db = new Connection();
-
-export const signUp = async (req: Request, res: Response) => {
-  const input = req.body;
-  console.log(input);
-
-  try {
-    const { error, value } = registerSchema.validate(req.body);
-
-    if (error) {
-      res.status(400).json({ message: error.details[0].message });
-    }
-
-    const hashedPassword = await bcrypt.hash(input.password, 10);
-    const name: input.name,
-        password: hashedPassword,
-        phone: input.phone,
-        dob: input.dob,
-        address: input.address,
-    }
-
-    await db.exec("INSERT_INTO_BENHNHAN", {
-        name
-    });
-
-    res.status(201).json({ message: "Registered successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
+const cookieOptions = {
+  secure: true,
+  httpOnly: true,
+  signed: true,
 };
 
-export const signIn = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  try {
-    const { error, value } = loginSchema.validate(req.body);
-
-    if (value) {
-      const user = await db.exec("signin", { email });
-
-      if (!user.recordset[0]) {
-        return res.status(400).json({ message: "user is not found" });
-      }
-
-      const userData = user.recordset[0] as {
-        id: number;
-        name: string;
-        email: string;
-        password: string;
-        role: string;
-      };
-
-      bcrypt.compare(password, userData.password, (err, data) => {
-        if (data) {
-          const { role, name, id, email, ...others } = userData;
-
-          const user = { role, name, id, email };
-
-          const token = jwt.sign(user, process.env.KEY as string, {
-            expiresIn: "30 days",
-          });
-
-          res.status(200).json({ user, token });
-        } else {
-          res.status(400).json({ message: "Wrong password" });
-        }
-      });
-    } else {
-      res.status(400).json(error?.details[0].message);
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+      db: () => Promise<mssql.Request>;
     }
-  } catch (error) {
-    res.status(400).json({ message: "something went wrong" });
   }
-};
+}
 
-export const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await (await db.exec("getAllUsers")).recordset;
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(400).json({ error: "something went wrong" });
+declare module "jsonwebtoken" {
+  export interface JwtPayload {
+    phone: string;
+    password: string;
+    role: Role;
   }
-};
+}
 
-export const deleteUsers: RequestHandler<{ id: string }> = async (
+export const getRole = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
-  const id = req.params.id;
+  req.db = async () => await getDatabase("guest");
 
   try {
-    await db.exec("deleteUsers", { id });
+    const token = req.signedCookies.token;
+    const {
+      phone: phone,
+      password: password,
+      role: role,
+    } = (jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload) || {};
 
-    res.status(201).json({ message: "user is deleted successfully" });
-  } catch (error) {
-    res.status(400).json({ error: "something went wrong" });
+    const user: User = {
+      ...(
+        await (await req.db())
+          .input("phone", phone)
+          .input("password", password)
+          .input("role", role)
+          .execute("getUserByCred")
+      ).recordset?.[0],
+      role,
+    };
+
+    if (
+      phone == null ||
+      password == null ||
+      user == null ||
+      user.id == null ||
+      user.isLocked
+    ) {
+      throw null;
+    }
+
+    req.user = user;
+    req.db = async () => await getDatabase(role);
+    return next();
+  } catch {
+    return next();
   }
 };
 
-export const getDoctors = async (req: Request, res: Response) => {
-  try {
-    const doctors = await (await db.exec("getDoctors")).recordset;
+const role = async (
+  role: Role,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  getRole(req, res, async () => {
+    if (req.user?.role === role) {
+      return next();
+    }
 
-    res.status(200).json(doctors);
-  } catch (error) {
-    res.status(500).json({ error: "something went wrong" });
-  }
+    return res
+      .status(402)
+      .send
+      // <Topbar user={req.user}>
+      //   <Warning fullscreen>
+      //     You are not authorized to perform this action.
+      //   </Warning>
+      // </Topbar>
+      ();
+  });
 };
+
+export const patient = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  getRole(req, res, async () => {
+    if (req.user?.role !== "guest") {
+      return next();
+    }
+
+    return res
+      .status(401)
+      .send
+      // <Topbar user={req.user}>
+      //   <Warning fullscreen>
+      //     You have to be logged in to perform this action.
+      //   </Warning>
+      // </Topbar>
+      ();
+  });
+};
+
+export const admin = async (req: Request, res: Response, next: NextFunction) =>
+  role("admin", req, res, next);
+
+export const staff = async (req: Request, res: Response, next: NextFunction) =>
+  role("staff", req, res, next);
+
+export const dentist = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => role("dentist", req, res, next);
+
+const authRouter = Router();
+
+authRouter.get("/signup", async (req, res) => {
+  return res.send(<Signup />);
+});
+
+authRouter.get("/login", async (req, res) => {
+  return res.send(<Login />);
+});
+
+authRouter.post("/signup", async (req, res) => {
+  const input = req.body;
+  try {
+    console.log("da vao try");
+    const user: User = {
+      ...(
+        await (await req.db())
+          .input("TEN", input.name)
+          .input("MATKHAU", input.password)
+          .input("DIENTHOAI", input.phone)
+          .input("NGAYSINH", input.dob)
+          .input("DIACHI", input.address)
+          .execute("INSERT_INTO_BENHNHAN")
+      ).recordset[0],
+      role: "patient",
+    };
+    console.log(user);
+    return res
+      .json("Registered successfully" + `<a href='/login'>Continue Login<a>`)
+      .status(201);
+  } catch (error) {
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+});
+
+authRouter.post("/login", async (req, res) => {
+  const { phone, password, role } = req.body;
+  try {
+
+    const user: User = {
+      ...(
+        await (await req.db())
+          .input("phone", phone)
+          .input("password", password)
+          .input("role", role)
+          .execute("getUserByCred")
+      ).recordset?.[0],
+      role,
+    };
+
+    if (user.isLocked) {
+      return res.status(401).send("This account has been locked.");
+    }
+
+    if (
+      phone == null ||
+      password == null ||
+      user == null ||
+      user.id == null ||
+      user.isLocked
+    ) {
+      return res.status(401).send("Phone and password do not match.");
+    }
+
+    res.cookie(
+      "token",
+      jwt.sign(
+        { phone: user.phone, password: user.password, role: user.role },
+        process.env.JWT_SECRET!
+      ),
+      cookieOptions
+    );
+
+    return res
+      .header("HX-Redirect", "/users")
+      .json({ ...user, password: undefined });
+  } catch (error: any) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message.split("'.")[0].split("'")[1]);
+    }
+
+    return res.status(500).send("Login failed. Please try again later.");
+  }
+});
+
+authRouter.get("/logout", patient, async (req, res) => {
+  return res.clearCookie("token").header("HX-Redirect", "/users").end();
+});
+
+export default authRouter;
