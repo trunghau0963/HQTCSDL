@@ -12,8 +12,11 @@ import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
+import { DentistProps } from "../../config/model";
 
 const adminRouter = Router();
+let dentists: DentistProps[] = [];
+
 
 adminRouter.get("/", async (req, res) => {
   return res.send(<AdminPage />);

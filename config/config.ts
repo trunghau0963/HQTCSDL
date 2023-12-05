@@ -20,7 +20,7 @@ export const sqlConfig = {
       port: parseInt(process.env.DB_SERVER_PORT!),
       database: process.env.DB_NAME,
       options: optionProps,
-      pool: poolProps,
+      // pool: poolProps,
     },
     () => console.log("Connected as Guest")
   ).connect(),
@@ -32,7 +32,7 @@ export const sqlConfig = {
       port: parseInt(process.env.DB_SERVER_PORT!),
       database: process.env.DB_NAME,
       options: optionProps,
-      pool: poolProps,
+      // pool: poolProps,
     },
     () => console.log("Connected as Patient")
   ).connect(),
@@ -44,7 +44,7 @@ export const sqlConfig = {
       port: parseInt(process.env.DB_SERVER_PORT!),
       database: process.env.DB_NAME,
       options: optionProps,
-      pool: poolProps,
+      // pool: poolProps,
     },
     () => console.log("Connected as Dentist")
   ).connect(),
@@ -56,7 +56,7 @@ export const sqlConfig = {
       port: parseInt(process.env.DB_SERVER_PORT!),
       database: process.env.DB_NAME,
       options: optionProps,
-      pool: poolProps,
+      // pool: poolProps,
     },
     () => console.log("Connected as Staff")
   ).connect(),
@@ -68,7 +68,7 @@ export const sqlConfig = {
       port: parseInt(process.env.DB_SERVER_PORT!),
       database: process.env.DB_NAME,
       options: optionProps,
-      pool: poolProps,
+      // pool: poolProps,
     },
     () => console.log("Connected as Admin")
   ).connect(),

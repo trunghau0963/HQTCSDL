@@ -4,34 +4,30 @@ import { loginSchema, registerSchema } from "../../middleware/useValidation";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const db = new Connection();
-
-export const signUp = async (req: Request, res: Response) => {
+export const Signup = (req: Request, res: Response) => {
   const input = req.body;
-  console.log(input);
-
   try {
-    const { error, value } = registerSchema.validate(req.body);
-
-    if (error) {
-      res.status(400).json({ message: error.details[0].message });
-    }
-
-    const hashedPassword = await bcrypt.hash(input.password, 10);
-    const name: input.name,
-        password: hashedPassword,
-        phone: input.phone,
-        dob: input.dob,
-        address: input.address,
-    }
-
-    await db.exec("INSERT_INTO_BENHNHAN", {
-        name
-    });
-
-    res.status(201).json({ message: "Registered successfully" });
+    console.log("da vao try");
+    const user: User = {
+      ...(
+        await (await req.db())
+          .input("TEN", input.name)
+          .input("MATKHAU", input.password)
+          .input("DIENTHOAI", input.phone)
+          .input("NGAYSINH", input.dob)
+          .input("DIACHI", input.address)
+          .execute("INSERT_INTO_BENHNHAN")
+      ).recordset[0],
+      role: "patient",
+    };
+    console.log(user);
+    return res
+      .json("Registered successfully" + `<a href='/login'>Continue Login<a>`)
+      .status(201);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
   }
 };
 

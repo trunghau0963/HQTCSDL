@@ -173,45 +173,25 @@ authRouter.post("/signup", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   const { phone, password, role } = req.body;
   try {
-
+    console.log({ phone, password, role });
     const user: User = {
       ...(
         await (await req.db())
-          .input("phone", phone)
-          .input("password", password)
-          .input("role", role)
-          .execute("getUserByCred")
-      ).recordset?.[0],
+          .input("DIENTHOAI", phone)
+          .input("MATKHAU", password)
+          .input("ROLE", role)
+          .execute("SIGIN")
+      ).recordset[0],
       role,
     };
-
-    if (user.isLocked) {
-      return res.status(401).send("This account has been locked.");
-    }
-
-    if (
-      phone == null ||
-      password == null ||
-      user == null ||
-      user.id == null ||
-      user.isLocked
-    ) {
-      return res.status(401).send("Phone and password do not match.");
-    }
-
-    res.cookie(
-      "token",
-      jwt.sign(
-        { phone: user.phone, password: user.password, role: user.role },
-        process.env.JWT_SECRET!
-      ),
-      cookieOptions
-    );
-
+    console.log('ankdsanidk');
+    console.log(user);
     return res
-      .header("HX-Redirect", "/users")
-      .json({ ...user, password: undefined });
+      .json("Login successfully" + `<a href='/${role}/dashboard'>Continue<a>`)
+      .status(201);
   } catch (error: any) {
+    console.log(error)
+
     if (error instanceof Error) {
       console.error(error.message);
       return res.status(400).send(error.message.split("'.")[0].split("'")[1]);
