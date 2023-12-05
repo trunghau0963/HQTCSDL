@@ -106,7 +106,8 @@ BEGIN TRAN
             CHIDINH NVARCHAR(128),
             SOLUONG INT,
             NGAYHETHAN DATE,
-            DONGIA INT
+            DONGIA INT,
+            DAXOA BIT DEFAULT(0)
         )
     
 
