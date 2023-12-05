@@ -5,17 +5,12 @@ import Dashboard from "../../app/dentist/Dashboard/Dashboard";
 import Home from "../../app/dentist/Home/Home";
 import Patient from "../../app/dentist/Patient/Patient";
 import Schedule from "../../app/dentist/Schedule/Schedule";
+import { dentist } from "../auth/router";
 import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
 
 const dentistRouter = Router();
 
-dentistRouter.get("/", async (req, res) => {
-  return res.send(
-    <DentistPage/>
-  );
-});
-
-dentistRouter.get("/dashboard", async (req, res) => {
+dentistRouter.get("/dashboard", dentist, async (req, res) => {
   return res.send(
     <Dashboard/>
   );

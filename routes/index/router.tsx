@@ -1,7 +1,6 @@
 import { Router } from "express";
 import * as elements from "typed-html";
 import LandingPage from "../../app/landing/LandingPage";
-import Navbar from "../../components/Navbar";
 import Info from "../../components/info/info";
 import Kham from "../../components/kham/kham";
 import Checkappointment from "../../components/checkappointment";

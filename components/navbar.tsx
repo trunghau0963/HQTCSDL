@@ -205,14 +205,18 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
                     Edit Profile
                   </a>
 
-                  <a class="dropdown-item" href="/logout">
+                  <button
+                    class="dropdown-item"
+                    hx-post="/logout"
+                    hx-trigger="click"
+                    type="button"
+                  >
                     Logout
-                  </a>
+                  </button>
                 </div>
               </li>
             </ul>
           </div>
-
         </div>
       </div>
     </nav>

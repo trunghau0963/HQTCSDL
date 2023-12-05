@@ -68,7 +68,7 @@ const Login = () => {
                         type="submit"
                         class="w-100 btn btn-success btn-block btn-lg gradient-custom-4 text-body"
                       >
-                        Sign up
+                        Sign In
                       </button>
 
                       <hr class="my-4"></hr>

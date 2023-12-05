@@ -10,66 +10,62 @@ import Profile from "../../app/patient/Profile/Profile";
 import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
 import Service from "../../app/patient/Service/Service";
 import Security from "../../app/patient/Security/Security";
+import { patient } from "../auth/router";
 
 const patientRouter = Router();
 
-patientRouter.get("/", async (req, res) => {
-  return res.send(
-    <PatientPage/>
-  );
-});
 
-patientRouter.get("/dashboard", async (req, res) => {
+patientRouter.get("/dashboard", patient, async (req, res) => {
   return res.send(
     <Dashboard/>
   );
 });
 
-patientRouter.get("/home", async (req, res) => {
+patientRouter.get("/home", patient, async (req, res) => {
   return res.send(
     <Home/>
   );
 });
 
 
-patientRouter.get("/drug", async (req, res) => {
+patientRouter.get("/drug", patient, async (req, res) => {
   return res.send(
     <Drug/>
   );
 });
 
-patientRouter.get("/dentist", async (req, res) => {
+patientRouter.get("/dentist", patient, async (req, res) => {
   return res.send(
     <Dentist/>
   );
 });
 
 
-patientRouter.get("/schedule", async (req, res) => {
+patientRouter.get("/schedule", patient, async (req, res) => {
   return res.send(
     <Schedule/>
   );
 });
 
-patientRouter.get("/information", async (req, res) => {
+patientRouter.get("/information", patient, async (req, res) => {
   return res.send(
     <Profile/>
   );
 });
 
-patientRouter.get("/schedule/add_appointment", async (req, res) => {
+patientRouter.get("/schedule/add_appointment", patient, async (req, res) => {
   return res.send(
     <AddAppointment/>
   );
 });
 
-patientRouter.get("/service", async (req, res) => {
+patientRouter.get("/service", patient, async (req, res) => {
   return res.send(
     <Service/>
   );
 });
 
-patientRouter.get("/about", async (req, res) => {
+patientRouter.get("/about",patient, async (req, res) => {
   return res.send(
     <Security/>
   );
