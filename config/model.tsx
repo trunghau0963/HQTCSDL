@@ -1,4 +1,5 @@
 import * as elements from "typed-html";
+import { Role } from "./config";
 export interface ToolItemsProps {
   icon: string;
   title: string;
@@ -14,6 +15,17 @@ export interface ToolItemsProps {
 export interface NavbarProps extends elements.Children {
   url: string;
   NAVIGATIONS(props: string): any[];
+}
+
+export type User = {
+  id: string;
+  name: string;
+  phone: string;
+  password?: string;
+  dob?: Date;
+  address?: string;
+  isLocked?: boolean;
+  role: Role;
 }
 
 export type DentistProps = {
