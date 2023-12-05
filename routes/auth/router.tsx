@@ -155,7 +155,7 @@ authRouter.post("/signup", async (req, res) => {
           .input("DIENTHOAI", input.phone)
           .input("NGAYSINH", input.dob)
           .input("DIACHI", input.address)
-          .execute("INSERT_INTO_BENHNHAN")
+          .execute("SIGN_UP_BENHNHAN")
       ).recordset[0],
       role: "patient",
     };
@@ -180,11 +180,11 @@ authRouter.post("/login", async (req, res) => {
           .input("DIENTHOAI", phone)
           .input("MATKHAU", password)
           .input("ROLE", role)
-          .execute("SIGIN")
+          .execute("SIGN_IN")
       ).recordset[0],
       role,
     };
-    console.log('ankdsanidk');
+    
     console.log(user);
     return res
       .json("Login successfully" + `<a href='/${role}/dashboard'>Continue<a>`)
