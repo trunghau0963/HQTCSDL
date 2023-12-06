@@ -1,24 +1,23 @@
 import * as elements from "typed-html";
-import PatientPage from "../patient";
+import AdminPage from "../admin";
 import Info from "../../../components/info/info";
 import Profile from "../../../components/info/Profile";
-import { getPatientById } from "../../../controller/patientController";
-import { Patient } from "../../../model/model";
-type patientProps = {
-  data?: Patient | undefined;
+import { Admin } from "../../../model/model";
+type dentisttProps = {
+  data?: Admin | undefined;
 };
-const ProfilePage = ({ data }: patientProps) => {
+const ProfilePage = ({ data }: dentisttProps) => {
   return (
-    <PatientPage>
+    <AdminPage>
       <Profile
-        id={data?.MABN}
+        id={data?.MAQT}
         name={data?.HOTEN}
         phone={data?.DIENTHOAI}
         dob={data?.NGAYSINH?.toDateString()}
         address={data?.DIACHI}
-        role={"Patient"}
+        role={"Admin"}
       />
-    </PatientPage>
+    </AdminPage>
   );
 };
 

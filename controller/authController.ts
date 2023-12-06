@@ -49,14 +49,12 @@ export const SigninController = async (req: Request, res: Response) => {
           .input("ROLE", req.body.role)
           .execute("SIGN_IN")
       ).recordset[0],
-      role: configRole,
+      role,
     };
 
-    console.log("user login : ", user.id, user.phone, user.password, user.role);
+    console.log("user login : ", user.id, user.DIENTHOAI, user.MATKHAU, user.role);
     const token = await middlewareToken.generateToken(
-      phone,
-      password,
-      role,
+      user,
       res
     );
     console.log(token);

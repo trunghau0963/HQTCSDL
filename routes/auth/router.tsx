@@ -38,28 +38,24 @@ export const getRole = async (
   res: Response,
   next: NextFunction
 ) => {
-  req.db = async () => await getDatabase("guest");
+  req.db = async () => await getDatabase("KHACH");
 
   try {
     const token = req.cookies.token as string;
     // console.log('token',token);
-    const {
-      phone: phone,
-      password: password,
-      role: role,
-    } = (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
 
-    const configRole = convertRoleViToEn(role);
-
+    const { DIENTHOAI, MATKHAU, role } = data.user;
     const user: User = {
       ...(
         await (await req.db())
-          .input("DIENTHOAI", phone)
-          .input("MATKHAU", password)
-          .input("ROLE", role) 
+          .input("DIENTHOAI", DIENTHOAI)
+          .input("MATKHAU", MATKHAU)
+          .input("ROLE", role)
           .execute("SIGN_IN")
       ).recordset[0],
-      role: configRole,
+      role,
     };
 
     req.user = user;
@@ -92,9 +88,8 @@ export const patient = async (
   next: NextFunction
 ) => {
   getRole(req, res, async () => {
-    if (req.user?.role !== "guest" && req.user?.role !== undefined) {
+    if (req.user?.role !== "KHACH" && req.user?.role !== undefined) {
       console.log("user role : ", req.user?.role);
-      console.log("patient can view");
       return next();
     }
 
@@ -103,16 +98,16 @@ export const patient = async (
 };
 
 export const admin = async (req: Request, res: Response, next: NextFunction) =>
-  role("admin", req, res, next);
+  role("QUANTRI", req, res, next);
 
 export const staff = async (req: Request, res: Response, next: NextFunction) =>
-  role("staff", req, res, next);
+  role("NHANVIEN", req, res, next);
 
 export const dentist = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => role("dentist", req, res, next);
+) => role("NHASI", req, res, next);
 
 const authRouter = Router();
 

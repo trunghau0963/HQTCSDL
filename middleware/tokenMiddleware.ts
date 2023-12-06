@@ -9,6 +9,10 @@ declare module "jsonwebtoken" {
   export interface JwtPayload {
     phone: string;
     password: string;
+    DIENTHOAI: string;
+    MATKHAU: string;
+    id: string;
+    HOTEN: string;
     role: Role;
   }
 }
@@ -23,13 +27,11 @@ interface Extended extends Request {
 }
 const middlewareToken = {
   generateToken: async (
-    phone: string,
-    password: string | undefined,
-    role: Role | undefined,
+    user: User,
     res: Response
   ) => {
-    console.log("data", { phone, password, role });
-    const token = jwt.sign({ phone, password, role }, process.env.JWT_TOKEN!, {
+    console.log("data", { user });
+    const token = jwt.sign({user }, process.env.JWT_TOKEN!, {
       expiresIn: "1d",
     });
     res.cookie("token", token, cookieOptions);
@@ -71,7 +73,7 @@ export const verifyTokenAndUserAuthorization = (
   next: NextFunction
 ) => {
   middlewareToken.verifyTokenMiddleware(req, res, () => {
-    if (req.user?.id === req.params.id || req.user?.role === "admin") {
+    if (req.user?.id === req.params.id || req.user?.role === "QUANTRI") {
       next();
     } else {
       res.status(403).json("You're not allowed to do that!");
@@ -85,7 +87,7 @@ export const verifyTokenAndAdmin = (
   next: NextFunction
 ) => {
   middlewareToken.verifyTokenMiddleware(req, res, () => {
-    if (req.user?.role === "admin") {
+    if (req.user?.role === "QUANTRI") {
       next();
     } else {
       res.status(403).json("You're not allowed to do that!");

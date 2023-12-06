@@ -1,73 +1,76 @@
 import * as elements from "typed-html";
-import BaseHtml from "../../layouts/baseHtml";
-const Profile = () => {
+
+type ProfileProps = {
+  id?: string;
+  name?: string;
+  phone?: string;
+  dob?: string;
+  address?: string;
+  role?: string;
+};
+
+const Profile = ({ id, name, phone, dob, address, role }: ProfileProps) => {
   return (
-    <BaseHtml>
-      <div class="flex items-center justify-center h-screen m-5">
-        <div class="rounded-lg shadow-lg p-5">
-          <div class="h-24 bg-blue-600 rounded-t-lg"></div>
-          <img
-            src="/img/user.jpg"
-            height="100"
-            width="100"
-            class="rounded-full -mt-12 border-4 border-white mx-auto"
-            alt="User avatar"
-            style="aspect-ratio: 100 / 100; object-fit: cover;"
-          />
-          <div class="text-center mt-2">
-            <h2 class="text-lg font-semibold">John Doe</h2>
-            <p class="text-gray-500">Software Engineer</p>
-          </div>
-          <div class="flex justify-around my-4">
-            <div class="text-center">
-              <h3 class="font-semibold text-lg">500</h3>
-              <p class="text-gray-500">Followers</p>
-            </div>
-            <div class="text-center">
-              <h3 class="font-semibold text-lg">300</h3>
-              <p class="text-gray-500">Following</p>
-            </div>
-          </div>
-          <div class="row">
-            <form action="" method="post">
-              <div class="form-group">
-                <label for="">Username</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  name="username"
+    <section class="vh-100" style="background-color: #f4f5f7;">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-6 mb-4 mb-lg-0">
+          <div class="card mb-3" style="border-radius: .5rem;">
+            <div class="row g-0">
+              <div class="bg-warning col-md-4 gradient-custom text-center text-white d-flex justify-content-center align-items-center flex-col">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                  alt="Avatar"
+                  class="img-fluid my-5"
+                  style="width: 80px;"
                 />
+                <h5>{name?.toUpperCase()}</h5>
+                <p>{role?.toUpperCase()}</p>
+                <i class="far fa-edit mb-5"></i>
               </div>
-              <div class="form-group">
-                <label for="">Email</label>
-                <input
-                  class="form-control"
-                  type="email"
-                  name="email"
-                />
+              <div class="col-md-8">
+                <div class="card-body p-4">
+                  <h6>Information</h6>
+                  <hr class="mt-0 mb-4" />
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>ID:</h6>
+                      <p class="text-muted">{id}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <h6>Phone</h6>
+                      <p class="text-muted">{phone}</p>
+                    </div>
+                  </div>
+                  <h6>Projects</h6>
+                  <hr class="mt-0 mb-4" />
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>Address</h6>
+                      <p class="text-muted">{address}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <h6>Day of birth</h6>
+                      <p class="text-muted">{dob}</p>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-start">
+                    <a href="#!">
+                      <i class="bi bi-facebook me-3"></i>
+                    </a>
+                    <a href="#!">
+                      <i class="bi bi-twitter  me-3"></i>
+                    </a>
+                    <a href="#!">
+                      <i class="bi bi-instagram "></i>
+                    </a>
+                  </div>
+                </div>
               </div>
-
-              <div class="form-group">
-                <label for="">password</label>
-                <input class="form-control" type="text" name="password" />
-              </div>
-
-              <div class="form-group">
-                <label for="">New Password</label>
-                <input class="form-control" type="text" name="new_password" />
-              </div>
-
-              <button class="btn btn-primary btn-rounded">Edit Profile</button>
-            </form>
-          </div>
-          <div class="px-6 py-4">
-            <button class="btn btn-danger">
-              Follow
-            </button>
+            </div>
           </div>
         </div>
       </div>
-    </BaseHtml>
+    </section>
   );
 };
 

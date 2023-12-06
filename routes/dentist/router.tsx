@@ -7,6 +7,10 @@ import Patient from "../../app/dentist/Patient/Patient";
 import Schedule from "../../app/dentist/Schedule/Schedule";
 import { dentist } from "../auth/router";
 import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
+import { Dentist } from "../../model/model";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { getDentistById } from "../../controller/dentistController";
+import ProfilePage from "../../app/dentist/Profile/Profile";
 
 const dentistRouter = Router();
 
@@ -34,6 +38,18 @@ dentistRouter.get("/schedule",dentist, async (req, res) => {
   return res.send(
     <Schedule/>
   );
+});
+
+dentistRouter.get("/information", dentist, async (req, res) => {
+  let dentist: Dentist | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    console.log("data: ", data.user.HOTEN);
+    dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
+  } catch {}
+  return res.send(<ProfilePage data={dentist} />);
 });
 
 

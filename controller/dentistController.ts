@@ -31,15 +31,19 @@ export const createDentist = async (req: Request, res: Response) => {
   }
 };
 
-export const getDentistById = async (req: Request, res: Response) => {
-  const { id } = req.body;
+export const getDentistById = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  // const { id } = req.body;
   try {
     const user: Dentist = (
       await (await req.db()).input("MANS", id).execute("GET_INFO_NHASI_BY_ID")
     ).recordset[0];
 
     console.log(user);
-    return res.json("successful get dentist").status(201);
+    return user;
   } catch (error) {
     if (error instanceof Error) {
       if (error instanceof Error) {

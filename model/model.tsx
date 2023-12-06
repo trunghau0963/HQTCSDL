@@ -19,12 +19,12 @@ export interface NavbarProps extends elements.Children {
 
 export type User = {
   id: string;
-  name: string;
-  phone: string;
-  password: string;
-  dob?: Date;
-  address?: string;
-  isLocked?: boolean;
+  HOTEN: string;
+  DIENTHOAI: string;
+  MATKHAU?: string;
+  NGAYSINH?: Date;
+  DIACHI?: string;
+  DAKHOA?: boolean;
   role: Role;
 };
 

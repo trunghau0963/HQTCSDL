@@ -12,8 +12,11 @@ import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
-import { Dentist } from "../../model/model";
+import { Admin } from "../../model/model";
 import { admin } from "../auth/router";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { getAdminById } from "../../controller/adminController";
+import ProfilePage from "../../app/admin/Profile/Profile";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
@@ -58,6 +61,18 @@ adminRouter.get("/service", admin, async (req, res) => {
 
 adminRouter.get("/profile", admin, async (req, res) => {
   return res.send(<Profile />);
+});
+
+adminRouter.get("/information", admin, async (req, res) => {
+  let dentist: Admin | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    console.log("data: ", data.user.HOTEN);
+    dentist = (await getAdminById(req, res, data.user.MAQT)) as Admin;
+  } catch {}
+  return res.send(<ProfilePage data={dentist} />);
 });
 
 export default adminRouter;
