@@ -12,7 +12,7 @@ import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
-import { DentistProps } from "../../config/model";
+import { DentistProps } from "../../model/model";
 import { admin } from "../auth/router";
 
 const adminRouter = Router();

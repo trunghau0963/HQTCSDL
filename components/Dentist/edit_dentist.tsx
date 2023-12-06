@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { DentistProps } from "../../config/model";
+import { DentistProps } from "../../model/model";
 
 interface EditDentistProps {
   Data: DentistProps;

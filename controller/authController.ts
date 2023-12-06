@@ -1,7 +1,7 @@
 import { Request, RequestHandler, response, Response } from "express";
 import Connection from "../middleware/connection";
 import middlewareToken from "../middleware/tokenMiddleware";
-import { User } from "../config/model";
+import { User } from "../model/model";
 // import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -64,10 +64,10 @@ export const SigninController = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.log(error);
 
-    if (error instanceof Error) {
-      console.error(error.message);
-      return res.status(400).send(error.message);
-    }
+    // if (error instanceof Error) {
+    //   console.error(error.message);
+    //   return res.status(400).send(error.message);
+    // }
 
     return res.status(500).send("Login failed. Please try again later.");
   }

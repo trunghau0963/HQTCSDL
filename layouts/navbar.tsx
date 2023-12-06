@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
-import { NavbarProps } from "../config/model";
-import { ToolItemsProps } from "../config/model";
+import { NavbarProps } from "../model/model";
+import { ToolItemsProps } from "../model/model";
 const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
   return (
     <nav class="navbar navbar-expand-lg navbar-light bg-secondary position-sticky top-0 z-3">

@@ -1,7 +1,7 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { PatientProps } from "../config/model";
+import { PatientProps } from "../model/model";
 
 export const createPatient = async (req: Request, res: Response) => {
   try {
@@ -9,12 +9,13 @@ export const createPatient = async (req: Request, res: Response) => {
     const user: PatientProps = {
       ...(
         await (await req.db())
-          .input("TEN", input.name)
+          .input("HOTEN", input.name)
           .input("MATKHAU", input.password)
           .input("DIENTHOAI", input.phone)
           .input("NGAYSINH", input.dob)
           .input("DIACHI", input.address)
-          .execute("INSERT_INTO_BENHNHAN")
+          .input("ROLE", "patient")
+          .execute("SIGN_UP")
       ).recordset[0],
     };
     console.log(user);
@@ -34,7 +35,9 @@ export const getPatientById = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
     const user: PatientProps = (
-      await (await req.db()).input("MABN", id).execute("GET_INFO_BENHNHAN_BY_ID")
+      await (await req.db())
+        .input("MABN", id)
+        .execute("GET_INFO_BENHNHAN_BY_ID")
     ).recordset[0];
 
     console.log(user);

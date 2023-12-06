@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../layouts/navbar";
 import { DENTISTNAVIGATIONS } from "../../constant";
 import Footer from "../../components/Footer";
 const DentistPage = ({ children }: elements.Children) => {

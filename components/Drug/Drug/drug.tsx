@@ -57,7 +57,7 @@ const Drug = () => {
                         <td>{data.idConsignment}</td>
                         <td>{data.idDrug}</td>
                         <td>{data.name}</td>
-                        <td>{data.chidinh}</td>
+                        <td>{data.drugIndicate}</td>
                         <td>{data.quantity}</td>
                         <td>{data.exp}</td>
                         <td>{data.price}</td>

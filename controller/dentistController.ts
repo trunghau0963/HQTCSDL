@@ -1,7 +1,7 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { DentistProps } from "../config/model";
+import { DentistProps } from "../model/model";
 
 export const createDentist = async (req: Request, res: Response) => {
   try {
@@ -9,11 +9,13 @@ export const createDentist = async (req: Request, res: Response) => {
     const user: DentistProps = {
       ...(
         await (await req.db())
-          .input("TEN", input.name)
+          .input("HOTEN", input.name)
           .input("MATKHAU", input.password)
           .input("DIENTHOAI", input.phone)
           .input("NGAYSINH", input.dob)
-          .execute("INSERT_INTO_NHASI")
+          .input("DIACHI", input.address)
+          .input("ROLE", "admin")
+          .execute("SIGN_UP")
       ).recordset[0],
     };
     console.log(user);

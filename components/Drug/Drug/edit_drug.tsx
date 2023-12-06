@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { drugProps } from "../../../config/model";
+import { drugProps } from "../../../model/model";
 
 interface EditDrugProps {
   Data: drugProps;
@@ -88,7 +88,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="chidinh"
-                                placeholder={Data.chidinh}
+                                placeholder={Data.drugIndicate}
                               />
                             </div>
                           </div>

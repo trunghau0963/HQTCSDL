@@ -22,7 +22,7 @@ export const sqlConfig = {
       options: optionProps,
       pool: poolProps,
     },
-    () => console.log("Connected as Guest")
+    // () => console.log("Connected as Guest")
   ).connect(),
   patient: new mssql.ConnectionPool(
     {
@@ -34,7 +34,7 @@ export const sqlConfig = {
       options: optionProps,
       pool: poolProps,
     },
-    () => console.log("Connected as Patient")
+    // () => console.log("Connected as Patient")
   ).connect(),
   dentist: new mssql.ConnectionPool(
     {
@@ -46,7 +46,7 @@ export const sqlConfig = {
       options: optionProps,
       pool: poolProps,
     },
-    () => console.log("Connected as Dentist")
+    // () => console.log("Connected as Dentist")
   ).connect(),
   staff: new mssql.ConnectionPool(
     {
@@ -58,7 +58,7 @@ export const sqlConfig = {
       options: optionProps,
       pool: poolProps,
     },
-    () => console.log("Connected as Staff")
+    // () => console.log("Connected as Staff")
   ).connect(),
   admin: new mssql.ConnectionPool(
     {
@@ -70,7 +70,7 @@ export const sqlConfig = {
       options: optionProps,
       pool: poolProps,
     },
-    () => console.log("Connected as Admin")
+    // () => console.log("Connected as Admin")
   ).connect(),
 };
 

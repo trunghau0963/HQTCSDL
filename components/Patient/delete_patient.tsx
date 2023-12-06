@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { PatientProps } from "../../config/model";
+import { PatientProps } from "../../model/model";
 
 interface DeletePatientProps {
   Data: PatientProps;

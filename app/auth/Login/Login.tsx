@@ -54,10 +54,10 @@ const Login = () => {
 
                       <div class="form-outline mb-4">
                         <select class="form-select" id="role" name="role">
-                          <option value="admin">Admin</option>
-                          <option value="patient">Patient</option>
-                          <option value="staff">Staff</option>
-                          <option value="dentist">Dentist</option>
+                          <option value="QUANTRI">Admin</option>
+                          <option value="BENHNHAN">Patient</option>
+                          <option value="NHANVIEN">Staff</option>
+                          <option value="NHASI">Dentist</option>
                         </select>
                         <label class="form-label" for="role">
                           Role

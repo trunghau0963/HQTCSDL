@@ -1,4 +1,4 @@
-import { ToolItemsProps } from "./config/model";
+import { ToolItemsProps } from "./model/model";
 
 export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
   {

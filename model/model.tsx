@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { Role } from "./config";
+import { Role } from "../config/config";
 export interface ToolItemsProps {
   icon: string;
   title: string;
@@ -102,8 +102,8 @@ export type drugProps = {
   idConsignment: string;
   idDrug: string;
   name: string;
-  chidinh: string;
-  quantity: number;
+  drugIndicate: string;
+  quantity: string;
   exp: string;
   price: number;
 };

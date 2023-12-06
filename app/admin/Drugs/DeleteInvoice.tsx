@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import { invoiceProps } from "../../../config/model";
+import { invoiceProps } from "../../../model/model";
 import DeleteInvoice from "../../../components/Drug/Invoice/delete_invoice";
 interface DeleteInvoiceProps {
   Data: invoiceProps;

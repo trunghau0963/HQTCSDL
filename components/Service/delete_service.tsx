@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { serviceProps } from "../../config/model";
+import { serviceProps } from "../../model/model";
 
 interface DeleteServiceProps {
   Data: serviceProps;

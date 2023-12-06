@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import DeletePatient from "../../../../components/Patient/delete_patient";
-import { PatientProps } from "../../../../config/model";
+import { PatientProps } from "../../../../model/model";
 
 interface DeletePatientProps {
   Data: PatientProps;

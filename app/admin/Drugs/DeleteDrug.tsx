@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import { drugProps } from "../../../config/model";
+import { drugProps } from "../../../model/model";
 import DeleteDrug from "../../../components/Drug/Drug/delete_drug";
 interface EditDrugProps {
   Data: drugProps;

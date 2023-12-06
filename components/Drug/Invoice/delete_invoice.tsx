@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { invoiceProps } from "../../../config/model";
+import { invoiceProps } from "../../../model/model";
 
 interface DeleteInvoiceProps {
   Data: invoiceProps;

@@ -1,7 +1,7 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { StaffProps } from "../config/model";
+import { StaffProps } from "../model/model";
 
 export const createStaff = async (req: Request, res: Response) => {
   try {
@@ -9,11 +9,13 @@ export const createStaff = async (req: Request, res: Response) => {
     const user: StaffProps = {
       ...(
         await (await req.db())
-          .input("TEN", input.name)
+          .input("HOTEN", input.name)
           .input("MATKHAU", input.password)
           .input("DIENTHOAI", input.phone)
           .input("NGAYSINH", input.dob)
-          .execute("INSERT_INTO_NHANVIEN")
+          .input("DIACHI", input.address)
+          .input("ROLE", "staff")
+          .execute("SIGN_UP")
       ).recordset[0],
     };
     console.log(user);

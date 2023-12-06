@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../config/model";
+import { User } from "../model/model";
 import { Role } from "../config/config";
 dotenv.config();
 

@@ -12,7 +12,7 @@ import {
   SigninController,
   LogoutController,
 } from "../../controller/authController";
-import { User } from "../../config/model";
+import { User } from "../../model/model";
 import middlewareToken from "../../middleware/tokenMiddleware";
 
 declare global {
@@ -75,6 +75,7 @@ const role = async (
 ) => {
   getRole(req, res, async () => {
     if (req.user?.role === role) {
+      console.log("user role : ", req.user?.role);
       return next();
     }
 

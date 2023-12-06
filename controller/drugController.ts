@@ -1,7 +1,7 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { StaffProps } from "../config/model";
+import { StaffProps } from "../model/model";
 
 export const createStaff = async (req: Request, res: Response) => {
   try {

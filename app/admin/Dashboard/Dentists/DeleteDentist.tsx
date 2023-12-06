@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import DeleteDentist from "../../../../components/Dentist/delete_dentist";
-import { DentistProps } from "../../../../config/model";
+import { DentistProps } from "../../../../model/model";
 
 interface DeleteDentistProps {
   Data: DentistProps;

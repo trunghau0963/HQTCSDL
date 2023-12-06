@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import { serviceProps } from "../../../config/model";
+import { serviceProps } from "../../../model/model";
 import DeleteService from "../../../components/Service/delete_service";
 
 interface DeleteServiceProps {
