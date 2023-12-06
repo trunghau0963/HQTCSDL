@@ -13,19 +13,14 @@ import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
 import { DentistProps } from "../../config/model";
+import { admin } from "../auth/router";
 
 const adminRouter = Router();
 let dentists: DentistProps[] = [];
 
-
-adminRouter.get("/", async (req, res) => {
-  return res.send(<AdminPage />);
-});
-
 adminRouter.get("/dashboard", async (req, res) => {
   return res.send(<DashBoard />);
 });
-
 
 adminRouter.get("/drug", async (req, res) => {
   return res.send(<Drug />);
@@ -55,7 +50,6 @@ adminRouter.get("/staff", async (req, res) => {
   return res.send(<StaffPage />);
 });
 
-
 adminRouter.get("/patient", async (req, res) => {
   return res.send(<PatientPage />);
 });
@@ -67,6 +61,5 @@ adminRouter.get("/service", async (req, res) => {
 adminRouter.get("/profile", async (req, res) => {
   return res.send(<Profile />);
 });
-
 
 export default adminRouter;

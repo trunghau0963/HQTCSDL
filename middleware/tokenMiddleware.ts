@@ -1,9 +1,17 @@
 import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../config/model";
 import { Role } from "../config/config";
 dotenv.config();
+
+declare module "jsonwebtoken" {
+  export interface JwtPayload {
+    phone: string;
+    password: string;
+    role: Role;
+  }
+}
 
 const cookieOptions = {
   secure: true,
@@ -11,7 +19,7 @@ const cookieOptions = {
 };
 
 interface Extended extends Request {
-  info?: User;
+  user?: User;
 }
 const middlewareToken = {
   generateToken: async (
@@ -27,7 +35,21 @@ const middlewareToken = {
     res.cookie("token", token, cookieOptions);
     return token;
   },
-  verifyToken: async (req: Extended, res: Response, next: NextFunction) => {
+  verifyToken: async (req: Extended, res: Response): Promise<User | JwtPayload> => {
+    const token = req.cookies.token as string;
+
+    if (!token) {
+      throw new Error("You are not Login or token expired");
+    }
+
+    const data= jwt.verify(token, process.env.JWT_TOKEN! as string) as User | JwtPayload || {} ;
+    return data;
+  },
+  verifyTokenMiddleware: async (
+    req: Extended,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const token = req.cookies.token as string;
       // console.log("token ", token);
@@ -35,8 +57,8 @@ const middlewareToken = {
         return res.json({ message: "You are not authenticated" });
       }
       const data = jwt.verify(token, process.env.JWT_TOKEN! as string) as User;
-      req.info = data;
-      next();
+      req.user = data;
+      return next();
     } catch (error) {
       return res.status(500).json({ error: "Something went wrong" });
     }
@@ -44,11 +66,11 @@ const middlewareToken = {
 };
 
 export const verifyTokenAndUserAuthorization = (
-  req: Request,
+  req: Extended,
   res: Response,
   next: NextFunction
 ) => {
-  middlewareToken.verifyToken(req, res, () => {
+  middlewareToken.verifyTokenMiddleware(req, res, () => {
     if (req.user?.id === req.params.id || req.user?.role === "admin") {
       next();
     } else {
@@ -58,11 +80,11 @@ export const verifyTokenAndUserAuthorization = (
 };
 
 export const verifyTokenAndAdmin = (
-  req: Request,
+  req: Extended,
   res: Response,
   next: NextFunction
 ) => {
-  middlewareToken.verifyToken(req, res, () => {
+  middlewareToken.verifyTokenMiddleware(req, res, () => {
     if (req.user?.role === "admin") {
       next();
     } else {
@@ -72,30 +94,3 @@ export const verifyTokenAndAdmin = (
 };
 
 export default middlewareToken;
-
-// export const generateToken = (user: User, res: Response) => {
-//   const token = jwt.sign(user, process.env.JWT_TOKEN as string, {
-//     expiresIn: "1h",
-//   });
-//   res.cookie("token", token, cookieOptions);
-//   return token;
-// };
-
-// export const verifyToken = (
-//   req: Extended,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const token = req.headers["token"] as string;
-//     if (!token) {
-//       return res.json({ message: "You are not authenticated" });
-//     }
-//     const data = jwt.verify(token, process.env.JWT_TOKEN as string) as User;
-//     req.info = data;
-//   } catch (error) {
-//     return res.status(500).json({ error: "something went" });
-//   }
-
-//   next();
-// };

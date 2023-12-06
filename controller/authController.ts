@@ -1,7 +1,7 @@
 import { Request, RequestHandler, response, Response } from "express";
-import Connection from "../../middleware/connection";
-import middlewareToken from "../../middleware/tokenMiddleware";
-import { User } from "../../config/model";
+import Connection from "../middleware/connection";
+import middlewareToken from "../middleware/tokenMiddleware";
+import { User } from "../config/model";
 // import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -17,7 +17,7 @@ export const SignupController = async (req: Request, res: Response) => {
           .input("DIENTHOAI", input.phone)
           .input("NGAYSINH", input.dob)
           .input("DIACHI", input.address)
-          .execute("INSERT_INTO_BENHNHAN")
+          .execute("SIGN_UP_BENHNHAN")
       ).recordset[0],
       role: "patient",
     };
@@ -46,7 +46,7 @@ export const SigninController = async (req: Request, res: Response) => {
           .input("DIENTHOAI", req.body.phone)
           .input("MATKHAU", req.body.password)
           .input("ROLE", req.body.role)
-          .execute("SIGIN")
+          .execute("SIGN_IN")
       ).recordset[0],
       role,
     };
@@ -81,37 +81,3 @@ export const LogoutController = async (req: Request, res: Response) => {
     .json("Logged out successfully!")
     .end();
 };
-
-// export const getUsers = async (req: Request, res: Response) => {
-//   try {
-//     const users = await (await db.exec("getAllUsers")).recordset;
-//     res.status(200).json(users);
-//   } catch (error) {
-//     res.status(400).json({ error: "something went wrong" });
-//   }
-// };
-
-// export const deleteUsers: RequestHandler<{ id: string }> = async (
-//   req: Request,
-//   res: Response
-// ) => {
-//   const id = req.params.id;
-
-//   try {
-//     await db.exec("deleteUsers", { id });
-
-//     res.status(201).json({ message: "user is deleted successfully" });
-//   } catch (error) {
-//     res.status(400).json({ error: "something went wrong" });
-//   }
-// };
-
-// export const getDoctors = async (req: Request, res: Response) => {
-//   try {
-//     const doctors = await (await db.exec("getDoctors")).recordset;
-
-//     res.status(200).json(doctors);
-//   } catch (error) {
-//     res.status(500).json({ error: "something went wrong" });
-//   }
-// };

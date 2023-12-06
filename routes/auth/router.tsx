@@ -11,7 +11,7 @@ import {
   SignupController,
   SigninController,
   LogoutController,
-} from "./controller";
+} from "../../controller/authController";
 import { User } from "../../config/model";
 import middlewareToken from "../../middleware/tokenMiddleware";
 
@@ -54,7 +54,7 @@ export const getRole = async (
           .input("DIENTHOAI", phone)
           .input("MATKHAU", password)
           .input("ROLE", role)
-          .execute("SIGIN")
+          .execute("SIGN_IN")
       ).recordset[0],
       role,
     };
@@ -78,15 +78,7 @@ const role = async (
       return next();
     }
 
-    return res
-      .status(402)
-      .send
-      // <Topbar user={req.user}>
-      //   <Warning fullscreen>
-      //     You are not authorized to perform this action.
-      //   </Warning>
-      // </Topbar>
-      ();
+    return res.status(402).send("You are not authenticated");
   });
 };
 
@@ -102,15 +94,7 @@ export const patient = async (
       return next();
     }
 
-    return res
-      .status(401)
-      .send
-      // <Topbar user={req.user}>
-      //   <Warning fullscreen>
-      //     You have to be logged in to perform this action.
-      //   </Warning>
-      // </Topbar>
-      ();
+    return res.status(401).send("You are not authenticated");
   });
 };
 
@@ -143,7 +127,7 @@ authRouter.post("/login", SigninController);
 authRouter.post(
   "/logout",
   patient,
-  middlewareToken.verifyToken,
+  middlewareToken.verifyTokenMiddleware,
   LogoutController
 );
 

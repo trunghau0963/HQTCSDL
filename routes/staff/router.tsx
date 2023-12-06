@@ -5,43 +5,44 @@ import Dashboard from "../../app/staff/Dashboard/Dashboard";
 import Home from "../../app/staff/Home/Home";
 import Schedule from "../../app/staff/Schedule/Schedule";
 import Drug from "../../app/staff/Drug/Drug";
+import { staff } from "../auth/router";
 import Service from "../../app/staff/Service/Service";
 
 const staffRouter = Router();
 
-staffRouter.get("/", async (req, res) => {
+staffRouter.get("/", staff, async (req, res) => {
   return res.send(
     <StaffPage/>
   );
 });
 
-staffRouter.get("/dashboard", async (req, res) => {
+staffRouter.get("/dashboard", staff, async (req, res) => {
   return res.send(
     <Dashboard/>
   );
 });
 
-staffRouter.get("/home", async (req, res) => {
+staffRouter.get("/home", staff, async (req, res) => {
   return res.send(
     <Home/>
   );
 });
 
 
-staffRouter.get("/drug", async (req, res) => {
+staffRouter.get("/drug", staff, async (req, res) => {
   return res.send(
     <Drug/>
   );
 });
 
 
-staffRouter.get("/schedule", async (req, res) => {
+staffRouter.get("/schedule", staff, async (req, res) => {
   return res.send(
     <Schedule/>
   );
 });
 
-staffRouter.get("/service", async (req, res) => {
+staffRouter.get("/service", staff, async (req, res) => {
   return res.send(
     <Service/>
   );

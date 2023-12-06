@@ -26,7 +26,7 @@ export type User = {
   address?: string;
   isLocked?: boolean;
   role: Role;
-}
+};
 
 export type DentistProps = {
   id: string;
@@ -34,8 +34,9 @@ export type DentistProps = {
   phone: string;
   password: string;
   gender: string | null;
-  address: string | null;
-  isLocked: boolean;
+  dob?: Date;
+  address?: string | null;
+  isLocked?: boolean;
 };
 
 export type PatientProps = {
@@ -44,9 +45,9 @@ export type PatientProps = {
   password: string;
   gender: string | null;
   name: string;
-  dob: string;
-  address: string;
-  isLocked: boolean;
+  dob?: Date;
+  address?: string | null;
+  isLocked?: boolean;
 };
 
 export type StaffProps = {
@@ -55,8 +56,9 @@ export type StaffProps = {
   password: string;
   name: string;
   gender: string | null;
-  address: string | null;
-  isLocked: boolean;
+  dob?: Date;
+  address?: string | null;
+  isLocked?: boolean;
 };
 
 export type AdminProps = {
@@ -65,7 +67,8 @@ export type AdminProps = {
   password: string;
   name: string;
   gender: string | null;
-  address: string | null;
+  dob?: Date;
+  address?: string | null;
 };
 
 export type AppointmentProps = {
@@ -104,4 +107,3 @@ export type drugProps = {
   exp: string;
   price: number;
 };
-

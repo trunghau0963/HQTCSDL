@@ -16,21 +16,21 @@ dentistRouter.get("/dashboard", dentist, async (req, res) => {
   );
 });
 
-dentistRouter.get("/home", async (req, res) => {
+dentistRouter.get("/home", dentist, async (req, res) => {
   return res.send(
     <Home/>
   );
 });
 
 
-dentistRouter.get("/patient", async (req, res) => {
+dentistRouter.get("/patient", dentist, async (req, res) => {
   return res.send(
     <Patient/>
   );
 });
 
 
-dentistRouter.get("/schedule", async (req, res) => {
+dentistRouter.get("/schedule",dentist, async (req, res) => {
   return res.send(
     <Schedule/>
   );
