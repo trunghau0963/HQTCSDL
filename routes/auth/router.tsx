@@ -5,6 +5,7 @@ import { Role, getDatabase } from "../../config/config";
 import * as elements from "typed-html";
 import Signup from "../../app/auth/Signup/Signup";
 import Login from "../../app/auth/Login/Login";
+import { convertRoleViToEn } from "../../utils/convertRole";
 // import Warning from "../../components/warning";
 // import Topbar from "../../components/topbar";
 import {
@@ -48,19 +49,21 @@ export const getRole = async (
       role: role,
     } = (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
 
+    const configRole = convertRoleViToEn(role);
+
     const user: User = {
       ...(
         await (await req.db())
           .input("DIENTHOAI", phone)
           .input("MATKHAU", password)
-          .input("ROLE", role)
+          .input("ROLE", role) 
           .execute("SIGN_IN")
       ).recordset[0],
-      role,
+      role: configRole,
     };
 
     req.user = user;
-    req.db = async () => await getDatabase(role);
+    req.db = async () => await getDatabase(user.role);
     return next();
   } catch {
     return next();

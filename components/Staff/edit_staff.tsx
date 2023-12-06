@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { StaffProps } from "../../model/model";
+import { StaffProps } from "../../model/temp";
 
 interface EditStaffProps {
   Data: StaffProps;

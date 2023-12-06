@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import DeleteStaff from "../../../../components/Staff/delete_staff";
-import { StaffProps } from "../../../../model/model";
+import { StaffProps } from "../../../../model/temp";
 
 interface DeleteStaffProps {
   Data: StaffProps;

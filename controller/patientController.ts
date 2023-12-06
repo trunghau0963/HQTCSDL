@@ -1,12 +1,12 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { PatientProps } from "../model/model";
+import { Patient } from "../model/model";
 
 export const createPatient = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user: PatientProps = {
+    const user: Patient = {
       ...(
         await (await req.db())
           .input("HOTEN", input.name)
@@ -34,7 +34,7 @@ export const createPatient = async (req: Request, res: Response) => {
 export const getPatientById = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const user: PatientProps = (
+    const user: Patient = (
       await (await req.db())
         .input("MABN", id)
         .execute("GET_INFO_BENHNHAN_BY_ID")
@@ -58,7 +58,7 @@ export const getPatientById = async (req: Request, res: Response) => {
 export const getPatientByName = async (req: Request, res: Response) => {
   const { name } = req.body;
   try {
-    const user: PatientProps = (
+    const user: Patient = (
       await (await req.db())
         .input("HOTEN", name)
         .execute("GET_INFO_BENHNHAN_BY_NAME")
@@ -81,7 +81,7 @@ export const getPatientByName = async (req: Request, res: Response) => {
 export const getPatientByPhone = async (req: Request, res: Response) => {
   const { phone } = req.body;
   try {
-    const user: PatientProps = (
+    const user: Patient = (
       await (await req.db())
         .input("DIENTHOAI", phone)
         .execute("GET_INFO_BENHNHAN_BY_PHONENUMBER")
@@ -103,9 +103,9 @@ export const getPatientByPhone = async (req: Request, res: Response) => {
 
 export const getAllPatient = async (req: Request, res: Response) => {
   try {
-    const patients: PatientProps[] = (
+    const patients: Patient[] = (
       await (await req.db()).execute("GET_INFO_BENHNHAN")
-    ).recordset as PatientProps[];
+    ).recordset as Patient[];
     console.log(patients);
   } catch (error) {
     if (error instanceof Error) {
@@ -121,7 +121,7 @@ export const getAllPatient = async (req: Request, res: Response) => {
 export const blockPatient = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const user: PatientProps = (
+    const user: Patient = (
       await (await req.db()).input("MABN", id).execute("BLOCK_ACCOUNT_BENHNHAN")
     ).recordset[0];
   } catch (error) {

@@ -12,53 +12,51 @@ import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
-import { DentistProps } from "../../model/model";
+import { Dentist } from "../../model/model";
 import { admin } from "../auth/router";
 
 const adminRouter = Router();
-let dentists: DentistProps[] = [];
-
-adminRouter.get("/dashboard", async (req, res) => {
+adminRouter.get("/dashboard", admin, async (req, res) => {
   return res.send(<DashBoard />);
 });
 
-adminRouter.get("/drug", async (req, res) => {
+adminRouter.get("/drug", admin, async (req, res) => {
   return res.send(<Drug />);
 });
 
-adminRouter.get("/schedule", async (req, res) => {
+adminRouter.get("/schedule", admin, async (req, res) => {
   return res.send(<Schedule />);
 });
 
-adminRouter.get("/schedule/add_appointment", async (req, res) => {
+adminRouter.get("/schedule/add_appointment", admin, async (req, res) => {
   return res.send(<AddAppointmentPage />);
 });
 
-adminRouter.get("/schedule/delete_appointment", async (req, res) => {
+adminRouter.get("/schedule/delete_appointment", admin, async (req, res) => {
   return res.send(<DeleteAppointmentPage />);
 });
 
-adminRouter.get("/schedule/edit_appointment", async (req, res) => {
+adminRouter.get("/schedule/edit_appointment", admin, async (req, res) => {
   return res.send(<EditAppointmentPage />);
 });
 
-adminRouter.get("/dentist", async (req, res) => {
+adminRouter.get("/dentist", admin, async (req, res) => {
   return res.send(<DentistPage />);
 });
 
-adminRouter.get("/staff", async (req, res) => {
+adminRouter.get("/staff", admin, async (req, res) => {
   return res.send(<StaffPage />);
 });
 
-adminRouter.get("/patient", async (req, res) => {
+adminRouter.get("/patient", admin, async (req, res) => {
   return res.send(<PatientPage />);
 });
 
-adminRouter.get("/service", async (req, res) => {
+adminRouter.get("/service", admin, async (req, res) => {
   return res.send(<Service />);
 });
 
-adminRouter.get("/profile", async (req, res) => {
+adminRouter.get("/profile", admin, async (req, res) => {
   return res.send(<Profile />);
 });
 

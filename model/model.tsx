@@ -21,54 +21,49 @@ export type User = {
   id: string;
   name: string;
   phone: string;
-  password?: string;
+  password: string;
   dob?: Date;
   address?: string;
   isLocked?: boolean;
   role: Role;
 };
 
-export type DentistProps = {
-  id: string;
-  name: string;
-  phone: string;
-  password: string;
-  gender: string | null;
-  dob?: Date;
-  address?: string | null;
-  isLocked?: boolean;
+export type Dentist = {
+  MANS: string;
+  HOTEN: string;
+  DIENTHOAI: string;
+  MATKHAU?: string;
+  NGAYSINH?: Date;
+  DIACHI?: string;
+  DAKHOA?: boolean;
+};
+export type Patient = {
+  MABN: string;
+  HOTEN: string;
+  DIENTHOAI: string;
+  MATKHAU?: string;
+  NGAYSINH?: Date;
+  DIACHI?: string;
+  DAKHOA?: boolean;
 };
 
-export type PatientProps = {
-  id: string;
-  phone: string;
-  password: string;
-  gender: string | null;
-  name: string;
-  dob?: Date;
-  address?: string | null;
-  isLocked?: boolean;
+export type Staff = {
+  MANV: string;
+  HOTEN: string;
+  DIENTHOAI: string;
+  MATKHAU?: string;
+  NGAYSINH?: Date;
+  DIACHI?: string;
+  DAKHOA?: boolean;
 };
 
-export type StaffProps = {
-  id: string;
-  phone: string;
-  password: string;
-  name: string;
-  gender: string | null;
-  dob?: Date;
-  address?: string | null;
-  isLocked?: boolean;
-};
-
-export type AdminProps = {
-  id: string;
-  phone: string;
-  password: string;
-  name: string;
-  gender: string | null;
-  dob?: Date;
-  address?: string | null;
+export type Admin = {
+  MAQT: string;
+  HOTEN: string;
+  DIENTHOAI: string;
+  MATKHAU?: string;
+  NGAYSINH?: Date;
+  DIACHI?: string;
 };
 
 export type AppointmentProps = {

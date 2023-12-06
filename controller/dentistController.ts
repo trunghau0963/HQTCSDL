@@ -1,12 +1,12 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { DentistProps } from "../model/model";
+import { Dentist } from "../model/model";
 
 export const createDentist = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user: DentistProps = {
+    const user: Dentist = {
       ...(
         await (await req.db())
           .input("HOTEN", input.name)
@@ -34,7 +34,7 @@ export const createDentist = async (req: Request, res: Response) => {
 export const getDentistById = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const user: DentistProps = (
+    const user: Dentist = (
       await (await req.db()).input("MANS", id).execute("GET_INFO_NHASI_BY_ID")
     ).recordset[0];
 
@@ -56,7 +56,7 @@ export const getDentistById = async (req: Request, res: Response) => {
 export const getDentistByName = async (req: Request, res: Response) => {
   const { name } = req.body;
   try {
-    const user: DentistProps = (
+    const user: Dentist = (
       await (await req.db())
         .input("HOTEN", name)
         .execute("GET_INFO_NHASI_BY_NAME")
@@ -79,7 +79,7 @@ export const getDentistByName = async (req: Request, res: Response) => {
 export const getDentistByPhone = async (req: Request, res: Response) => {
   const { phone } = req.body;
   try {
-    const user: DentistProps = (
+    const user: Dentist = (
       await (await req.db())
         .input("DIENTHOAI", phone)
         .execute("GET_INFO_NHASI_BY_PHONENUMBER")
@@ -101,9 +101,9 @@ export const getDentistByPhone = async (req: Request, res: Response) => {
 
 export const getAllDentist = async (req: Request, res: Response) => {
   try {
-    const dentists: DentistProps[] = (
+    const dentists: Dentist[] = (
       await (await req.db()).execute("GET_INFO_NHASI")
-    ).recordset as DentistProps[];
+    ).recordset as Dentist[];
     console.log(dentists);
   } catch (error) {
     if (error instanceof Error) {
@@ -119,7 +119,7 @@ export const getAllDentist = async (req: Request, res: Response) => {
 export const blockDentist = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-    const user: DentistProps = (
+    const user: Dentist = (
       await (await req.db()).input("MANS", id).execute("BLOCK_ACCOUNT_NHASI")
     ).recordset[0];
   } catch (error) {

@@ -1,12 +1,10 @@
 import * as elements from "typed-html";
 import {
-  DentistProps,
-  PatientProps,
-  StaffProps,
   serviceProps,
   drugProps,
   invoiceProps,
 } from "../../model/model";
+import { PatientProps, DentistProps, StaffProps } from "../../model/temp";
 export const DentistData: DentistProps[] = [
   {
     id: "1",

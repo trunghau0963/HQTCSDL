@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import EditPatient from "../../../../components/Patient/edit_patient";
-import { PatientProps } from "../../../../model/model";
+import { PatientProps } from "../../../../model/temp";
 interface EditPatientProps {
   Data: PatientProps;
 }

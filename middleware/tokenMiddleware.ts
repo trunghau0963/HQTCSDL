@@ -25,7 +25,7 @@ const middlewareToken = {
   generateToken: async (
     phone: string,
     password: string | undefined,
-    role: Role,
+    role: Role | undefined,
     res: Response
   ) => {
     console.log("data", { phone, password, role });

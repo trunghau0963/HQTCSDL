@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import EditStaff from "../../../../components/Staff/edit_staff";
-import { StaffProps } from "../../../../model/model";
+import { StaffProps } from "../../../../model/temp";
 interface EditStaffProps {
   Data: StaffProps;
 }

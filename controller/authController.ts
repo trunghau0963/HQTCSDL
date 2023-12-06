@@ -2,8 +2,8 @@ import { Request, RequestHandler, response, Response } from "express";
 import Connection from "../middleware/connection";
 import middlewareToken from "../middleware/tokenMiddleware";
 import { User } from "../model/model";
-// import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { convertRoleViToEn } from "../utils/convertRole";
 
 export const SignupController = async (req: Request, res: Response) => {
   const input = req.body;
@@ -40,6 +40,7 @@ export const SigninController = async (req: Request, res: Response) => {
   try {
     const { phone, password, role } = req.body;
     console.log({ phone, password, role });
+    const configRole = convertRoleViToEn(role);
     const user: User = {
       ...(
         await (await req.db())
@@ -48,26 +49,29 @@ export const SigninController = async (req: Request, res: Response) => {
           .input("ROLE", req.body.role)
           .execute("SIGN_IN")
       ).recordset[0],
-      role,
+      role: configRole,
     };
 
+    console.log("user login : ", user.id, user.phone, user.password, user.role);
     const token = await middlewareToken.generateToken(
-      req.body.phone,
-      req.body.password,
-      user.role,
+      phone,
+      password,
+      role,
       res
     );
     console.log(token);
     return res
-      .json("Login successfully" + `<a href='/${role}/dashboard'>Continue<a>`)
+      .json(
+        "Login successfully" + `<a href='/${configRole}/dashboard'>Continue<a>`
+      )
       .status(201);
   } catch (error: any) {
     console.log(error);
 
-    // if (error instanceof Error) {
-    //   console.error(error.message);
-    //   return res.status(400).send(error.message);
-    // }
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
 
     return res.status(500).send("Login failed. Please try again later.");
   }
