@@ -13,13 +13,18 @@ import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
 import { Admin, Patient, Dentist, Staff } from "../../model/model";
+import ProfilePage from "../../app/admin/Profile/Profile";
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAdminById } from "../../controller/adminController";
 import { getAllStaff } from "../../controller/staffController";
-import { getAllPatient } from "../../controller/patientController";
+import {
+  createPatient,
+  getAllPatient,
+  deletePatient,
+  updatePatient,
+} from "../../controller/patientController";
 import { getAllDentist } from "../../controller/dentistController";
-import ProfilePage from "../../app/admin/Profile/Profile";
 import { addDrug } from "../../controller/drugController";
 
 const adminRouter = Router();
@@ -64,7 +69,7 @@ adminRouter.get("/staff", admin, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-      staffs = (await getAllStaff(req, res)) as Staff[];
+    staffs = (await getAllStaff(req, res)) as Staff[];
   } catch {}
   return res.send(<StaffPage Data={staffs} />);
 });
@@ -79,6 +84,13 @@ adminRouter.get("/patient", admin, async (req, res) => {
   } catch {}
   return res.send(<PatientPage Data={patients} />);
 });
+
+adminRouter.post("/patient", admin, createPatient);
+
+// adminRouter.delete("/patient", admin, deletePatient);
+
+adminRouter.put("/patient", admin, updatePatient);
+
 
 adminRouter.get("/service", admin, async (req, res) => {
   return res.send(<Service />);

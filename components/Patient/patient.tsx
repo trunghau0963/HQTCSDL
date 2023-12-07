@@ -9,9 +9,8 @@ type PatientProps = {
 
 const PatientComponent = ({ Data }: PatientProps) => {
   Data.forEach((data) => {
-    if(data.MATKHAU == undefined) data.MATKHAU = "NULL"
-  })  
-  console.log(Data);
+    if (data.MATKHAU == undefined) data.MATKHAU = "NULL";
+  });
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -110,7 +109,14 @@ const PatientComponent = ({ Data }: PatientProps) => {
                         </td>
                         <td class="text-right">
                           <EditPatientPage Data={data} />
-                          <DeletePatientPage Data={data} />
+                          {/* <DeletePatientPage Data={data} /> */}
+                          <button
+                            hx-delete="/admin/patient"
+                            hx-target="body"
+                            class="btn btn-link text-decoration-none"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))}

@@ -42,12 +42,10 @@ export const getRole = async (
 
   try {
     const token = req.cookies.token as string;
-    console.log("token", token);
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
 
     const { DIENTHOAI, MATKHAU, role } = data.user;
-    // console.log(data.user);
     const user: User = {
       ...(
         await (await req.db())
@@ -58,9 +56,6 @@ export const getRole = async (
       ).recordset[0],
       role,
     };
-
-    console.log(user.role);
-
     req.user = user;
     req.db = async () => await getDatabase(user.role);
     return next();

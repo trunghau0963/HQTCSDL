@@ -120,6 +120,31 @@ export const getAllDentist = async (req: Request, res: Response) => {
   }
 };
 
+export const updateDentist = async (req: Request, res: Response) => {
+  try {
+    const input = req.body;
+    console.log(input);
+    const user = await (await req.db())
+      .input("MABN", input.id)
+      .input("MATKHAU", input.password)
+      .input("HOTEN", input.name)
+      .input("NGAYSINH", input.dob)
+      .input("DIACHI", input.address)
+      .execute("UPDATE_INFO_BENHNHAN");
+    res
+      .header("HX-Redirect", "/admin/patient")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful update patient");
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
+    return res.status(500).send("Action Failed");
+  }
+};
+
 export const blockDentist = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {

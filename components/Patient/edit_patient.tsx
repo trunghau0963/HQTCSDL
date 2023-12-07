@@ -37,112 +37,122 @@ const EditPatient = ({ Data }: EditPatientProps) => {
               <div class="p-5">
                 <div class="row">
                   <div class="col-lg-8 offset-lg-2">
-                    <form method="POST">
+                    <form
+                      id="update-patient-form"
+                      hx-put="/admin/patient"
+                      hx-vals={`{"id": ${Data.MABN}}`}
+                    >
                       <div class="row">
-                        <div class="col-sm-6">
+                        <div class="row">
                           <div class="form-group">
-                            <label>
-                              Name <span class="text-danger">*</span>
+                            <label class="form-label font-weight-bold" for="id">
+                              ID <span class="text-danger"></span>
                             </label>
                             <input
-                              class="form-control"
                               type="text"
-                              name="first_name"
-                              value={Data.HOTEN}
+                              id="id"
+                              class="form-control form-control-lg"
+                              name="id"
+                              required=""
+                              value={Data.MABN}
+                              placeholder={Data.MABN}
+                              readonly="true"
                             />
                           </div>
                         </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label>Phone</label>
-                            <input
-                              class="form-control"
-                              type="text"
-                              name="last_name"
-                              value={Data.DIENTHOAI}
-                            />
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group gender-select">
-                            <label class="gen-label">Gender:</label>
-                            <div class="form-check-inline">
-                              <label class="form-check-label">
-                                <input
-                                  type="radio"
-                                  name="gender"
-                                  class="form-check-input"
-                                  value="male"
-                                />
-                                Male
+                        <div class="row my-3">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="name"
+                              >
+                                Name <span class="text-danger">*</span>
                               </label>
+                              <input
+                                type="text"
+                                id="name"
+                                class="form-control form-control-lg"
+                                name="name"
+                                required=""
+                                value={Data.HOTEN}
+                                placeholder={Data.HOTEN}
+                              />
                             </div>
-                            <div class="form-check-inline">
-                              <label class="form-check-label">
-                                <input
-                                  type="radio"
-                                  name="gender"
-                                  class="form-check-input"
-                                  value="female"
-                                />
-                                Female
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="password"
+                              >
+                                Password<span class="text-danger">*</span>
                               </label>
+                              <input
+                                type="password"
+                                id="password"
+                                class="form-control form-control-lg"
+                                name="password"
+                                value={Data.MATKHAU}
+                                required="********"
+                              />
                             </div>
                           </div>
                         </div>
-                        <div class="col-sm-12">
-                          <div class="row">
-                            <div class="col-sm-12">
-                              <div class="form-group">
-                                <label>Address</label>
+                        <div class="row my-3">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <div class="form-outline mb-4">
+                                <label
+                                  class="form-label font-weight-bold"
+                                  for="dob"
+                                >
+                                  Date of Birth
+                                </label>
                                 <input
-                                  type="text"
-                                  class="form-control "
-                                  name="address"
-                                  value={Data.DIACHI ? Data.DIACHI : "Null"}
+                                  type="date"
+                                  id="dob"
+                                  class="form-control form-control-lg"
+                                  name="dob"
+                                  required=""
+                                  max={new Date().toISOString().split("T")[0]}
+                                  value={
+                                    Data.NGAYSINH.toISOString().split("T")[0]
+                                  }
+                                  placeholder={Data.NGAYSINH.toDateString()}
                                 />
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label>Password </label>
-                            <input
-                              class="form-control"
-                              type="text"
-                              name="phone"
-                              value={Data.MATKHAU}
-                            />
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label>Avatar</label>
-                            <div class="profile-upload">
-                              <div class="upload-img">
-                                <img alt="" src="/img/user.jpg" />
-                              </div>
-                              <div class="upload-input">
-                                <input
-                                  type="file"
-                                  class="form-control"
-                                  name="image"
-                                  value="<%= list[i].image %>"
-                                />
-                              </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="address"
+                              >
+                                Address
+                              </label>
+                              <input
+                                id="address"
+                                class="form-control form-control-lg"
+                                name="address"
+                                required=""
+                                value={Data.DIACHI}
+                                placeholder={Data.DIACHI}
+                              />
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <label>Short Biography</label>
-                        {/* <textarea class="form-control" rows="3" cols="30" name="biography" value="<%= list[i].biography %>"></textarea> */}
                       </div>
 
-                      <div class="m-t-20 text-center">
-                        <button class="btn btn-primary submit-btn">
-                          Edit Patient
+                      <div class="d-flex justify-content-center m-t-20 text-center">
+                        <button
+                          type="submit"
+                          hx-target="#update-patient-form"
+                          hx-swap="outerHTML"
+                          class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                        >
+                          Update Patient
                         </button>
                       </div>
                     </form>

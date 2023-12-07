@@ -38,114 +38,115 @@ const DeletePatient = ({ Data }: DeletePatientProps) => {
             <div class="modal-body">
               <div class="row">
                 <div class="col-lg-8 offset-lg-2">
-                  <form method="post">
+                  <form
+                    id="delete-patient-form"
+                    hx-delete="/admin/patient"
+                    hx-target="#delete-patient-form"
+                    hx-confirm="Are you sure you want to delete?"
+                  >
                     <div class="row">
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label>
-                            Name <span class="text-danger">*</span>
-                          </label>
-                          <input
-                            class="form-control"
-                            type="text"
-                            name="first_name"
-                            value={Data.HOTEN}
-                          />
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label>Phone</label>
-                          <input
-                            class="form-control"
-                            type="text"
-                            name="last_name"
-                            value={Data.DIENTHOAI}
-                          />
-                        </div>
-                      </div>
-                      <div class="col-sm-6"></div>
-                      <div class="col-sm-6">
-                        <div class="form-group gender-select">
-                          <label class="gen-label">Gender:</label>
-                          <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input
-                                type="radio"
-                                name="gender"
-                                class="form-check-input"
-                                value="male"
-                              />
-                              Male
+                      <div class="row my-3">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label
+                              class="form-label font-weight-bold"
+                              for="name"
+                            >
+                              Name <span class="text-danger">*</span>
                             </label>
+                            <input
+                              type="text"
+                              id="name"
+                              class="form-control form-control-lg"
+                              name="name"
+                              required=""
+                              value={Data.HOTEN}/>
                           </div>
-                          <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input
-                                type="radio"
-                                name="gender"
-                                class="form-check-input"
-                                value="female"
-                              />
-                              Female
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label
+                              class="form-label font-weight-bold"
+                              for="password"
+                            >
+                              Password<span class="text-danger">*</span>
                             </label>
+                            <input
+                              type="password"
+                              id="password"
+                              class="form-control form-control-lg"
+                              name="password"
+                              required=""
+                            />
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-12">
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <div class="form-group">
-                              <label>Address</label>
+                      <div class="row my-3">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label
+                              class="form-label font-weight-bold"
+                              for="phone"
+                            >
+                              Phone <span class="text-danger">*</span>
+                            </label>
+                            <input
+                              type="tel"
+                              id="phone"
+                              class="form-control form-control-lg"
+                              name="phone"
+                              required=""
+                            />
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <div class="form-outline mb-4">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="dob"
+                              >
+                                Date of Birth
+                              </label>
                               <input
-                                type="text"
-                                class="form-control "
-                                name="address"
-                                value={Data.DIACHI ? Data.DIACHI : "Null"}
+                                type="date"
+                                id="dob"
+                                class="form-control form-control-lg"
+                                name="dob"
+                                required=""
+                                max={new Date().toISOString().split("T")[0]}
                               />
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label>
-                            Password <span class="text-danger">*</span>
-                          </label>
-                          <input
-                            class="form-control"
-                            type="text"
-                            name="phone"
-                            value={Data.MATKHAU}
-                          />
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label>Avatar</label>
-                          <div class="profile-upload">
-                            <div class="upload-img">
-                              <img alt="" src="/img/user.jpg" />
-                            </div>
-                            <div class="upload-input">
-                              <input
-                                type="file"
-                                class="form-control"
-                                name="image"
-                                value="<%= list[i].image %>"
-                              />
-                            </div>
+                      <div class="row my-3">
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label
+                              class="form-label font-weight-bold"
+                              for="address"
+                            >
+                              Address
+                            </label>
+                            <textarea
+                              id="address"
+                              class="form-control form-control-lg"
+                              name="address"
+                              required=""
+                            ></textarea>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label>Short Biography</label>
-                      {/* <textarea class="form-control" rows="3" cols="30" name="biography"></textarea> */}
-                    </div>
-                    <div class="m-t-20 text-center">
-                      <button class="btn btn-primary submit-btn">
-                        Delete Doctor
+
+                    <div class="d-flex justify-content-center m-t-20 text-center">
+                      <button
+                        type="submit"
+                        hx-post={Data.MABN}
+                        class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                      >
+                        Delete Patient
                       </button>
                     </div>
                   </form>
