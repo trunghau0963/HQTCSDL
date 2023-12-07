@@ -55,52 +55,6 @@ export const getAdminById = async (req: Request, res: Response, id : string) => 
   }
 };
 
-export const getAdminByName = async (req: Request, res: Response, name: string) => {
-  // const { name } = req.body;
-  try {
-    const user: Admin = (
-      await (await req.db())
-        .input("HOTEN", name)
-        .execute("GET_INFO_QUANTRI_BY_NAME")
-    ).recordset[0];
-    console.log(user);
-    return user;
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get patient by id. Please try again later.");
-    }
-  }
-};
-
-export const getAdminByPhone = async (req: Request, res: Response) => {
-  const { phone } = req.body;
-  try {
-    const user: Admin = (
-      await (await req.db())
-        .input("DIENTHOAI", phone)
-        .execute("GET_INFO_QUANTRI_BY_PHONENUMBER")
-    ).recordset[0];
-    console.log(user);
-    return res.json("successful get patient").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get patient by id. Please try again later.");
-    }
-  }
-};
-
 export const getAllAdmin = async (req: Request, res: Response) => {
   try {
     const patients: Admin[] = (

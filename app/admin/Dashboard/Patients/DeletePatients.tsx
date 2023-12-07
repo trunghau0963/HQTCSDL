@@ -1,9 +1,9 @@
 import * as elements from "typed-html";
 import DeletePatient from "../../../../components/Patient/delete_patient";
-import { PatientProps } from "../../../../model/temp";
+import { Patient } from "../../../../model/model";
 
 interface DeletePatientProps {
-  Data: PatientProps;
+  Data: Patient;
 }
 
 const DeletePatientPage = ({Data} : DeletePatientProps) => {

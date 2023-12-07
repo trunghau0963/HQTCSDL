@@ -12,10 +12,13 @@ import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
-import { Admin } from "../../model/model";
+import { Admin, Patient, Dentist, Staff } from "../../model/model";
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAdminById } from "../../controller/adminController";
+import { getAllStaff } from "../../controller/staffController";
+import { getAllPatient } from "../../controller/patientController";
+import { getAllDentist } from "../../controller/dentistController";
 import ProfilePage from "../../app/admin/Profile/Profile";
 
 const adminRouter = Router();
@@ -44,15 +47,36 @@ adminRouter.get("/schedule/edit_appointment", admin, async (req, res) => {
 });
 
 adminRouter.get("/dentist", admin, async (req, res) => {
-  return res.send(<DentistPage />);
+  let dentists: Dentist[] = [];
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    dentists = (await getAllDentist(req, res)) as Dentist[];
+  } catch {}
+  return res.send(<DentistPage Data={dentists} />);
 });
 
 adminRouter.get("/staff", admin, async (req, res) => {
-  return res.send(<StaffPage />);
+  let staffs: Staff[] = [];
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+      staffs = (await getAllStaff(req, res)) as Staff[];
+  } catch {}
+  return res.send(<StaffPage Data={staffs} />);
 });
 
 adminRouter.get("/patient", admin, async (req, res) => {
-  return res.send(<PatientPage />);
+  let patients: Patient[] = [];
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    patients = (await getAllPatient(req, res)) as Patient[];
+  } catch {}
+  return res.send(<PatientPage Data={patients} />);
 });
 
 adminRouter.get("/service", admin, async (req, res) => {
@@ -64,15 +88,14 @@ adminRouter.get("/profile", admin, async (req, res) => {
 });
 
 adminRouter.get("/information", admin, async (req, res) => {
-  let dentist: Admin | undefined;
+  let admin: Admin | undefined;
   try {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    console.log("data: ", data.user.HOTEN);
-    dentist = (await getAdminById(req, res, data.user.MAQT)) as Admin;
+    admin = (await getAdminById(req, res, data.user.MAQT)) as Admin;
   } catch {}
-  return res.send(<ProfilePage data={dentist} />);
+  return res.send(<ProfilePage data={admin} />);
 });
 
 export default adminRouter;

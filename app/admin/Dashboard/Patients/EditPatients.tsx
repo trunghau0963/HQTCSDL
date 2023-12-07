@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
 import EditPatient from "../../../../components/Patient/edit_patient";
-import { PatientProps } from "../../../../model/temp";
+import { Patient } from "../../../../model/model";
 interface EditPatientProps {
-  Data: PatientProps;
+  Data: Patient;
 }
 const EditPatientPage = ({Data}: EditPatientProps) => {
   return (

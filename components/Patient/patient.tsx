@@ -2,9 +2,16 @@ import * as elements from "typed-html";
 import AddPatientPage from "../../app/admin/Dashboard/Patients/AddPatienst";
 import DeletePatientPage from "../../app/admin/Dashboard/Patients/DeletePatients";
 import EditPatientPage from "../../app/admin/Dashboard/Patients/EditPatients";
-import { PatientData } from "../../config/hardcode/hardcode";
+import { Patient } from "../../model/model";
+type PatientProps = {
+  Data: Patient[];
+};
 
-const Patient = () => {
+const PatientComponent = ({ Data }: PatientProps) => {
+  Data.forEach((data) => {
+    if(data.MATKHAU == undefined) data.MATKHAU = "NULL"
+  })  
+  console.log(Data);
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -46,7 +53,6 @@ const Patient = () => {
                       <th>Name</th>
                       <th>Phone</th>
                       <th>Password</th>
-                      <th>Gender</th>
                       <th>DOB</th>
                       <th>Address</th>
                       <th>Locked</th>
@@ -54,38 +60,37 @@ const Patient = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {PatientData.map((data) => (
+                    {Data.map((data, idx) => (
                       <tr>
                         <td>
                           <img
                             width="50"
                             height="50"
-                            src={`/img/patient-thumb-0${data.id}.jpg`}
+                            src={`/img/patient-thumb-0${idx + 1}.jpg`}
                             class="rounded-circle"
                             alt=""
                           />{" "}
                           <h2></h2>
                         </td>
-                        <td>{data.id}</td>
-                        <td>{data.name}</td>
-                        <td>{data.phone}</td>
-                        <td>{data.password ? data.password : undefined}</td>
-                        <td>{data.gender}</td>
-                        <td>{data.dob}</td>
-                        <td>{data.address}</td>
+                        <td>{data.MABN}</td>
+                        <td>{data.HOTEN}</td>
+                        <td>{data.DIENTHOAI}</td>
+                        <td>{data.MATKHAU ? data.MATKHAU : "NULL"}</td>
+                        <td>{data.NGAYSINH.toLocaleDateString()}</td>
+                        <td>{data.DIACHI}</td>
                         <td>
-                          {data.isLocked ? (
+                          {data.DAKHOA ? (
                             <div class="form-check form-switch">
                               <input
                                 class="form-check-input"
                                 type="checkbox"
                                 role="switch"
-                                id={`flexSwitchCheck_${data.id}`}
+                                id={`flexSwitchCheck_${data.MABN}`}
                                 checked
                               />
                               <label
                                 class="form-check-label"
-                                for={`flexSwitchCheck_${data.id}`}
+                                for={`flexSwitchCheck_${data.MABN}`}
                               ></label>
                             </div>
                           ) : (
@@ -94,34 +99,16 @@ const Patient = () => {
                                 class="form-check-input"
                                 type="checkbox"
                                 role="switch"
-                                id={`flexSwitchCheck_${data.id}`}
+                                id={`flexSwitchCheck_${data.MABN}`}
                               />
                               <label
                                 class="form-check-label"
-                                for={`flexSwitchCheck_${data.id}`}
+                                for={`flexSwitchCheck_${data.MABN}`}
                               ></label>
                             </div>
                           )}
                         </td>
                         <td class="text-right">
-                          {/* <div class="dropdown">
-                            <a
-                              class="btn btn-primary btn-rounded float-right dropdown-toggle"
-                              id="dropdownMenuButton"
-                              data-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
-                            >
-                              Action
-                            </a>
-                            <div
-                              class="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <div class="dropdown-item"></div>
-                              <div class="dropdown-item"></div>
-                            </div>
-                          </div> */}
                           <EditPatientPage Data={data} />
                           <DeletePatientPage Data={data} />
                         </td>
@@ -376,4 +363,4 @@ const Patient = () => {
   );
 };
 
-export default Patient;
+export default PatientComponent;

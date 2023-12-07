@@ -1,10 +1,14 @@
 import * as elements from "typed-html";
-import AddStaff from "./add_staff";
 import AddStaffPage from "../../app/admin/Dashboard/Staffs/AddStaff";
 import DeleteStaffPage from "../../app/admin/Dashboard/Staffs/DeleteStaff";
 import EditStaffPage from "../../app/admin/Dashboard/Staffs/EditStaff";
-import { StaffData } from "../../config/hardcode/hardcode";
-const Staff = () => {
+import { Staff } from "../../model/model";
+
+type StaffProps = {
+  Data: Staff[];
+};
+
+const StaffComponent = ({ Data }: StaffProps) => {
   return (
     <div class="main-wrapper">
       <div class="page-wrapper">
@@ -49,44 +53,44 @@ const Staff = () => {
                       <th>Name</th>
                       <th>Phone</th>
                       <th>Password</th>
-                      <th>Gender</th>
+                      <th>Dob</th>
                       <th>Address</th>
                       <th>Locked</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {StaffData.map((data) => (
+                    {Data.map((data, idx) => (
                       <tr>
                         <td>
                           <img
                             width="50"
                             height="50"
-                            src={`/img/staff-thumb_0${data.id}.jpg`}
+                            src={`/img/staff-thumb_0${idx + 1}.jpg`}
                             class="rounded-circle"
                             alt=""
                           />{" "}
                           <h2></h2>
                         </td>
-                        <td>{data.id}</td>
-                        <td>{data.name}</td>
-                        <td>{data.phone}</td>
-                        <td>{data.password}</td>
-                        <td>{data.gender}</td>
-                        <td>{data.address}</td>
+                        <td>{data.MANV}</td>
+                        <td>{data.HOTEN}</td>
+                        <td>{data.DIENTHOAI}</td>
+                        <td>{data.MATKHAU}</td>
+                        <td>{data.NGAYSINH.toLocaleDateString()}</td>
+                        <td>{data.DIACHI}</td>
                         <td>
-                          {data.isLocked ? (
+                          {data.DAKHOA ? (
                             <div class="form-check form-switch">
                               <input
                                 class="form-check-input"
                                 type="checkbox"
                                 role="switch"
-                                id={`flexSwitchCheck_${data.id}`}
+                                id={`flexSwitchCheck_${data.MANV}`}
                                 checked
                               />
                               <label
                                 class="form-check-label"
-                                for={`flexSwitchCheck_${data.id}`}
+                                for={`flexSwitchCheck_${data.MANV}`}
                               ></label>
                             </div>
                           ) : (
@@ -95,11 +99,11 @@ const Staff = () => {
                                 class="form-check-input"
                                 type="checkbox"
                                 role="switch"
-                                id={`flexSwitchCheck_${data.id}`}
+                                id={`flexSwitchCheck_${data.MANV}`}
                               />
                               <label
                                 class="form-check-label"
-                                for={`flexSwitchCheck_${data.id}`}
+                                for={`flexSwitchCheck_${data.MANV}`}
                               ></label>
                             </div>
                           )}
@@ -359,4 +363,4 @@ const Staff = () => {
   );
 };
 
-export default Staff;
+export default StaffComponent;

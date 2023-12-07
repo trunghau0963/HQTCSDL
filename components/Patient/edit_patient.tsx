@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
-import { PatientProps } from "../../model/temp";
+import { Patient } from "../../model/model";
 
 interface EditPatientProps {
-  Data: PatientProps;
+  Data: Patient;
 }
 const EditPatient = ({ Data }: EditPatientProps) => {
   return (
@@ -48,7 +48,7 @@ const EditPatient = ({ Data }: EditPatientProps) => {
                               class="form-control"
                               type="text"
                               name="first_name"
-                              value={Data.name}
+                              value={Data.HOTEN}
                             />
                           </div>
                         </div>
@@ -59,7 +59,7 @@ const EditPatient = ({ Data }: EditPatientProps) => {
                               class="form-control"
                               type="text"
                               name="last_name"
-                              value={Data.phone}
+                              value={Data.DIENTHOAI}
                             />
                           </div>
                         </div>
@@ -99,7 +99,7 @@ const EditPatient = ({ Data }: EditPatientProps) => {
                                   type="text"
                                   class="form-control "
                                   name="address"
-                                  value={Data.address ? Data.address : "Null"}
+                                  value={Data.DIACHI ? Data.DIACHI : "Null"}
                                 />
                               </div>
                             </div>
@@ -112,7 +112,7 @@ const EditPatient = ({ Data }: EditPatientProps) => {
                               class="form-control"
                               type="text"
                               name="phone"
-                              value={Data.password}
+                              value={Data.MATKHAU}
                             />
                           </div>
                         </div>
