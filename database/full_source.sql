@@ -3058,6 +3058,148 @@ BEGIN TRAN
         THROW
     END CATCH
 COMMIT TRAN
+
+go
+CREATE OR ALTER PROC BLOCK_ACCOUNT
+    @MA CHAR(16),
+    @ROLE CHAR(12)
+AS
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(128)
+    BEGIN TRY
+        IF @MA IS NULL OR @role IS NULL
+		BEGIN;
+			throw 51000, N'MÃ VÀ ROLE KHÔNG ĐƯỢC ĐỂ TRỐNG.', 1
+		END
+
+        DECLARE @ACRONYM VARCHAR(12)
+        IF @ROLE = 'BENHNHAN'
+        BEGIN
+            SET @ACRONYM = 'MABN'
+        END 
+        ELSE IF @ROLE = 'NHANVIEN'
+        BEGIN
+            SET @ACRONYM = 'MANV'
+        END 
+        ELSE IF @ROLE = 'KHACH'
+        BEGIN
+            SET @ACRONYM = 'MABN'
+        END 
+        ELSE
+        BEGIN
+            SET @ACRONYM = 'MANS'
+        END 
+
+        DECLARE @SQL NVARCHAR(128), @ISLOCKED BIT
+        SET @ISLOCKED = 0
+
+        IF @ROLE != 'QUANTRI'
+        BEGIN
+            SET @SQL = '
+                SELECT @ISLOCKED = DAKHOA from ' + quotename(@role) + '
+                WHERE ' + quotename(@ACRONYM) + ' = @MA'
+        END
+        EXEC sp_executesql @SQL,
+            N'@MA char(16), @isLocked bit output',
+            @MA = @MA, @ISLOCKED = @ISLOCKED output
+
+        IF @ISLOCKED = 1
+        BEGIN;
+            throw 51000, 'This account is currently locked.', 1
+        END
+
+        DECLARE @IS_EXIST BIT
+
+        SET @SQL = 'SELECT @IS_EXIST = CASE WHEN EXISTS (SELECT 1 FROM' +  quotename(@role) + ' WHERE ' + quotename(@ACRONYM) + ' = @MA) THEN 1 ELSE 0 END'
+       
+        EXEC sp_executesql @SQL,
+            N'@MA char(16), @IS_EXIST bit output',
+            @MA = @MA, @IS_EXIST = @IS_EXIST output
+        
+        IF @IS_EXIST = 0
+        BEGIN;
+            throw 51000, N'TÀI KHOẢN KHÔNG TỒN TẠI', 1
+        END
+
+		SET @sql = '
+			UPDATE ' + quotename(@role) + '
+            SET DAKHOA = 1 WHERE ' + quotename(@ACRONYM) + ' = @MA'
+        PRINT @SQL
+     
+		exec sp_executesql @sql,
+			N'@MA CHAR(16)',
+			@MA = @MA
+
+    END TRY
+    BEGIN CATCH
+        SET @MSG = N'KHÔNG TÌM THẤY ID ' + CONVERT(NVARCHAR, @MA, 64)
+        ROLLBACK
+        RAISERROR(@MSG, 16, 1);
+    END CATCH
+COMMIT TRAN
+
+go
+CREATE OR ALTER PROC UNBLOCK_ACCOUNT
+    @MA CHAR(16),
+    @ROLE CHAR(12)
+AS
+BEGIN TRAN
+    DECLARE @MSG NVARCHAR(128)
+    BEGIN TRY
+        IF @MA IS NULL OR @role IS NULL
+		BEGIN;
+			throw 51000, N'MÃ VÀ ROLE KHÔNG ĐƯỢC ĐỂ TRỐNG.', 1
+		END
+
+        DECLARE @ACRONYM VARCHAR(12)
+        IF @ROLE = 'BENHNHAN'
+        BEGIN
+            SET @ACRONYM = 'MABN'
+        END 
+        ELSE IF @ROLE = 'NHANVIEN'
+        BEGIN
+            SET @ACRONYM = 'MANV'
+        END 
+        ELSE IF @ROLE = 'KHACH'
+        BEGIN
+            SET @ACRONYM = 'MABN'
+        END 
+        ELSE
+        BEGIN
+            SET @ACRONYM = 'MANS'
+        END 
+
+        DECLARE @SQL NVARCHAR(128)
+
+        DECLARE @IS_EXIST BIT
+
+        SET @SQL = 'SELECT @IS_EXIST = CASE WHEN EXISTS (SELECT 1 FROM' +  quotename(@role) + ' WHERE ' + quotename(@ACRONYM) + ' = @MA) THEN 1 ELSE 0 END'
+       
+        EXEC sp_executesql @SQL,
+            N'@MA char(16), @IS_EXIST bit output',
+            @MA = @MA, @IS_EXIST = @IS_EXIST output
+        
+        IF @IS_EXIST = 0
+        BEGIN;
+            throw 51000, N'TÀI KHOẢN KHÔNG TỒN TẠI', 1
+        END
+
+		SET @sql = '
+			UPDATE ' + quotename(@role) + '
+            SET DAKHOA = 0 WHERE ' + quotename(@ACRONYM) + ' = @MA'
+        PRINT @SQL
+     
+		exec sp_executesql @sql,
+			N'@MA CHAR(16)',
+			@MA = @MA
+
+    END TRY
+    BEGIN CATCH
+        SET @MSG = N'KHÔNG TÌM THẤY ID ' + CONVERT(NVARCHAR, @MA, 64)
+        ROLLBACK
+        RAISERROR(@MSG, 16, 1);
+    END CATCH
+COMMIT TRAN
 --Phan quyen
 --Tao login
 GO
@@ -3442,6 +3584,8 @@ GRANT EXEC ON UPDATE_INFO_THUOC TO QUANTRI
 GRANT EXEC ON BLOCK_ACCOUNT_BENHNHAN TO QUANTRI  
 GRANT EXEC ON BLOCK_ACCOUNT_NHASI TO QUANTRI  
 GRANT EXEC ON BLOCK_ACCOUNT_NHANVIEN TO QUANTRI  
+GRANT EXEC ON BLOCK_ACCOUNT TO QUANTRI   
+GRANT EXEC ON UNBLOCK_ACCOUNT TO QUANTRI 
 GRANT EXEC ON SIGN_UP_BENHNHAN TO QUANTRI
 --Nhap lieu
 GO
