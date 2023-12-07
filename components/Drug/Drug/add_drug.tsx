@@ -34,51 +34,24 @@ const AddDrug = () => {
                             <div class="col-sm-6">
                               <div class="form-group">
                                 <label class="font-weight-bold">
-                                  ID of Consigment{" "}
-                                  <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="IDC"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID of Drug<span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="IDD"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
                                   Name <span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
                                   type="text"
-                                  name="first_name"
+                                  name="name"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
                                 <label class="font-weight-bold">
-                                  Chidinh<span class="text-danger">*</span>
+                                  Assign<span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
                                   type="text"
-                                  name="chidinh"
+                                  name="drugIndicate"
                                 />
                               </div>
                             </div>
@@ -86,23 +59,25 @@ const AddDrug = () => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">Quantity</label>
+                                <label class="font-weight-bold">
+                                  Quantity <span class="text-danger">*</span>
+                                </label>
                                 <input
                                   type="number"
                                   class="form-control "
-                                  name="Quantity"
+                                  name="quantity"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
                                 <label class="font-weight-bold">
-                                  Expire day <span class="text-danger">*</span>
+                                  Unit <span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
                                   type="text"
-                                  name="exp"
+                                  name="unit"
                                 />
                               </div>
                             </div>
@@ -122,22 +97,37 @@ const AddDrug = () => {
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">Image</label>
-                                <div class="profile-upload">
-                                  <div class="upload-img h-100">
-                                    <img
-                                      class="rounded-circle"
-                                      alt=""
-                                      src="/img/user.jpg"
-                                    />
-                                  </div>
-                                  <div class="upload-input">
-                                    <input
-                                      type="file"
-                                      class="form-control"
-                                      name="image"
-                                    />
-                                  </div>
+                                <label class="font-weight-bold">
+                                  Expire day <span class="text-danger">*</span>
+                                </label>
+                                <input
+                                  type="date"
+                                  class="form-control form-control-lg"
+                                  name="exp"
+                                  required=""
+                                  min={new Date().toISOString().split("T")[0]}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label class="font-weight-bold">Image</label>
+                              <div class="profile-upload">
+                                <div class="upload-img h-100">
+                                  <img
+                                    class="rounded-circle"
+                                    alt=""
+                                    src="/img/user.jpg"
+                                  />
+                                </div>
+                                <div class="upload-input">
+                                  <input
+                                    type="file"
+                                    class="form-control"
+                                    name="image"
+                                  />
                                 </div>
                               </div>
                             </div>

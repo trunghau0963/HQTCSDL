@@ -47,7 +47,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="IDC"
-                                placeholder={Data.idConsignment}
+                                placeholder={Data.MALO}
                               />
                             </div>
                           </div>
@@ -60,7 +60,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="IDD"
-                                placeholder={Data.idDrug}
+                                placeholder={Data.MATHUOC}
                               />
                             </div>
                           </div>
@@ -75,7 +75,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="first_name"
-                                placeholder={Data.name}
+                                placeholder={Data.TENTHUOC}
                               />
                             </div>
                           </div>
@@ -88,7 +88,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="chidinh"
-                                placeholder={Data.drugIndicate}
+                                placeholder={Data.CHIDINH}
                               />
                             </div>
                           </div>
@@ -101,7 +101,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 type="number"
                                 class="form-control "
                                 name="Quantity"
-                                placeholder={Data.quantity.toString()}
+                                placeholder={Data.SOLUONG.toString()}
                               />
                             </div>
                           </div>
@@ -112,9 +112,9 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                               </label>
                               <input
                                 class="form-control"
-                                type="text"
+                                type="date"
                                 name="exp"
-                                placeholder={Data.exp}
+                                placeholder={Data.NGAYHETHAN instanceof Date ? Data.NGAYHETHAN.toISOString().split('T')[0] : ''}
                               />
                             </div>
                           </div>
@@ -129,7 +129,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="price"
-                                placeholder={Data.price.toString()}
+                                placeholder={Data.DONGIA.toString()}
                               />
                             </div>
                           </div>

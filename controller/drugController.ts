@@ -1,23 +1,30 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { Staff } from "../model/model";
+import { drugProps, Staff } from "../model/model";
 
-export const createStaff = async (req: Request, res: Response) => {
+export const addDrug= async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user: Staff = {
+    console.log(input)
+    const drug: drugProps = {
       ...(
         await (await req.db())
-          .input("TEN", input.name)
-          .input("MATKHAU", input.password)
-          .input("DIENTHOAI", input.phone)
-          .input("NGAYSINH", input.dob)
-          .execute("INSERT_INTO_NHANVIEN")
+          .input("TENTHUOC", input.name)
+          .input("DONVI", input.unit)
+          .input("CHIDINH", input.drugIndicate)
+          .input("SOLUONG", input.quantity)
+          .input("NGAYHETHAN", input.exp)
+          .input("DONGIA", input.price)
+          .execute("INSERT_INTO_THUOC")
       ).recordset[0],
     };
-    console.log(user);
-    res.status(200).send("successful create staff");
+
+    console.log(drug)
+
+    return res
+      .json("Add successfully" + `<a href='/'>Continue Login<a>`)
+      .status(201);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

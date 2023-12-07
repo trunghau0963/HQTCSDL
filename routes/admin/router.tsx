@@ -17,6 +17,7 @@ import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAdminById } from "../../controller/adminController";
 import ProfilePage from "../../app/admin/Profile/Profile";
+import { addDrug } from "../../controller/drugController";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
@@ -74,5 +75,7 @@ adminRouter.get("/information", admin, async (req, res) => {
   } catch {}
   return res.send(<ProfilePage data={dentist} />);
 });
+
+adminRouter.post("/drug", addDrug);
 
 export default adminRouter;
