@@ -20,6 +20,7 @@ import { getAllStaff } from "../../controller/staffController";
 import { getAllPatient } from "../../controller/patientController";
 import { getAllDentist } from "../../controller/dentistController";
 import ProfilePage from "../../app/admin/Profile/Profile";
+import { addDrug } from "../../controller/drugController";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
@@ -97,5 +98,7 @@ adminRouter.get("/information", admin, async (req, res) => {
   } catch {}
   return res.send(<ProfilePage data={admin} />);
 });
+
+adminRouter.post("/drug", addDrug);
 
 export default adminRouter;

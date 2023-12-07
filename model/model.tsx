@@ -94,11 +94,12 @@ export type serviceProps = {
 };
 
 export type drugProps = {
-  idConsignment: string;
-  idDrug: string;
-  name: string;
-  drugIndicate: string;
-  quantity: string;
-  exp: string;
-  price: number;
+  MALO: string;
+  MATHUOC: string;
+  TENTHUOC: string;
+  CHIDINH: string;
+  SOLUONG: string;
+  DONVI: string;
+  NGAYHETHAN: Date;
+  DONGIA: number;
 };

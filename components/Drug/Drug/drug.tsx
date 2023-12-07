@@ -44,8 +44,9 @@ const Drug = () => {
                       <th>Id Consignment</th>
                       <th>Id Drug</th>
                       <th>Name Drug</th>
-                      <th>Chi dinh</th>
-                      <th>Qunatity</th>
+                      <th>Assign</th>
+                      <th>Quantity</th>
+                      <th>Unit</th>
                       <th>Exp day</th>
                       <th>Price</th>
                       <th class="text-right">Action</th>
@@ -54,13 +55,14 @@ const Drug = () => {
                   <tbody>
                     {drugData.map((data) => (
                       <tr>
-                        <td>{data.idConsignment}</td>
-                        <td>{data.idDrug}</td>
-                        <td>{data.name}</td>
-                        <td>{data.drugIndicate}</td>
-                        <td>{data.quantity}</td>
-                        <td>{data.exp}</td>
-                        <td>{data.price}</td>
+                        <td>{data.MALO}</td>
+                        <td>{data.MATHUOC}</td>
+                        <td>{data.TENTHUOC}</td>
+                        <td>{data.CHIDINH}</td>
+                        <td>{data.SOLUONG}</td>
+                        <td>{data.DONVI}</td>
+                        <td>{data.NGAYHETHAN}</td>
+                        <td>{data.DONGIA}</td>
                         <td class="text-right">
                           <EditDrugPage Data={data} />
                           <DeleteDrugPage Data={data} />
