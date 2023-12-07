@@ -2,10 +2,13 @@ import * as elements from "typed-html";
 import AdminPage from "../admin";
 import Drug from "../../../components/Drug/Drug/drug";
 import Invoice from "../../../components/Drug/Invoice/invoice";
-const DrugPage = () => {
+import { drugProps } from "../../../model/model";
+
+const DrugPage = ({ drugs }: { drugs: drugProps[] }) => {
+  console.log(drugs)
   return (
-    <AdminPage>
-      <Drug/>
+    <AdminPage> 
+      <Drug drugs = {drugs}/>
       <Invoice/>
     </AdminPage>
   );

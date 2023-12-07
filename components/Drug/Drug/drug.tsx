@@ -3,8 +3,10 @@ import AddDrugPage from "../../../app/admin/Drugs/AddDrug";
 import DeleteDrugPage from "../../../app/admin/Drugs/DeleteDrug";
 import EditDrugPage from "../../../app/admin/Drugs/EditDrug";
 import { drugData } from "../../../config/hardcode/hardcode";
+import { drugProps } from "../../../model/model";
 
-const Drug = () => {
+const Drug = ({ drugs }: { drugs: drugProps[] }) => {
+
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -22,14 +24,13 @@ const Drug = () => {
                   <div class="form-group form-focus">
                     <label class="focus-label"></label>
                     <input
-                      type="text"
+                      type="search"
                       class="form-control floating w-100"
                       name="search"
                       placeholder="Search here..."
+                      hx-post="/drug/search" 
+                      hx-trigger="input changed delay:500ms, search" 
                     />
-                    <button type="submit" class="btn btn-primary">
-                      Search
-                    </button>
                   </div>
                 </form>
               </div>
@@ -53,7 +54,7 @@ const Drug = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {drugData.map((data) => (
+                    {drugs.map((data:any) => (
                       <tr>
                         <td>{data.MALO}</td>
                         <td>{data.MATHUOC}</td>
@@ -61,7 +62,7 @@ const Drug = () => {
                         <td>{data.CHIDINH}</td>
                         <td>{data.SOLUONG}</td>
                         <td>{data.DONVI}</td>
-                        <td>{data.NGAYHETHAN}</td>
+                        <td>{data.NGAYHETHAN.toISOString().split('T')[0]}</td>
                         <td>{data.DONGIA}</td>
                         <td class="text-right">
                           <EditDrugPage Data={data} />

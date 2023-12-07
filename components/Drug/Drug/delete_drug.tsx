@@ -36,7 +36,7 @@ const DeleteDrug = ({ Data }: EditDrugProps) => {
                   </div>
                   <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                      <form method="post">
+                      <form method="delete">
                         <div class="row">
                           <div class="row my-3">
                             <div class="col-sm-6">
@@ -49,6 +49,7 @@ const DeleteDrug = ({ Data }: EditDrugProps) => {
                                   class="form-control"
                                   type="text"
                                   name="IDC"
+                                  value = {Data.MALO}
                                   placeholder={Data.MALO}
                                 />
                               </div>
@@ -62,98 +63,9 @@ const DeleteDrug = ({ Data }: EditDrugProps) => {
                                   class="form-control"
                                   type="text"
                                   name="IDD"
+                                  value = {Data.MATHUOC}
                                   placeholder={Data.MATHUOC}
                                 />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Name <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="first_name"
-                                  placeholder={Data.TENTHUOC}
-                                />
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Chidinh<span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="chidinh"
-                                  placeholder={Data.CHIDINH}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">Quantity</label>
-                                <input
-                                  type="number"
-                                  class="form-control "
-                                  name="Quantity"
-                                  placeholder={Data.SOLUONG.toString()}
-                                />
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Expire day <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="exp"
-                                  placeholder={Data.NGAYHETHAN instanceof Date ? Data.NGAYHETHAN.toISOString().split('T')[0] : ''}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Price <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="price"
-                                  placeholder={Data.DONGIA.toString()}
-                                />
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">Image</label>
-                                <div class="profile-upload">
-                                  <div class="upload-img h-100">
-                                    <img
-                                      class="rounded-circle"
-                                      alt=""
-                                      src="/img/user.jpg"
-                                    />
-                                  </div>
-                                  <div class="upload-input">
-                                    <input
-                                      type="file"
-                                      class="form-control"
-                                      name="image"
-                                    />
-                                  </div>
-                                </div>
                               </div>
                             </div>
                           </div>
