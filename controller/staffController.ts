@@ -106,7 +106,7 @@ export const getAllStaff = async (req: Request, res: Response) => {
     const staffs: Staff[] = (
       await (await req.db()).execute("GET_INFO_NHANVIEN")
     ).recordset as Staff[];
-    console.log(staffs);
+    return staffs;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

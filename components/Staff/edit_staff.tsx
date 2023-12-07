@@ -1,10 +1,10 @@
 import * as elements from "typed-html";
-import { StaffProps } from "../../model/temp";
+import { Staff } from "../../model/model";
 
-interface EditStaffProps {
-  Data: StaffProps;
-}
-const EditStaff = ({ Data }: EditStaffProps) => {
+type StaffProps = {
+  Data: Staff;
+};
+const EditStaff = ({ Data }: StaffProps) => {
   return (
     <div>
       <button
@@ -44,8 +44,8 @@ const EditStaff = ({ Data }: EditStaffProps) => {
                             <input
                               class="form-control"
                               type="text"
-                              name="first_name"
-                              value={Data.name}
+                              name="name"
+                              value={Data.HOTEN}
                             />
                           </div>
                         </div>
@@ -55,8 +55,8 @@ const EditStaff = ({ Data }: EditStaffProps) => {
                             <input
                               class="form-control"
                               type="text"
-                              name="last_name"
-                              value={Data.phone}
+                              name="phone"
+                              value={Data.DIENTHOAI}
                             />
                           </div>
                         </div>
@@ -96,7 +96,7 @@ const EditStaff = ({ Data }: EditStaffProps) => {
                                   type="text"
                                   class="form-control "
                                   name="address"
-                                  value={Data.address ? Data.address : "Null"}
+                                  value={Data.DIACHI ? Data.DIACHI : "Null"}
                                 />
                               </div>
                             </div>
@@ -109,7 +109,7 @@ const EditStaff = ({ Data }: EditStaffProps) => {
                               class="form-control"
                               type="text"
                               name="phone"
-                              value={Data.password}
+                              value={Data.MATKHAU}
                             />
                           </div>
                         </div>

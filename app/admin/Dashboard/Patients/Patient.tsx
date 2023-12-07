@@ -1,12 +1,16 @@
 import * as elements from "typed-html";
-import DashBoard from "../Dashboard";
-import Patient from "../../../../components/Patient/patient";
+import PatientComponent from "../../../../components/Patient/patient";
 import AdminPage from "../../admin";
+import { Patient } from "../../../../model/model";
 
-const PatientPage = () => {
+type PatientProps = {
+  Data: Patient[];
+};
+
+const PatientPage = ({Data} : PatientProps) => {
   return (
     <AdminPage>
-      <Patient/>
+      <PatientComponent Data={Data}/>
     </AdminPage>
   );
 };

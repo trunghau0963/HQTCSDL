@@ -32,29 +32,29 @@ export type Dentist = {
   MANS: string;
   HOTEN: string;
   DIENTHOAI: string;
-  MATKHAU?: string;
-  NGAYSINH?: Date;
-  DIACHI?: string;
-  DAKHOA?: boolean;
+  MATKHAU: string;
+  NGAYSINH: Date;
+  DIACHI: string;
+  DAKHOA: boolean;
 };
 export type Patient = {
   MABN: string;
   HOTEN: string;
   DIENTHOAI: string;
-  MATKHAU?: string;
-  NGAYSINH?: Date;
-  DIACHI?: string;
-  DAKHOA?: boolean;
+  MATKHAU: string;
+  NGAYSINH: Date;
+  DIACHI: string;
+  DAKHOA: boolean;
 };
 
 export type Staff = {
   MANV: string;
   HOTEN: string;
   DIENTHOAI: string;
-  MATKHAU?: string;
-  NGAYSINH?: Date;
-  DIACHI?: string;
-  DAKHOA?: boolean;
+  MATKHAU: string;
+  NGAYSINH: Date;
+  DIACHI: string;
+  DAKHOA: boolean;
 };
 
 export type Admin = {

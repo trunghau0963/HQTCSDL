@@ -42,7 +42,7 @@ export const getDentistById = async (
       await (await req.db()).input("MANS", id).execute("GET_INFO_NHASI_BY_ID")
     ).recordset[0];
 
-    console.log(user);
+    // console.log(user);
     return user;
   } catch (error) {
     if (error instanceof Error) {
@@ -108,7 +108,7 @@ export const getAllDentist = async (req: Request, res: Response) => {
     const dentists: Dentist[] = (
       await (await req.db()).execute("GET_INFO_NHASI")
     ).recordset as Dentist[];
-    console.log(dentists);
+    return dentists;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

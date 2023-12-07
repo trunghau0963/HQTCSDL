@@ -43,8 +43,9 @@ patientRouter.get("/information", patient, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    console.log("data: ", data.user.HOTEN);
-    patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
+      patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
+      console.log("data: ", patient);
+
   } catch {}
   return res.send(<ProfilePage data={patient} />);
 });

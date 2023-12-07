@@ -2,10 +2,16 @@ import * as elements from "typed-html";
 import AddDentist from "./add_dentist";
 import AddDentistPage from "../../app/admin/Dashboard/Dentists/AddDentist";
 import DeleteDentistPage from "../../app/admin/Dashboard/Dentists/DeleteDentist";
-import { DentistData } from "../../config/hardcode/hardcode";
 import EditDentistPage from "../../app/admin/Dashboard/Dentists/EditDentist";
+import { DentistData } from "../../config/hardcode/hardcode";
+import { Dentist } from "../../model/model";
 
-const Dentist = () => {
+type DentistProps = {
+  Data: Dentist[];
+};
+
+const DentistComponent = ({ Data }: DentistProps) => {
+  console.log("data", Data);
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -47,44 +53,44 @@ const Dentist = () => {
                       <th>Name</th>
                       <th>Phone</th>
                       <th>Password</th>
-                      <th>Gender</th>
+                      <th>Dob</th>
                       <th>Address</th>
                       <th>Locked</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {DentistData.map((data) => (
+                    {Data.map((data: Dentist, idx) => (
                       <tr>
                         <td>
                           <img
                             width="50"
                             height="50"
-                            src={`/img/doctor-thumb-0${data.id}.jpg`}
+                            src={`/img/doctor-thumb-0${idx+1}.jpg`}
                             class="rounded-circle"
                             alt=""
                           />{" "}
                           <h2></h2>
                         </td>
-                        <td>{data.id}</td>
-                        <td>{data.name}</td>
-                        <td>{data.phone}</td>
-                        <td>{data.password}</td>
-                        <td>{data.gender}</td>
-                        <td>{data.address}</td>
+                        <td>{data.MANS}</td>
+                        <td>{data.HOTEN}</td>
+                        <td>{data.DIENTHOAI}</td>
+                        <td>{data.MATKHAU}</td>
+                        <td>{data.NGAYSINH.toLocaleDateString()}</td>
+                        <td>{data.DIACHI}</td>
                         <td>
-                          {data.isLocked ? (
+                          {data.DAKHOA ? (
                             <div class="form-check form-switch">
                               <input
                                 class="form-check-input"
                                 type="checkbox"
                                 role="switch"
-                                id={`flexSwitchCheck_${data.id}`}
+                                id={`flexSwitchCheck_${data.MANS}`}
                                 checked
                               />
                               <label
                                 class="form-check-label"
-                                for={`flexSwitchCheck_${data.id}`}
+                                for={`flexSwitchCheck_${data.MANS}`}
                               ></label>
                             </div>
                           ) : (
@@ -93,37 +99,16 @@ const Dentist = () => {
                                 class="form-check-input"
                                 type="checkbox"
                                 role="switch"
-                                id={`flexSwitchCheck_${data.id}`}
+                                id={`flexSwitchCheck_${data.MANS}`}
                               />
                               <label
                                 class="form-check-label"
-                                for={`flexSwitchCheck_${data.id}`}
+                                for={`flexSwitchCheck_${data.MANS}`}
                               ></label>
                             </div>
                           )}
                         </td>
                         <td class="text-right">
-                          {/* <div class="dropdown">
-                            <a
-                              class="btn btn-primary btn-rounded float-right dropdown-toggle"
-                              id="dropdownMenuButton"
-                              data-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
-                            >
-                              Action
-                            </a>
-                            <div
-                              class="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <div class="dropdown-item">
-                                <EditDentistPage Data={data} />
-                              </div>
-                              <div class="dropdown-item">
-                              </div>
-                              </div>
-                            </div> */}
                           <DeleteDentistPage Data={data} />
                           <EditDentistPage Data={data} />
                         </td>
@@ -378,4 +363,4 @@ const Dentist = () => {
   );
 };
 
-export default Dentist;
+export default DentistComponent;

@@ -48,6 +48,7 @@ dentistRouter.get("/information", dentist, async (req, res) => {
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     console.log("data: ", data.user.HOTEN);
     dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
+    console.log("dentist: ", dentist);
   } catch {}
   return res.send(<ProfilePage data={dentist} />);
 });

@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
-import { DentistProps } from "../../model/temp";
+import { Dentist } from "../../model/model";
 
 interface DeleteDentistProps {
-  Data: DentistProps;
+  Data: Dentist;
 }
 const DeleteDentist = ({ Data }: DeleteDentistProps) => {
   return (
@@ -49,7 +49,7 @@ const DeleteDentist = ({ Data }: DeleteDentistProps) => {
                             class="form-control"
                             type="text"
                             name="first_name"
-                            value={Data.name}
+                            value={Data.HOTEN}
                           />
                         </div>
                       </div>
@@ -60,7 +60,7 @@ const DeleteDentist = ({ Data }: DeleteDentistProps) => {
                             class="form-control"
                             type="text"
                             name="last_name"
-                            value={Data.phone}
+                            value={Data.DIENTHOAI}
                           />
                         </div>
                       </div>
@@ -101,7 +101,7 @@ const DeleteDentist = ({ Data }: DeleteDentistProps) => {
                                 type="text"
                                 class="form-control "
                                 name="address"
-                                value={Data.address ? Data.address : "Null"}
+                                value={Data.DIACHI ? Data.DIACHI : "Null"}
                               />
                             </div>
                           </div>
@@ -116,7 +116,7 @@ const DeleteDentist = ({ Data }: DeleteDentistProps) => {
                             class="form-control"
                             type="text"
                             name="phone"
-                            value={Data.password}
+                            value={Data.MATKHAU}
                           />
                         </div>
                       </div>

@@ -558,7 +558,7 @@ BEGIN TRAN
             RAISERROR(@MSG, 16, 1);
         END
 
-        SELECT MANV, HOTEN, DIENTHOAI
+        SELECT *
         FROM NHANVIEN NV
     END TRY
     BEGIN CATCH
@@ -700,7 +700,7 @@ BEGIN TRAN
             RAISERROR(@MSG, 16, 1);
         END
 
-        SELECT MABN, HOTEN, DIENTHOAI, NGAYSINH, DIACHI
+        SELECT *
         FROM BENHNHAN BN
     END TRY
     BEGIN CATCH
@@ -835,7 +835,7 @@ BEGIN TRAN
             RAISERROR(@MSG, 16, 1);
         END
 
-        SELECT MANS, HOTEN, DIENTHOAI
+        SELECT *
         FROM NHASI NS
     END TRY
     BEGIN CATCH

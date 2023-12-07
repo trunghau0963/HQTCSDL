@@ -31,7 +31,11 @@ export const createPatient = async (req: Request, res: Response) => {
   }
 };
 
-export const getPatientById = async (req: Request, res: Response, id : string) => {
+export const getPatientById = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
   // const { id } = req.body;
   try {
     const user: Patient = (
@@ -40,7 +44,7 @@ export const getPatientById = async (req: Request, res: Response, id : string) =
         .execute("GET_INFO_BENHNHAN_BY_ID")
     ).recordset[0];
 
-    console.log(user);
+    // console.log(user);
     return user;
   } catch (error) {
     if (error instanceof Error) {
@@ -55,7 +59,11 @@ export const getPatientById = async (req: Request, res: Response, id : string) =
   }
 };
 
-export const getPatientByName = async (req: Request, res: Response, name: string) => {
+export const getPatientByName = async (
+  req: Request,
+  res: Response,
+  name: string
+) => {
   // const { name } = req.body;
   try {
     const user: Patient = (
@@ -106,7 +114,7 @@ export const getAllPatient = async (req: Request, res: Response) => {
     const patients: Patient[] = (
       await (await req.db()).execute("GET_INFO_BENHNHAN")
     ).recordset as Patient[];
-    console.log(patients);
+    return patients;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

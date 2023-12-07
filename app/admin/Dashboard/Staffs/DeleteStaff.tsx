@@ -1,12 +1,12 @@
 import * as elements from "typed-html";
 import DeleteStaff from "../../../../components/Staff/delete_staff";
-import { StaffProps } from "../../../../model/temp";
+import { Staff } from "../../../../model/model";
 
-interface DeleteStaffProps {
-  Data: StaffProps;
-}
+type StaffProps = {
+  Data: Staff;
+};
 
-const DeleteStaffPage = ({Data} : DeleteStaffProps) => {
+const DeleteStaffPage = ({Data} : StaffProps) => {
   return (
     <DeleteStaff Data={Data}/>
   );

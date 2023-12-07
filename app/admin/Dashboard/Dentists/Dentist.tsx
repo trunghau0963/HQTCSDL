@@ -1,12 +1,17 @@
 import * as elements from "typed-html";
-import DashBoard from "../Dashboard";
-import Dentist from "../../../../components/Dentist/dentist";
+import DentistComponent from "../../../../components/Dentist/dentist";
 import AdminPage from "../../admin";
+import { Dentist } from "../../../../model/model";
 
-const DentistPage = () => {
+type DentistProps = {
+  Data: Dentist[];
+};
+
+const DentistPage = ({ Data }: DentistProps) => {
+  // console.log('dentist page: ', Data);
   return (
     <AdminPage>
-      <Dentist/>
+      <DentistComponent Data={Data} />
     </AdminPage>
   );
 };
