@@ -12,8 +12,7 @@ import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import Service from "../../app/admin/Service/Service";
 import Profile from "../../components/info/Profile";
-import { Admin, Patient, Dentist, Staff } from "../../model/model";
-import ProfilePage from "../../app/admin/Profile/Profile";
+import { Admin, drugProps, Patient, Dentist, Staff } from "../../model/model";
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAdminById } from "../../controller/adminController";
@@ -25,16 +24,30 @@ import {
   updatePatient,
 } from "../../controller/patientController";
 import { getAllDentist } from "../../controller/dentistController";
-import { addDrug } from "../../controller/drugController";
+import ProfilePage from "../../app/admin/Profile/Profile";
+import { addDrug, deleteDrug, getDrugByName, getDrugInfo, updateInfoDrug } from "../../controller/drugController";
+import { Upload } from "lucide-react";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
   return res.send(<DashBoard />);
 });
 
-adminRouter.get("/drug", admin, async (req, res) => {
-  return res.send(<Drug />);
-});
+adminRouter.get("/drug", [admin, async (req: any, res:any) => {
+  try {
+    const drugInfo: drugProps[] = (await getDrugInfo(req, res)) || [];
+
+    // Sử dụng dữ liệu trong hàm xử lý của route
+    return res.send(<Drug drugs = {drugInfo} />);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+}]);
+
+adminRouter.post("/drug", addDrug);
+adminRouter.delete("/drug", deleteDrug);
+adminRouter.put("/drug", updateInfoDrug);
 
 adminRouter.get("/schedule", admin, async (req, res) => {
   return res.send(<Schedule />);
@@ -111,6 +124,5 @@ adminRouter.get("/information", admin, async (req, res) => {
   return res.send(<ProfilePage data={admin} />);
 });
 
-adminRouter.post("/drug", addDrug);
 
 export default adminRouter;

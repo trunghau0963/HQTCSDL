@@ -34,7 +34,7 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                 </div>
                 <div class="row">
                   <div class="col-lg-8 offset-lg-2">
-                    <form method="POST">
+                    <form method="PUT">
                       <div class="row">
                         <div class="row my-3">
                           <div class="col-sm-6">
@@ -47,7 +47,8 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="IDC"
-                                placeholder={Data.MALO}
+                                value={Data.MALO}
+                                readonly=""
                               />
                             </div>
                           </div>
@@ -60,7 +61,8 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="IDD"
-                                placeholder={Data.MATHUOC}
+                                value={Data.MATHUOC}
+                                readonly=""
                               />
                             </div>
                           </div>
@@ -74,21 +76,21 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                               <input
                                 class="form-control"
                                 type="text"
-                                name="first_name"
-                                placeholder={Data.TENTHUOC}
+                                name="name"
+                                value={Data.TENTHUOC}
                               />
                             </div>
                           </div>
                           <div class="col-sm-6">
                             <div class="form-group">
                               <label class="font-weight-bold">
-                                Chidinh<span class="text-danger">*</span>
+                                Assign<span class="text-danger">*</span>
                               </label>
                               <input
                                 class="form-control"
                                 type="text"
-                                name="chidinh"
-                                placeholder={Data.CHIDINH}
+                                name="assign"
+                                value={Data.CHIDINH}
                               />
                             </div>
                           </div>
@@ -100,21 +102,19 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                               <input
                                 type="number"
                                 class="form-control "
-                                name="Quantity"
-                                placeholder={Data.SOLUONG.toString()}
+                                name="quantity"
+                                placeholder={Data.SOLUONG}
                               />
                             </div>
                           </div>
                           <div class="col-sm-6">
                             <div class="form-group">
-                              <label class="font-weight-bold">
-                                Expire day <span class="text-danger">*</span>
-                              </label>
+                              <label class="font-weight-bold">Unit</label>
                               <input
-                                class="form-control"
-                                type="date"
-                                name="exp"
-                                placeholder={Data.NGAYHETHAN instanceof Date ? Data.NGAYHETHAN.toISOString().split('T')[0] : ''}
+                                type="text"
+                                class="form-control "
+                                name="unit"
+                                value={Data.DONVI}
                               />
                             </div>
                           </div>
@@ -129,28 +129,48 @@ const EditDrug = ({ Data }: EditDrugProps) => {
                                 class="form-control"
                                 type="text"
                                 name="price"
-                                placeholder={Data.DONGIA.toString()}
+                                value={Data.DONGIA.toString()}
                               />
                             </div>
                           </div>
                           <div class="col-sm-6">
                             <div class="form-group">
-                              <label class="font-weight-bold">Image</label>
-                              <div class="profile-upload">
-                                <div class="upload-img h-100">
-                                  <img
-                                    class="rounded-circle"
-                                    alt=""
-                                    src="/img/user.jpg"
-                                  />
-                                </div>
-                                <div class="upload-input">
-                                  <input
-                                    type="file"
-                                    class="form-control"
-                                    name="image"
-                                  />
-                                </div>
+                              <label class="font-weight-bold">
+                                Expire day <span class="text-danger">*</span>
+                              </label>
+                              <input
+                                class="form-control"
+                                type="date"
+                                name="exp"
+                                value={
+                                  Data.NGAYHETHAN instanceof Date
+                                    ? Data.NGAYHETHAN.toISOString().split(
+                                        "T"
+                                      )[0]
+                                    : ""
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="font-weight-bold">Image</label>
+                            <div class="profile-upload">
+                              <div class="upload-img h-100">
+                                <img
+                                  class="rounded-circle"
+                                  alt=""
+                                  src="/img/user.jpg"
+                                />
+                              </div>
+                              <div class="upload-input">
+                                <input
+                                  type="file"
+                                  class="form-control"
+                                  name="image"
+                                />
                               </div>
                             </div>
                           </div>
