@@ -16,7 +16,7 @@ const AddInvoice = () => {
         aria-labelledby="myLargeModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-lg bg-muted">
+        <div class="modal-dialog modal-lg bg-muted" hx-include="admin/drug/invoice">
           <div class="modal-content">
             <div>
               <div>

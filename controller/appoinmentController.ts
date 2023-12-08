@@ -1,23 +1,24 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { Staff } from "../model/model";
+import { Appointment, AppointmentDetails } from "../model/model";
 
-export const createStaff = async (req: Request, res: Response) => {
+export const registerAppointment = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user: Staff = {
-      ...(
-        await (await req.db())
-          .input("TEN", input.name)
-          .input("MATKHAU", input.password)
-          .input("DIENTHOAI", input.phone)
-          .input("NGAYSINH", input.dob)
-          .execute("INSERT_INTO_NHANVIEN")
-      ).recordset[0],
-    };
-    console.log(user);
-    res.status(200).send("successful create staff");
+    const user = await (await req.db())
+      .input("TEN", input.TEN)
+      .input("DIENTHOAI", input.DIENTHOAI)
+      .input("NGAYSINH", input.NGAYSINH)
+      .input("DIACHI", input.DIACHI)
+      .input("MANS", input.MANS)
+      .input("NGAYKHAM", input.NGAYKHAM)
+      .execute("REGISTER_LICHKHAM");
+    res
+      // .header("HX-Redirect", "/admin/appointment")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful registe Appointment");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -29,82 +30,21 @@ export const createStaff = async (req: Request, res: Response) => {
   }
 };
 
-export const getStaffById = async (req: Request, res: Response) => {
-  const { id } = req.body;
+export const addDetailOfAppointment = async (req: Request, res: Response) => {
   try {
-    const user: Staff = (
-      await (await req.db())
-        .input("MANV", id)
-        .execute("GET_INFO_NHANVIEN_BY_ID")
-    ).recordset[0];
-
-    console.log(user);
-    return res.json("successful get staff").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get staff by id. Please try again later.");
-    }
-  }
-};
-
-export const getStaffByName = async (req: Request, res: Response) => {
-  const { name } = req.body;
-  try {
-    const user: Staff = (
-      await (await req.db())
-        .input("HOTEN", name)
-        .execute("GET_INFO_NHANVIEN_BY_NAME")
-    ).recordset[0];
-    console.log(user);
-    return res.json("successful get staff").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get staff by id. Please try again later.");
-    }
-  }
-};
-
-export const getStaffByPhone = async (req: Request, res: Response) => {
-  const { phone } = req.body;
-  try {
-    const user: Staff = (
-      await (await req.db())
-        .input("DIENTHOAI", phone)
-        .execute("GET_INFO_NHANVIEN_BY_PHONENUMBER")
-    ).recordset[0];
-    console.log(user);
-    return res.json("successful get staff").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get staff by id. Please try again later.");
-    }
-  }
-};
-
-export const getAllStaff = async (req: Request, res: Response) => {
-  try {
-    const staffs: Staff[] = (
-      await (await req.db()).execute("GET_INFO_NHANVIEN")
-    ).recordset as Staff[];
-    console.log(staffs);
+    const input = req.body;
+    const user = await (await req.db())
+      .input("MABN", input.MABN)
+      .input("MANS", input.MANS)
+      .input("TRIEUCHUNG", input.TRIEUCHUNG)
+      .input("CHANDOAN", input.CHANDOAN)
+      .input("NGAYKHAM", input.NGAYKHAM)
+      .execute("INSERT_INTO_CHITIETPHIENKHAM");
+    res
+      // .header("HX-Redirect", "/admin/appointment")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful registe Appointment");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -112,21 +52,252 @@ export const getAllStaff = async (req: Request, res: Response) => {
     }
     return res
       .status(500)
-      .send("Can't get all staff. Please try again later.");
+      .send("Something went wrong. Please try again later.");
   }
 };
 
-export const blockStaff = async (req: Request, res: Response) => {
-  const { id } = req.body;
+export const deleteAppointment = async (req: Request, res: Response) => {
   try {
-    const user: Staff = (
-      await (await req.db()).input("MANV", id).execute("BLOCK_ACCOUNT_NHANVIEN")
-    ).recordset[0];
+    const input = req.body;
+    const user = await (await req.db())
+      .input("MANS", input.MANS)
+      .input("NGAYKHAM", input.NGAYKHAM)
+      .input("GIOKHAM", input.GIOKHAM)
+      .execute("DROP_LICHKHAM");
+    res
+      // .header("HX-Redirect", "/admin/appointment")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful delete Appointment");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
       return res.status(400).send(error.message);
     }
-    return res.status(500).send("Somthg went wrong. Please try again later.");
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+};
+
+export const updateAppointment = async (req: Request, res: Response) => {
+  try {
+    const input = req.body;
+    const user = await (await req.db())
+      .input("SODIENTHOAI", input.SODIENTHOAI)
+      .input("MANS_OLD", input.MANS_OLD)
+      .input("NGAYKHAM_OLD", input.NGAYKHAM_OLD)
+      .input("GIOKHAM_OLD", input.GIOKHAM_OLD)
+      .input("MANS_NEW", input.MANS_NEW)
+      .input("NGAYKHAM_NEW", input.NGAYKHAM_NEW)
+      .input("GIOKHAM_NEW", input.GIOKHAM_NEW)
+      .execute("CHANGE_LICHKHAM");
+    res
+      // .header("HX-Redirect", "/admin/appointment")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful delete Appointment");
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+};
+
+export const getAppointment = async (req: Request, res: Response) => {
+  try {
+    const data: Appointment[] = (
+      await (await req.db()).execute("GET_LICHKHAM_DETAIL")
+    ).recordset as Appointment[];
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getAppointmentOfDentist = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Appointment = (
+      await (await req.db())
+        .input("MANS", id)
+        .execute("GET_LICHKHAM_DETAIL_OF_NHASI")
+    ).recordset[0];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment of dentist. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getAppointmentOfPatient = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Appointment = (
+      await (await req.db())
+        .input("MABN", id)
+        .execute("GET_LICHKHAM_DETAIL_FOR_BENHNHAN")
+    ).recordset[0];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment of patient. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getAppointmentIsDone = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Appointment[] = (
+      await (await req.db()).execute("GET_LICHKHAM_DETAIL_DONE")
+    ).recordset as Appointment[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is done. Please try again later."
+    );
+    return undefined;
+  }
+};
+
+export const getAppointmentIsDoneOfDentist = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Appointment = (
+      await (await req.db())
+        .input("MANS", id)
+        .execute("GET_LICHKHAM_DETAIL_DONE_OF_NHASI")
+    ).recordset[0];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment of dentist which is done. Please try again later."
+    );
+    return undefined;
+  }
+};
+
+export const getAppointmentNotDone = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Appointment[] = (
+      await (await req.db()).execute("GET_LICHKHAM_DETAIL_UNFINISHED")
+    ).recordset as Appointment[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is unfinished. Please try again later."
+    );
+    return undefined;
+  }
+};
+
+export const getAppointmentNotDoneOfDentist = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Appointment = (
+      await (await req.db())
+        .input("MANS", id)
+        .execute("GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI")
+    ).recordset[0];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is unfinished. Please try again later."
+    );
+    return undefined;
+  }
+};
+
+export const getDetailOfAppointment = async (req: Request, res: Response) => {
+  try {
+    const data: AppointmentDetails[] = (
+      await (await req.db()).execute("GET_CHITIETPHIENKHAM_DETAIL_ALL")
+    ).recordset as AppointmentDetails[];
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getDetailOfAppointmentDetail = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const input = req.body;
+    const data: AppointmentDetails = (
+      await (await req.db())
+        .input("MABN", input.id)
+        .input("NGAYKHAM", input.date)
+        .input("GIOKHAM", input.time)
+        .execute("GET_CHITIETPHIENKHAM_DETAIL")
+    ).recordset[0];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
   }
 };

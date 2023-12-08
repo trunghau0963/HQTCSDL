@@ -13,7 +13,7 @@ export const createPatient = async (req: Request, res: Response) => {
       .input("ROLE", "BENHNHAN")
       .execute("SIGN_UP");
     res
-      .header("HX-Redirect", "/auth/patient")
+      .header("HX-Redirect", "/admin/patient")
       .status(200)
       .json(user.recordset[0])
       .send("successful create patient");

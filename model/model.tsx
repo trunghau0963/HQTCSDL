@@ -72,25 +72,43 @@ export type AppointmentProps = {
   date: Date;
 };
 
-export type scheduleOfDentistProps = {
-  idDentist: string;
-  date: Date;
+export type Appointment = {
+  MABN: string;
+  MANS: string;
+  NGAYKHAM: Date;
+  GIOKHAM: Date;
 };
 
-export type invoiceProps = {
-  id: string;
-  idPatient: string;
-  idDentist: string;
-  date: string;
-  total: number;
-  description: string;
-  symptom: string;
+export type AppointmentDetails = {
+  MACT: string;
+  MABN: string;
+  MANS: string;
+  NGAYKHAM: Date;
+  GIOKHAM: Date;
+  TONGTIEN: number;
+  CHANDOAN: string;
+  TRIEUCHUNG: string;
 };
 
-export type serviceProps = {
-  id: string;
-  name: string;
-  price: number;
+export type Schedule= {
+  MANS: string;
+  NGAYKHAM: Date;
+  GIOKHAM: Date;
+};
+
+export type Invoice = {
+  MACT: string;
+  MALO: string;
+  MATHUOC: string;
+  SOLUONG: number;
+  LIEULUONG: string;
+  THANHTIEN: number;
+};
+
+export type Service = {
+  MADV: string;
+  TENDV: string;
+  DONGIA: number;
 };
 
 export type drugProps = {
@@ -102,4 +120,10 @@ export type drugProps = {
   DONVI: string;
   NGAYHETHAN: Date;
   DONGIA: number;
+};
+
+export type serviceIndicators = {
+  MACT: string;
+  MADV: string;
+  THANHTIEN: number;
 };

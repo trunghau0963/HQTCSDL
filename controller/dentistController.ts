@@ -6,20 +6,19 @@ import { Dentist } from "../model/model";
 export const createDentist = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user: Dentist = {
-      ...(
-        await (await req.db())
-          .input("HOTEN", input.name)
-          .input("MATKHAU", input.password)
-          .input("DIENTHOAI", input.phone)
-          .input("NGAYSINH", input.dob)
-          .input("DIACHI", input.address)
-          .input("ROLE", "admin")
-          .execute("SIGN_UP")
-      ).recordset[0],
-    };
-    console.log(user);
-    res.status(200).send("successful create dentist");
+    const user = await (await req.db())
+      .input("HOTEN", input.name)
+      .input("MATKHAU", input.password)
+      .input("DIENTHOAI", input.phone)
+      .input("NGAYSINH", input.dob)
+      .input("DIACHI", input.address)
+      .input("ROLE", "NHASI")
+      .execute("SIGN_UP");
+    res
+      .header("HX-Redirect", "/admin/dentist")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful create patient");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

@@ -1,23 +1,22 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { Staff } from "../model/model";
+import { Invoice } from "../model/model";
 
-export const createStaff = async (req: Request, res: Response) => {
+export const addDrugIntoInvoice = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user: Staff = {
-      ...(
-        await (await req.db())
-          .input("TEN", input.name)
-          .input("MATKHAU", input.password)
-          .input("DIENTHOAI", input.phone)
-          .input("NGAYSINH", input.dob)
-          .execute("INSERT_INTO_NHANVIEN")
-      ).recordset[0],
-    };
-    console.log(user);
-    res.status(200).send("successful create staff");
+    const user = await (await req.db())
+      .input("MACT", input.MACT)
+      .input("TENTHUOC", input.TENTHUOC)
+      .input("SOLUONG", input.SOLUONG)
+      .input("LIEULUONG", input.LIEULUONG)
+      .execute("INSERT_INTO_TOATHUOC");
+    res
+      .header("HX-Redirect", "/admin/drug")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful add drug into Invoice");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -29,82 +28,19 @@ export const createStaff = async (req: Request, res: Response) => {
   }
 };
 
-export const getStaffById = async (req: Request, res: Response) => {
-  const { id } = req.body;
+export const deleteDrugIntoInvoice = async (req: Request, res: Response) => {
   try {
-    const user: Staff = (
-      await (await req.db())
-        .input("MANV", id)
-        .execute("GET_INFO_NHANVIEN_BY_ID")
-    ).recordset[0];
-
-    console.log(user);
-    return res.json("successful get staff").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get staff by id. Please try again later.");
-    }
-  }
-};
-
-export const getStaffByName = async (req: Request, res: Response) => {
-  const { name } = req.body;
-  try {
-    const user: Staff = (
-      await (await req.db())
-        .input("HOTEN", name)
-        .execute("GET_INFO_NHANVIEN_BY_NAME")
-    ).recordset[0];
-    console.log(user);
-    return res.json("successful get staff").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get staff by id. Please try again later.");
-    }
-  }
-};
-
-export const getStaffByPhone = async (req: Request, res: Response) => {
-  const { phone } = req.body;
-  try {
-    const user: Staff = (
-      await (await req.db())
-        .input("DIENTHOAI", phone)
-        .execute("GET_INFO_NHANVIEN_BY_PHONENUMBER")
-    ).recordset[0];
-    console.log(user);
-    return res.json("successful get staff").status(201);
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        return res.status(400).send(error.message);
-      }
-      return res
-        .status(500)
-        .send("Can't get staff by id. Please try again later.");
-    }
-  }
-};
-
-export const getAllStaff = async (req: Request, res: Response) => {
-  try {
-    const staffs: Staff[] = (
-      await (await req.db()).execute("GET_INFO_NHANVIEN")
-    ).recordset as Staff[];
-    console.log(staffs);
+    const input = req.body;
+    const user = await (await req.db())
+      .input("MACT", input.MACT)
+      .input("MATHUOC", input.MATHUOC)
+      .input("MALO", input.MALO)
+      .execute("DROP_THUOC_IN_TOATHUOC");
+    res
+      .header("HX-Redirect", "/admin/drug")
+      .status(200)
+      .json(user.recordset[0])
+      .send("successful delete drug into Invoice");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -112,21 +48,42 @@ export const getAllStaff = async (req: Request, res: Response) => {
     }
     return res
       .status(500)
-      .send("Can't get all staff. Please try again later.");
+      .send("Something went wrong. Please try again later.");
   }
 };
 
-export const blockStaff = async (req: Request, res: Response) => {
-  const { id } = req.body;
+export const getInvoice = async (req: Request, res: Response) => {
   try {
-    const user: Staff = (
-      await (await req.db()).input("MANV", id).execute("BLOCK_ACCOUNT_NHANVIEN")
-    ).recordset[0];
+    const Invoice: Invoice[] = (await (await req.db()).execute("GET_TOATHUOC"))
+      .recordset as Invoice[];
+
+    return Invoice;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
-      return res.status(400).send(error.message);
+      throw new Error(error.message);
     }
-    return res.status(500).send("Somthg went wrong. Please try again later.");
+    console.error("Can't get invoice information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getInvoiceById = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const invoice: Invoice = (
+      await (await req.db()).input("MACT", id).execute("GET_TOATHUOC_DETAIL")
+    ).recordset[0];
+    return invoice;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get invoice information. Please try again later.");
+    return undefined;
   }
 };
