@@ -79,7 +79,7 @@ export type Appointment = {
   GIOKHAM: Date;
 };
 
-export type AppointmentDetails = {
+export type Invoice = {
   MACT: string;
   MABN: string;
   MANS: string;
@@ -96,7 +96,7 @@ export type Schedule= {
   GIOKHAM: Date;
 };
 
-export type Invoice = {
+export type Prescription = {
   MACT: string;
   MALO: string;
   MATHUOC: string;

@@ -28,49 +28,56 @@ const AddService = () => {
                   </div>
                   <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                      <form method="POST">
-                        <div class="row my-3">
-                          <div class="col-sm-4">
+                      <form id="update-service-form" hx-delete="/admin/service">
+                        <div class="row">
+                          <div class="row my-3">
                             <div class="form-group">
-                              <label class="font-weight-bold">
-                                ID of Service<span class="text-danger">*</span>
-                              </label>
-                              <input
-                                class="form-control"
-                                type="text"
-                                name="IDD"
-                              />
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label class="font-weight-bold">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="TENDV"
+                              >
                                 Name <span class="text-danger">*</span>
                               </label>
                               <input
-                                class="form-control"
                                 type="text"
-                                name="first_name"
+                                id="TENDV"
+                                class="form-control form-control-lg"
+                                name="TENDV"
+                                required=""
+                                placeholder="Name of Service"
                               />
                             </div>
                           </div>
-                          <div class="col-sm-4">
+                          <div class="row my-3">
                             <div class="form-group">
-                              <label class="font-weight-bold">
-                                Price <span class="text-danger">*</span>
-                              </label>
-                              <input
-                                class="form-control"
-                                type="text"
-                                name="price"
-                              />
+                              <div class="form-outline mb-4">
+                                <label
+                                  class="form-label font-weight-bold"
+                                  for="DONGIA"
+                                >
+                                  Date of Birth
+                                </label>
+                                <input
+                                  type="number"
+                                  id="DONGIA"
+                                  class="form-control form-control-lg"
+                                  name="DONGIA"
+                                  required=""
+                                  placeholder="Price of Service"
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
 
-                        <div class="m-t-20 text-center">
-                          <button class="btn btn-warning submit-btn">
-                            Create Service
+                        <div class="d-flex justify-content-center m-t-20 text-center">
+                          <button
+                            type="submit"
+                            hx-target="#update-service-form"
+                            hx-swap="outerHTML"
+                            class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                          >
+                            Add service
                           </button>
                         </div>
                       </form>

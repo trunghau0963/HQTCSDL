@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
-import { serviceProps } from "../../model/model";
+import { Service } from "../../model/model";
 
 interface EditServiceProps {
-  Data: serviceProps;
+  Data: Service;
 }
 const EditService = ({ Data }: EditServiceProps) => {
   return (
@@ -34,52 +34,82 @@ const EditService = ({ Data }: EditServiceProps) => {
                 </div>
                 <div class="row">
                   <div class="col-lg-8 offset-lg-2">
-                    <form method="POST">
-                      <div class="row my-3">
-                        <div class="col-sm-4">
+                    <form
+                      id="update-service-form"
+                      hx-put="/admin/service"
+                      hx-vals={`{"id": ${Data.MADV}}`}
+                    >
+                      <div class="row">
+                        <div class="row my-3">
                           <div class="form-group">
-                            <label class="font-weight-bold">
-                              ID of Service<span class="text-danger">*</span>
+                            <label
+                              class="form-label font-weight-bold"
+                              for="MADV"
+                            >
+                              ID <span class="text-danger"></span>
                             </label>
                             <input
-                              class="form-control"
                               type="text"
-                              name="IDD"
-                              placeholder={Data.id}
+                              id="MADV"
+                              class="form-control form-control-lg"
+                              name="MADV"
+                              required=""
+                              value={Data.MADV}
+                              placeholder={Data.MADV}
+                              readonly="true"
                             />
                           </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="row my-3">
                           <div class="form-group">
-                            <label class="font-weight-bold">
+                            <label
+                              class="form-label font-weight-bold"
+                              for="TENDV"
+                            >
                               Name <span class="text-danger">*</span>
                             </label>
                             <input
-                              class="form-control"
                               type="text"
-                              name="first_name"
-                              placeholder={Data.name}
+                              id="TENDV"
+                              class="form-control form-control-lg"
+                              name="TENDV"
+                              required=""
+                              value={Data.TENDV}
+                              placeholder={Data.TENDV}
                             />
                           </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="row my-3">
                           <div class="form-group">
-                            <label class="font-weight-bold">
-                              Price <span class="text-danger">*</span>
-                            </label>
-                            <input
-                              class="form-control"
-                              type="text"
-                              name="price"
-                              placeholder={Data.price.toString()}
-                            />
+                            <div class="form-outline mb-4">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="DONGIA"
+                              >
+                                Date of Birth
+                              </label>
+                              <input
+                                type="number"
+                                id="DONGIA"
+                                class="form-control form-control-lg"
+                                name="DONGIA"
+                                required=""
+                                value={Data.DONGIA.toString()}
+                                placeholder={Data.DONGIA.toString()}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
 
-                      <div class="m-t-20 text-center">
-                        <button class="btn btn-primary submit-btn">
-                          Edit Service
+                      <div class="d-flex justify-content-center m-t-20 text-center">
+                        <button
+                          type="submit"
+                          hx-target="#update-service-form"
+                          hx-swap="outerHTML"
+                          class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                        >
+                          Update service
                         </button>
                       </div>
                     </form>

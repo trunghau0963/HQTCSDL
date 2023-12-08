@@ -1,9 +1,9 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import { serviceProps } from "../../../model/model";
 import EditService from "../../../components/Service/edit_service";
+import { Service } from "../../../model/model";
 interface EditServiceProps {
-  Data: serviceProps;
+  Data: Service;
 }
 const EditServicePage = ({Data} : EditServiceProps) => {
   return (

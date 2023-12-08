@@ -1,10 +1,9 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import { serviceProps } from "../../../model/model";
 import DeleteService from "../../../components/Service/delete_service";
-
+import { Service } from "../../../model/model";
 interface DeleteServiceProps {
-  Data: serviceProps;
+  Data: Service;
 }
 const DeleteServicePage = ({Data} :DeleteServiceProps ) => {
   return (
