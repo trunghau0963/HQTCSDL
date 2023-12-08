@@ -1,9 +1,9 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import { invoiceProps } from "../../../model/model";
+import { Invoice } from "../../../model/model";
 import EditInvoice from "../../../components/Drug/Invoice/edit_invoice";
 interface EditInvoiceProps {
-  Data: invoiceProps;
+  Data: Invoice;
 }
 const EditInvoicePage = ({Data} : EditInvoiceProps) => {
   return (

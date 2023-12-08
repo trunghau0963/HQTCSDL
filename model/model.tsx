@@ -81,10 +81,12 @@ export type Appointment = {
 
 export type Invoice = {
   MACT: string;
+  DIENTHOAI: string;
+  HOTEN: string[];
   MABN: string;
   MANS: string;
   NGAYKHAM: Date;
-  GIOKHAM: Date;
+  GIOKHAM: string;
   TONGTIEN: number;
   CHANDOAN: string;
   TRIEUCHUNG: string;

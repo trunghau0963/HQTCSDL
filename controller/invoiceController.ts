@@ -3,7 +3,7 @@ import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
 import { Invoice } from "../model/model";
 
-export const addInvoice= async (req: Request, res: Response) => {
+export const addInvoice = async (req: Request, res: Response) => {
   try {
     const input = req.body;
     const user = await (await req.db())
@@ -29,12 +29,12 @@ export const addInvoice= async (req: Request, res: Response) => {
   }
 };
 
-export const getInvoice= async (req: Request, res: Response) => {
+export const getInvoice = async (req: Request, res: Response) => {
   try {
     const data: Invoice[] = (
       await (await req.db()).execute("GET_CHITIETPHIENKHAM_DETAIL_ALL")
     ).recordset as Invoice[];
-
+    // console.log("Invoice", data);
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -46,10 +46,7 @@ export const getInvoice= async (req: Request, res: Response) => {
   }
 };
 
-export const getInvoiceDetail = async (
-  req: Request,
-  res: Response
-) => {
+export const getInvoiceDetail = async (req: Request, res: Response) => {
   try {
     const input = req.body;
     const data: Invoice = (
@@ -59,6 +56,7 @@ export const getInvoiceDetail = async (
         .input("GIOKHAM", input.time)
         .execute("GET_CHITIETPHIENKHAM_DETAIL")
     ).recordset[0];
+    console.log("Invoice detail", data);
     return data;
   } catch (error) {
     if (error instanceof Error) {

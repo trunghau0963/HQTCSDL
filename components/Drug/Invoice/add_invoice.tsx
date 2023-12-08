@@ -16,7 +16,10 @@ const AddInvoice = () => {
         aria-labelledby="myLargeModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-lg bg-muted" hx-include="admin/drug/invoice">
+        <div
+          class="modal-dialog modal-lg bg-muted"
+          hx-include="admin/drug/invoice"
+        >
           <div class="modal-content">
             <div>
               <div>
@@ -28,31 +31,44 @@ const AddInvoice = () => {
                   </div>
                   <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                      <form method="POST">
+                      <form
+                        id="update-invoice-form"
+                        hx-post="/admin/drug/add-invoice"
+                      >
                         <div class="row">
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID <span class="text-danger">*</span>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="MANS"
+                                >
+                                  MANS <span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
+                                  class="form-control form-control-lg"
                                   type="text"
-                                  name="ID"
+                                  name="MANS"
+                                  required=""
+                                  placeholder="MANS"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID of Patient
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="MABN"
+                                >
+                                  MABN
                                   <span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
+                                  class="form-control form-control-lg"
                                   type="text"
-                                  name="IDP"
+                                  name="MABN"
+                                  required=""
+                                  placeholder="MABN"
                                 />
                               </div>
                             </div>
@@ -60,26 +76,35 @@ const AddInvoice = () => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID of Dentist{" "}
-                                  <span class="text-danger">*</span>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="NGAYKHAM"
+                                >
+                                  NgayKham <span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
-                                  type="text"
-                                  name="IDD"
+                                  class="form-control form-control-lg"
+                                  type="string"
+                                  name="NGAYKHAM"
+                                  required=""
+                                  placeholder="NGAYKHAM"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Description<span class="text-danger">*</span>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="GIOKHAM"
+                                >
+                                  GioKham<span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
+                                  class="form-control form-control-lg"
                                   type="text"
-                                  name="Description"
+                                  name="GIOKHAM"
+                                  required=""
+                                  placeholder="GIOKHAM"
                                 />
                               </div>
                             </div>
@@ -87,46 +112,68 @@ const AddInvoice = () => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">Symptom</label>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="TONGTIEN"
+                                >
+                                  TongTien
+                                </label>
                                 <input
-                                  type="text"
+                                  type="number"
                                   class="form-control "
-                                  name="Symptom"
+                                  name="TONGTIEN"
+                                  required=""
+                                  placeholder="TONGTIEN"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label>Date</label>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="CHANDOAN"
+                                >
+                                  ChanDoan
+                                </label>
                                 <div class="cal-icon">
                                   <input
-                                    type="date"
-                                    class="form-control"
-                                    name="date"
+                                    type="text.CHANDOAN"
+                                    class="form-control form-control-lg"
+                                    name="CHANDOAN"
+                                    required=""
+                                    placeholder="CHANDOAN"
                                   />
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Total <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="Total"
-                                />
-                              </div>
+                            <div class="form-group">
+                              <label
+                                class="font-weight-bold form-label"
+                                for="TRIEUCHUNG"
+                              >
+                                TRIEUCHUNG <span class="text-danger">*</span>
+                              </label>
+                              <input
+                                class="form-control form-control-lg"
+                                type="text"
+                                name="TRIEUCHUNG"
+                                required=""
+                                placeholder="TRIEUCHUNG"
+                              />
                             </div>
                           </div>
                         </div>
 
-                        <div class="m-t-20 text-center">
-                          <button class="btn btn-warning submit-btn">
-                            Create Invoice
+                        <div class="d-flex justify-content-center m-t-20 text-center">
+                          <button
+                            type="submit"
+                            hx-target="#update-invoice-form"
+                            hx-swap="outerHTML"
+                            class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                          >
+                            Add Invoice
                           </button>
                         </div>
                       </form>

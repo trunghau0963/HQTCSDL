@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
-import { invoiceProps } from "../../../model/model";
+import { Invoice } from "../../../model/model";
 
 interface DeleteInvoiceProps {
-  Data: invoiceProps;
+  Data: Invoice;
 }
 const DeleteInvoice = ({ Data }: DeleteInvoiceProps) => {
   return (
@@ -36,33 +36,67 @@ const DeleteInvoice = ({ Data }: DeleteInvoiceProps) => {
                   </div>
                   <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                      <form method="post">
+                      <form
+                        id="update-invoice-form"
+                        hx-delete="/admin/drug/delete-invoice"
+                        hx-vals={`{"id": ${Data.MACT}}`}
+                      >
                         <div class="row">
                           <div class="row my-3">
+                            <div class="form-group">
+                              <label
+                                class="form-label font-weight-bold"
+                                for="MACT"
+                              >
+                                ID <span class="text-danger"></span>
+                              </label>
+                              <input
+                                type="text"
+                                id="id"
+                                class="form-control form-control-lg"
+                                name="id"
+                                required=""
+                                value={Data.MACT}
+                                placeholder={Data.MACT}
+                                readonly="true"
+                              />
+                            </div>
+                          </div>
+                          <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID <span class="text-danger">*</span>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="MANS"
+                                >
+                                  MANS <span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
+                                  class="form-control form-control-lg"
                                   type="text"
-                                  name="ID"
-                                  placeholder={Data.id}
+                                  name="MANS"
+                                  required=""
+                                  value={Data.MANS}
+                                  placeholder={Data.MANS}
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID of Patient
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="MABN"
+                                >
+                                  MABN
                                   <span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
+                                  class="form-control form-control-lg"
                                   type="text"
-                                  name="IDP"
-                                  placeholder={Data.idPatient}
+                                  name="MABN"
+                                  required=""
+                                  value={Data.MABN}
+                                  placeholder={Data.MABN}
                                 />
                               </div>
                             </div>
@@ -70,28 +104,37 @@ const DeleteInvoice = ({ Data }: DeleteInvoiceProps) => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  ID of Dentist{" "}
-                                  <span class="text-danger">*</span>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="NGAYKHAM"
+                                >
+                                  NgayKham <span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
-                                  type="text"
-                                  name="IDD"
-                                  placeholder={Data.idDentist}
+                                  class="form-control form-control-lg"
+                                  type="string"
+                                  name="NGAYKHAM"
+                                  required=""
+                                  value={Data.MABN}
+                                  placeholder={Data.NGAYKHAM.toDateString()}
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Description<span class="text-danger">*</span>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="GIOKHAM"
+                                >
+                                  GioKham<span class="text-danger">*</span>
                                 </label>
                                 <input
-                                  class="form-control"
+                                  class="form-control form-control-lg"
                                   type="text"
-                                  name="Description"
-                                  placeholder={Data.description}
+                                  name="GIOKHAM"
+                                  required=""
+                                  value={Data.GIOKHAM}
+                                  placeholder={Data.GIOKHAM}
                                 />
                               </div>
                             </div>
@@ -99,48 +142,70 @@ const DeleteInvoice = ({ Data }: DeleteInvoiceProps) => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">Symptom</label>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="TONGTIEN"
+                                >
+                                  TongTien
+                                </label>
                                 <input
-                                  type="text"
+                                  type="number"
                                   class="form-control "
-                                  name="Symptom"
-                                  placeholder={Data.symptom}
+                                  name="TONGTIEN"
+                                  required=""
+                                  value={Data.TONGTIEN.toString()}
+                                  placeholder={Data.TONGTIEN.toString()}
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label>Date</label>
+                                <label
+                                  class="font-weight-bold form-label"
+                                  for="CHANDOAN"
+                                >
+                                  ChanDoan
+                                </label>
                                 <div class="cal-icon">
                                   <input
-                                    type="date"
-                                    class="form-control"
-                                    name="date"
-                                    placeholder={Data.date}
+                                    type="text.CHANDOAN"
+                                    class="form-control form-control-lg"
+                                    name="CHANDOAN"
+                                    required=""
+                                    value={Data.CHANDOAN}
+                                    placeholder={Data.CHANDOAN}
                                   />
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label class="font-weight-bold">
-                                  Total <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="Total"
-                                  placeholder={Data.total.toString()}
-                                />
-                              </div>
+                            <div class="form-group">
+                              <label
+                                class="font-weight-bold form-label"
+                                for="TRIEUCHUNG"
+                              >
+                                TRIEUCHUNG <span class="text-danger">*</span>
+                              </label>
+                              <input
+                                class="form-control form-control-lg"
+                                type="text"
+                                name="TRIEUCHUNG"
+                                required=""
+                                value={Data.TRIEUCHUNG}
+                                placeholder={Data.TRIEUCHUNG}
+                              />
                             </div>
-  
                           </div>
                         </div>
-                        <div class="m-t-20 text-center">
-                          <button class="btn btn-primary submit-btn">
+
+                        <div class="d-flex justify-content-center m-t-20 text-center">
+                          <button
+                            type="submit"
+                            hx-target="#update-invoice-form"
+                            hx-swap="outerHTML"
+                            class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                          >
                             Delete Invoice
                           </button>
                         </div>

@@ -1,8 +1,6 @@
 import * as elements from "typed-html";
 import {
-  serviceProps,
   drugProps,
-  invoiceProps,
 } from "../../model/model";
 import { PatientProps, DentistProps, StaffProps } from "../../model/temp";
 export const DentistData: DentistProps[] = [
@@ -210,33 +208,7 @@ export const PatientData: PatientProps[] = [
   },
 ];
 
-export const serviceData: serviceProps[] = [
-  {
-    id: "serv001",
-    name: "Dental Checkup",
-    price: 50.0,
-  },
-  {
-    id: "serv002",
-    name: "Teeth Cleaning",
-    price: 25.0,
-  },
-  {
-    id: "serv003",
-    name: "Root Canal",
-    price: 100.0,
-  },
-  {
-    id: "serv004",
-    name: "Dental Filling",
-    price: 45.75,
-  },
-  {
-    id: "serv005",
-    name: "Tooth Extraction",
-    price: 75.0,
-  },
-];
+
 
 export const drugData: drugProps[] = [
   {
@@ -291,50 +263,50 @@ export const drugData: drugProps[] = [
   },
 ];
 
-export const invoiceData: invoiceProps[] = [
-  {
-    id: "inv001",
-    idPatient: "pat001",
-    idDentist: "dent001",
-    date: "2023-11-17T12:30:00Z",
-    total: 120.5,
-    description: "Dental Checkup",
-    symptom: "Toothache",
-  },
-  {
-    id: "inv002",
-    idPatient: "pat002",
-    idDentist: "dent002",
-    date: "2023-11-18T10:45:00Z",
-    total: 75.0,
-    description: "Teeth Cleaning",
-    symptom: "Plaque buildup",
-  },
-  {
-    id: "inv003",
-    idPatient: "pat003",
-    idDentist: "dent001",
-    date: "2023-11-19T14:15:00Z",
-    total: 200.0,
-    description: "Root Canal",
-    symptom: "Severe pain",
-  },
-  {
-    id: "inv004",
-    idPatient: "pat004",
-    idDentist: "dent003",
-    date: "2023-11-20T11:00:00Z",
-    total: 90.75,
-    description: "Dental Filling",
-    symptom: "Cavity",
-  },
-  {
-    id: "inv005",
-    idPatient: "pat005",
-    idDentist: "dent002",
-    date: "2023-11-21T09:30:00Z",
-    total: 150.0,
-    description: "Tooth Extraction",
-    symptom: "Impacted tooth",
-  },
-];
+// export const invoiceData: invoiceProps[] = [
+//   {
+//     id: "inv001",
+//     idPatient: "pat001",
+//     idDentist: "dent001",
+//     date: "2023-11-17T12:30:00Z",
+//     total: 120.5,
+//     description: "Dental Checkup",
+//     symptom: "Toothache",
+//   },
+//   {
+//     id: "inv002",
+//     idPatient: "pat002",
+//     idDentist: "dent002",
+//     date: "2023-11-18T10:45:00Z",
+//     total: 75.0,
+//     description: "Teeth Cleaning",
+//     symptom: "Plaque buildup",
+//   },
+//   {
+//     id: "inv003",
+//     idPatient: "pat003",
+//     idDentist: "dent001",
+//     date: "2023-11-19T14:15:00Z",
+//     total: 200.0,
+//     description: "Root Canal",
+//     symptom: "Severe pain",
+//   },
+//   {
+//     id: "inv004",
+//     idPatient: "pat004",
+//     idDentist: "dent003",
+//     date: "2023-11-20T11:00:00Z",
+//     total: 90.75,
+//     description: "Dental Filling",
+//     symptom: "Cavity",
+//   },
+//   {
+//     id: "inv005",
+//     idPatient: "pat005",
+//     idDentist: "dent002",
+//     date: "2023-11-21T09:30:00Z",
+//     total: 150.0,
+//     description: "Tooth Extraction",
+//     symptom: "Impacted tooth",
+//   },
+// ];

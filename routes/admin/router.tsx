@@ -20,6 +20,7 @@ import {
   Staff,
   Appointment,
   Service,
+  Invoice,
 } from "../../model/model";
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -58,6 +59,8 @@ import {
   getAppointment,
 } from "../../controller/appoinmentController";
 
+import { getInvoice } from "../../controller/invoiceController";
+
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
   return res.send(<DashBoard />);
@@ -67,8 +70,9 @@ adminRouter.get("/drug", [
   admin,
   async (req: any, res: any) => {
     try {
-      const drugInfo: drugProps[] = (await getDrugInfo(req, res)) || [];
-      return res.send(<Drug drugs={drugInfo} />);
+      const drugs: drugProps[] = (await getDrugInfo(req, res)) || [];
+      const invoices: Invoice[] = (await getInvoice(req, res)) || [];
+      return res.send(<Drug drugs={drugs} invoices={invoices} />);
     } catch (error) {
       console.error(error);
       return res.status(500).send("Internal Server Error");
