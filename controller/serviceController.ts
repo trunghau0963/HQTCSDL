@@ -29,6 +29,7 @@ export const addService = async (req: Request, res: Response) => {
 export const deleteService = async (req: Request, res: Response) => {
   try {
     const input = req.body;
+    console.log(input.MADV);
     const user = await (await req.db())
       .input("MADV", input.MADV)
       .execute("DROP_DICHVU");

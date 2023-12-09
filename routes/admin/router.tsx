@@ -146,7 +146,7 @@ adminRouter.get("/service", admin, async (req, res) => {
 
 adminRouter.post("/service", admin, addService);
 adminRouter.put("/service", admin, updateService);
-adminRouter.delete("/service", admin, updateService);
+adminRouter.delete("/service", admin, deleteService);
 
 adminRouter.get("/profile", admin, async (req, res) => {
   return res.send(<Profile />);

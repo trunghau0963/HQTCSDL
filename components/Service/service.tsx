@@ -52,13 +52,24 @@ const ServiceComponent = ({ Data }: ServiceProps) => {
                   </thead>
                   <tbody>
                     {Data.map((data) => (
-                      <tr>
+                      <tr id="service">
                         <td>{data.MADV}</td>
                         <td>{data.TENDV}</td>
                         <td>{data.DONGIA}</td>
                         <td class="text-right">
                           <EditServicePage Data={data} />
-                          <DeleteServicePage Data={data} />
+                          {/* <DeleteServicePage Data={data} /> */}
+                          {/* <button
+                            type="button"
+                            class="btn btn-link text-decoration-none"
+                            hx-delete="/admin/service"
+                            hx-target="#service"
+                            hx-params={`{"MADV": ${data.MADV}}`}
+                            hx-headers={`{"MADV": ${data.MADV}}`}
+                          >
+                            <i class="bi bi-eraser"></i>
+                            Delete
+                          </button> */}
                         </td>
                       </tr>
                     ))}
