@@ -55,14 +55,7 @@ const Calendar = () => {
                 name="years"
                 size="1"
               >
-                <option class="yer">2023</option>
-                <option class="yer">2022</option>
-                <option class="yer">2021</option>
-                <option class="yer">2020</option>
-                <option class="yer">2019</option>
-                <option class="yer">2018</option>
-                <option class="yer">2017</option>
-                <option class="yer">2016</option>
+                <option class="yer">{new Date().getFullYear()}</option>
               </select>
             </label>
           </div>
