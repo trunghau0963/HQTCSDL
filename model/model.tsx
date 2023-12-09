@@ -94,6 +94,7 @@ export type Invoice = {
 
 export type Schedule= {
   MANS: string;
+  HOTEN: string;
   NGAYKHAM: Date;
   GIOKHAM: Date;
 };
@@ -111,6 +112,7 @@ export type Service = {
   MADV: string;
   TENDV: string;
   DONGIA: number;
+  DAXOA: boolean
 };
 
 export type drugProps = {
@@ -122,6 +124,7 @@ export type drugProps = {
   DONVI: string;
   NGAYHETHAN: Date;
   DONGIA: number;
+  DAXOA: boolean
 };
 
 export type serviceIndicators = {

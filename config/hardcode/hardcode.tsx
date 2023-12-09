@@ -220,6 +220,7 @@ export const drugData: drugProps[] = [
     NGAYHETHAN: new Date("2024-05-01"),
     DONVI: 'pill',
     DONGIA: 10.0,
+    DAXOA: false
   },
   {
     MALO: "cons002",
@@ -230,6 +231,8 @@ export const drugData: drugProps[] = [
     DONVI: 'pill',
     NGAYHETHAN: new Date("2024-08-15"),
     DONGIA: 15.0,
+    DAXOA: false
+
   },
   {
     MALO: "cons003",
@@ -240,6 +243,8 @@ export const drugData: drugProps[] = [
     DONVI: 'pill',
     NGAYHETHAN: new Date("2023-12-31"),
     DONGIA: 8.5,
+    DAXOA: false
+
   },
   {
     MALO: "cons004",
@@ -250,6 +255,8 @@ export const drugData: drugProps[] = [
     DONVI: 'pill',
     NGAYHETHAN: new Date("2024-06-30"),
     DONGIA: 5.0,
+    DAXOA: false
+
   },
   {
     MALO: "cons005",
@@ -260,6 +267,8 @@ export const drugData: drugProps[] = [
     DONVI: 'pill',
     NGAYHETHAN: new Date("2024-04-15"),
     DONGIA: 7.0,
+    DAXOA: false
+
   },
 ];
 

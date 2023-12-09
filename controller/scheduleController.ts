@@ -80,9 +80,10 @@ export const updateSchedule = async (req: Request, res: Response) => {
 export const getSchedule = async (req: Request, res: Response) => {
   try {
     const data: Schedule[] = (
-      await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL")
-    ).recordset as Schedule[];
-
+      await (await req.db())
+      .execute("GET_LICHLAMVIEC_DETAIL")
+    ).recordset;
+    
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -96,8 +97,12 @@ export const getSchedule = async (req: Request, res: Response) => {
 
 export const getScheduleIsFree = async (req: Request, res: Response) => {
     try {
+      const { year, mon, day } = req.query;
+      const date = `${year}-${mon}-${day}`;
       const data: Schedule[] = (
-        await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL_FREE")
+        await (await req.db())
+        .input("DATE", date)
+        .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
       ).recordset as Schedule[];
   
       return data;

@@ -1,5 +1,6 @@
 import * as elements from "typed-html";
 import { DentistData } from "../../../config/hardcode/hardcode";
+import { Schedule } from "../../../model/model";
 const DentistAvailable = () => {
   return (
     <div
@@ -25,39 +26,9 @@ const DentistAvailable = () => {
               </button>
             </div>
           </div>
-          {DentistData.map((data) => (
-            <div class="row w-auto py-3 m-3">
-              <img
-                class="col-sm-3 col-md-3 p-0 rounded-2 w-auto"
-                src={`/img/doctor-thumb-0${data.id}.jpg`}
-                alt={`${data.name}`}
-              />
-              <div class="col-sm-9 col-md-9">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h1 class="text-4xl">{data.name}</h1>
-                  <a href="/patient/schedule/add_appointment"
-                    class={`btn btn-primary ${data.isLocked ? `` : `disabled`}`}
-                  >
-                    <h1
-                      class={`text-lg ${
-                        data.isLocked ? `text-success` : `text-warning`
-                      }`}
-                    >
-                      {data.isLocked ? "Available" : "Unavailable"}
-                    </h1>
-                  </a>
-                </div>
-                <h3 class="text-lg">{data.gender ? data.gender : "Null"}</h3>
-                <p class="fw-lighter">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries,
-                </p>
-              </div>
-            </div>
-          ))}
+          <div id="schedule" class='schedule'>
+            
+          </div>
         </div>
       </div>
     </div>
