@@ -28,7 +28,7 @@ const AddService = () => {
                   </div>
                   <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                      <form id="update-service-form" hx-delete="/admin/service">
+                      <form id="add-service-form" hx-post="/admin/service">
                         <div class="row">
                           <div class="row my-3">
                             <div class="form-group">
@@ -55,7 +55,7 @@ const AddService = () => {
                                   class="form-label font-weight-bold"
                                   for="DONGIA"
                                 >
-                                  Date of Birth
+                                  Price
                                 </label>
                                 <input
                                   type="number"
@@ -73,7 +73,7 @@ const AddService = () => {
                         <div class="d-flex justify-content-center m-t-20 text-center">
                           <button
                             type="submit"
-                            hx-target="#update-service-form"
+                            hx-target="#add-service-form"
                             hx-swap="outerHTML"
                             class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
                           >
