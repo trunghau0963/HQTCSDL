@@ -18,7 +18,6 @@ export const registerAppointment = async (req: Request, res: Response) => {
       .input("GIOKHAM", input.hour)
       .execute("REGISTER_LICHKHAM")).recordset;
 
-
     return res
       .header("HX-Redirect", "/patient/schedule/")
       .json({ message: "Success" })

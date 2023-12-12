@@ -10,7 +10,7 @@ import AddAppointment from "../../components/Appointment/patientAppointment/addA
 import Service from "../../app/patient/Service/Service";
 import Security from "../../app/patient/Security/Security";
 import { patient } from "../auth/router";
-import { Patient, Schedule } from "../../model/model";
+import { Patient, Schedule, drugProps } from "../../model/model";
 import middlewareToken from "../../middleware/tokenMiddleware";
 import { getPatientById } from "../../controller/patientController";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -32,7 +32,12 @@ patientRouter.get("/home", patient, async (req, res) => {
 });
 
 patientRouter.get("/drug", patient, async (req, res) => {
-  return res.send(<Drug />);
+  const drugList: drugProps[]= (
+    await (await req.db())
+    .execute("GET_INFO_THUOC")
+  ).recordset;
+  console.log(drugList)
+  return res.send(<Drug drugs={drugList}/>);
 });
 
 patientRouter.get("/dentist", patient, async (req, res) => {
