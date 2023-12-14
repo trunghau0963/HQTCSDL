@@ -2,19 +2,21 @@ import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
 import { Schedule } from "../model/model";
+import { number } from "joi";
 
 export const addSchedule = async (req: Request, res: Response) => {
   try {
-    const input = req.body;
-    const user = await (await req.db())
-      .input("MANS", input.MANS)
-      .input("NGAYKHAM", input.NGAYKHAM)
-      .input("GIOKHAM", input.GIOKHAM)
-      .execute("INSERT_INTO_LICHLAMVIEC");
-    res
+    const {NGAYKHAM, GIOKHAM, MANS} = req.body;
+    console.log(req.body)
+  
+    const user = (await (await req.db())
+      .input("MANS", MANS)
+      .input("NGAYKHAM", NGAYKHAM)
+      .input("GIOKHAM", GIOKHAM)
+      .execute("INSERT_INTO_LICHLAMVIEC")).recordset[0];
+    return res
       .header("HX-Redirect", "/admin/schedule")
       .status(200)
-      .json(user.recordset[0])
       .send("successful register Schedule");
   } catch (error) {
     if (error instanceof Error) {
@@ -35,7 +37,7 @@ export const deleteSchedule = async (req: Request, res: Response) => {
       .input("NGAYKHAM", input.NGAYKHAM)
       .input("GIOKHAM", input.GIOKHAM)
       .execute("DROP_LICHLAMVIEC");
-    res
+    return res
       .header("HX-Redirect", "/admin/schedule")
       .status(200)
       .json(user.recordset[0])
@@ -95,12 +97,20 @@ export const getSchedule = async (req: Request, res: Response) => {
 };
 
 export const getScheduleIsFree = async (req: Request, res: Response) => {
-  try {
-    const { year, mon, day } = req.query;
-    const date =`${year}-${mon}-${day}`;
-    console.log("date", date);
-    const data: Schedule[] = (
-      await (await req.db())
+    try {
+      const { year, mon, day } = req.query;
+      const date = `${year}-${mon}-${day}`;
+ 
+      const getDaysInMonth = (year: number, month: number) => {
+        return new Date(year, month, 0).getDate();
+      }
+
+      if(getDaysInMonth(Number(year), Number(mon)) < Number(day)){
+          return [];
+      }
+      
+      const data: Schedule[] = (
+        await (await req.db())
         .input("NGAYKHAM", date)
         .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
     ).recordset as Schedule[];

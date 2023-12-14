@@ -6,19 +6,22 @@ import { Appointment } from "../model/model";
 export const registerAppointment = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    const user = await (await req.db())
-      .input("TEN", input.TEN)
-      .input("DIENTHOAI", input.DIENTHOAI)
-      .input("NGAYSINH", input.NGAYSINH)
-      .input("DIACHI", input.DIACHI)
-      .input("MANS", input.MANS)
-      .input("NGAYKHAM", input.NGAYKHAM)
-      .execute("REGISTER_LICHKHAM");
-    res
-      // .header("HX-Redirect", "/admin/appointment")
-      .status(200)
-      .json(user.recordset[0])
-      .send("successful registe Appointment");
+    console.log(input)
+    
+    const user = (await (await req.db())
+      .input("TEN", input.patient_name)
+      .input("DIENTHOAI", input.phoneNum)
+      .input("NGAYSINH", input.dob)
+      .input("DIACHI", input.address)
+      .input("MANS", input.dentist_id)
+      .input("NGAYKHAM", input.doa)
+      .input("GIOKHAM", input.hour)
+      .execute("REGISTER_LICHKHAM")).recordset;
+
+    return res
+      .header("HX-Redirect", "/patient/schedule/")
+      .json({ message: "Success" })
+      .status(200);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

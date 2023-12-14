@@ -26,8 +26,7 @@ const DentistAvailable = () => {
               </button>
             </div>
           </div>
-          <div id="schedule" class='schedule'>
-            
+          <div id="schedule" class="schedule">
           </div>
         </div>
       </div>
