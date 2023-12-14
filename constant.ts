@@ -39,7 +39,7 @@ export const PATIENTNAVIGATIONS = (baseUrl: string) => [
     url: `${baseUrl}/service`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  }, 
+  },
   {
     title: "Dentist",
     icon: "/icons/dentist.svg",
@@ -75,13 +75,20 @@ export const NAVIGATIONS = (baseUrl: string) => [
     url: `${baseUrl}/service`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  }, 
+  },
   {
     title: "Drug",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",
     slug: "drug",
+  },
+  {
+    title: "Invoice",
+    icon: "/icons/receipt.svg",
+    url: `${baseUrl}/invoice`,
+    color: "btn btn-outline-warning",
+    slug: "invoice",
   },
 ];
 
@@ -106,7 +113,7 @@ export const ADMINNAVIGATIONS = (baseUrl: string) => [
     url: `${baseUrl}/service`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  }, 
+  },
   {
     title: "Drug",
     icon: "/icons/drug.svg",
@@ -115,4 +122,3 @@ export const ADMINNAVIGATIONS = (baseUrl: string) => [
     slug: "drug",
   },
 ];
-

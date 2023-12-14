@@ -3,10 +3,10 @@ import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
 import { drugProps, Staff } from "../model/model";
 
-export const addDrug= async (req: Request, res: Response) => {
+export const addDrug = async (req: Request, res: Response, url: string) => {
   try {
     const input = req.body;
-  
+    const directUrl = `/${url}/drug`;
     const drug: drugProps = {
       ...(
         await (await req.db())
@@ -20,9 +20,10 @@ export const addDrug= async (req: Request, res: Response) => {
       ).recordset[0],
     };
 
-    console.log(drug)
+    console.log(drug);
 
     return res
+      .header("HX-Redirect", directUrl)
       .json("Add successfully" + `<a href='/'>Continue Login<a>`)
       .status(201);
   } catch (error) {
@@ -36,11 +37,13 @@ export const addDrug= async (req: Request, res: Response) => {
   }
 };
 
-export const getDrugInfo = async (req: Request, res: Response): Promise<drugProps[] | undefined> => {
+export const getDrugInfo = async (
+  req: Request,
+  res: Response
+): Promise<drugProps[] | undefined> => {
   try {
     const drugs: drugProps[] = (
-      await (await req.db())
-        .execute("GET_INFO_THUOC")
+      await (await req.db()).execute("GET_INFO_THUOC")
     ).recordset;
 
     return drugs;
@@ -54,22 +57,36 @@ export const getDrugInfo = async (req: Request, res: Response): Promise<drugProp
   }
 };
 
+export const getNameOfDrug = async (req: Request, res: Response) => {
+  try {
+    const drugs: drugProps[] = (
+      await (await req.db()).execute("GET_INFO_THUOC")
+    ).recordset as drugProps[];
+
+    const nameArray: string[] = drugs.map((drug) => drug.TENTHUOC.toString());
+    return nameArray;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get drug information. Please try again later.");
+    return undefined;
+  }
+};
+
 export const getDrugByName = async (req: Request, res: Response) => {
   const { name } = req.body;
   try {
-    let drugs: drugProps[] = []
-    if (name !== ''){
+    let drugs: drugProps[] = [];
+    if (name !== "") {
       drugs = (
         await (await req.db())
           .input("TENTHUOC", name)
           .execute("GET_INFO_THUOC_BY_NAME")
       ).recordset;
-    }
-    else{
-      drugs = (
-        await (await req.db())
-          .execute("GET_INFO_THUOC")
-      ).recordset;
+    } else {
+      drugs = (await (await req.db()).execute("GET_INFO_THUOC")).recordset;
     }
     console.log(drugs);
     return drugs;
@@ -86,17 +103,18 @@ export const getDrugByName = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteDrug = async (req: Request, res: Response) => {
+export const deleteDrug = async (req: Request, res: Response, url: string) => {
   const { IDC, IDD } = req.body;
+  const directUrl = `/${url}/drug`;
   try {
-    console.log(IDC)
+    console.log(IDC);
     await (await req.db())
-    .input("MALO", IDC)
-    .input("MATHUOC", IDD)
-    .execute("DROP_THUOC")
+      .input("MALO", IDC)
+      .input("MATHUOC", IDD)
+      .execute("DROP_THUOC");
 
     return res
-      .header("HX-Redirect", "/admin/drug")
+      .header("HX-Redirect", directUrl)
       .json({ message: "Success" })
       .status(200);
   } catch (error) {
@@ -112,23 +130,28 @@ export const deleteDrug = async (req: Request, res: Response) => {
   }
 };
 
-export const updateInfoDrug = async (req: Request, res: Response) => {
+export const updateInfoDrug = async (
+  req: Request,
+  res: Response,
+  url: string
+) => {
   const info = req.body;
+  const directUrl = `/${url}/drug`;
   try {
-    console.log(req.body)
+    console.log(req.body);
     await (await req.db())
-    .input("MALO", info.IDC)
-    .input("MATHUOC", info.IDD)
-    .input("TENTHUOC", info.name)
-    .input("DONVI", info.unit)
-    .input("CHIDINH", info.assign)
-    .input("SOLUONG", info.quantity)
-    .input("NGAYHETHAN", info.exp)
-    .input("DONGIA", info.price)
-    .execute("UPDATE_INFO_THUOC")
+      .input("MALO", info.IDC)
+      .input("MATHUOC", info.IDD)
+      .input("TENTHUOC", info.name)
+      .input("DONVI", info.unit)
+      .input("CHIDINH", info.assign)
+      .input("SOLUONG", info.quantity)
+      .input("NGAYHETHAN", info.exp)
+      .input("DONGIA", info.price)
+      .execute("UPDATE_INFO_THUOC");
 
     return res
-      .header("HX-Redirect", "/admin/drug")
+      .header("HX-Redirect", directUrl)
       .json({ message: "Success" })
       .status(200);
   } catch (error) {
@@ -143,5 +166,3 @@ export const updateInfoDrug = async (req: Request, res: Response) => {
     }
   }
 };
-
-

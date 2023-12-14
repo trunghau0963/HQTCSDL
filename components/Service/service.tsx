@@ -1,24 +1,20 @@
 import * as elements from "typed-html";
-import AddServicePage from "../../app/admin/Service/AddService";
-import DeleteServicePage from "../../app/admin/Service/DeleteService";
-import EditServicePage from "../../app/admin/Service/EditService";
+import { AddService, EditService, DeleteService } from "./functionService";
 import { Service } from "../../model/model";
 type ServiceProps = {
   Data: Service[];
+  url: string;
 };
 
-const ServiceComponent = ({ Data }: ServiceProps) => {
+const ServiceComponent = ({ Data, url }: ServiceProps) => {
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
         <div class="content">
           <div class="row">
-            <div class="col-sm-4 col-3">
-              <h4 class="page-title">patient</h4>
-            </div>
             <div class="row">
               <div class="col-sm-6 col-md-12 my-2 mx-2">
-                <AddServicePage />
+                <AddService url={url} />
               </div>
               <div class="col-sm-6 col-md-12 my-2 mx-2">
                 <form action="" method="POST">
@@ -57,19 +53,8 @@ const ServiceComponent = ({ Data }: ServiceProps) => {
                         <td>{data.TENDV}</td>
                         <td>{data.DONGIA}</td>
                         <td class="text-right">
-                          <EditServicePage Data={data} />
-                          {/* <DeleteServicePage Data={data} /> */}
-                          {/* <button
-                            type="button"
-                            class="btn btn-link text-decoration-none"
-                            hx-delete="/admin/service"
-                            hx-target="#service"
-                            hx-params={`{"MADV": ${data.MADV}}`}
-                            hx-headers={`{"MADV": ${data.MADV}}`}
-                          >
-                            <i class="bi bi-eraser"></i>
-                            Delete
-                          </button> */}
+                          <EditService Data={data} url={url} />
+                          <DeleteService Data={data} url={url} />
                         </td>
                       </tr>
                     ))}

@@ -14,7 +14,7 @@ const DrugPage = ({ drugs, invoices }: drugPageProps) => {
   console.log(invoices);
   return (
     <AdminPage>
-      <Drug drugs={drugs} />
+      <Drug drugs={drugs} url="admin" />
       <InvoiceComponent Data={invoices} />
     </AdminPage>
   );

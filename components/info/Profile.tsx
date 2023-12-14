@@ -11,7 +11,7 @@ type ProfileProps = {
 
 const Profile = ({ id, name, phone, dob, address, role }: ProfileProps) => {
   return (
-    <section class="vh-100" style="background-color: #f4f5f7;">
+    <section class="min-vh-100" style="background-color: #f4f5f7;">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-6 mb-4 mb-lg-0">
           <div class="card mb-3" style="border-radius: .5rem;">

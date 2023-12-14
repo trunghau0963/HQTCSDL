@@ -3,13 +3,13 @@ import StaffPage from "../staff";
 import ToolNavigation from "../../../components/Dashboard/tools-navigation";
 
 const TOOLS = (baseUrl: string): any[] => [
-  {
-    title: "Home",
-    icon: "/icons/home.svg",
-    url: `${baseUrl}/home`,
-    color: "btn btn-outline-info",
-    slug: "home",
-  },
+  // {
+  //   title: "Home",
+  //   icon: "/icons/home.svg",
+  //   url: `${baseUrl}/home`,
+  //   color: "btn btn-outline-info",
+  //   slug: "home",
+  // },
   {
     title: "Schedule",
     icon: "/icons/schedule.svg",
@@ -23,14 +23,21 @@ const TOOLS = (baseUrl: string): any[] => [
     url: `${baseUrl}/service`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  },  
+  },
   {
     title: "Drug",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  },  
+  },
+  {
+    title: "Invoice",
+    icon: "/icons/receipt.svg",
+    url: `${baseUrl}/invoice`,
+    color: "btn btn-outline-warning",
+    slug: "invoice",
+  },
 ];
 
 const Dashboard = () => {

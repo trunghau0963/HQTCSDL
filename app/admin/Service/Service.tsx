@@ -6,7 +6,7 @@ import { Service } from "../../../model/model";
 const ServicePage = ({ services }: { services: Service[] }) => {
   return (
     <AdminPage>
-      <ServiceComponent Data={services} />
+      <ServiceComponent Data={services} url="admin" />
     </AdminPage>
   );
 };

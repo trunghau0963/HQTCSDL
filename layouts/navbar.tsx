@@ -170,16 +170,6 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
                   </div>
                 </div>
               </li>
-              <li class="nav-item dropdown d-none d-sm-block">
-                <a
-                  // href="javascript:void(0);"
-                  id="open_msg_box"
-                  class="hasnotifications nav-link"
-                >
-                  <i class="bi bi-chat-left-dots-fill"></i>
-                  <span class="badge badge-pill bg-danger float-right">8</span>
-                </a>
-              </li>
               <li class="nav-item dropdown has-arrow end-0">
                 <a
                   href="#"

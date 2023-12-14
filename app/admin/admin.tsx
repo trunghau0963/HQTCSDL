@@ -8,7 +8,7 @@ const AdminPage = ({ children }: elements.Children) => {
   return (
     <BaseHtml>
       <Navbar children={children} url={"/admin"} NAVIGATIONS={ADMINNAVIGATIONS} />
-      <div>{children}</div>
+      <div class="w-100 min-vh-100">{children}</div>
       <Footer/>
     </BaseHtml>
   );

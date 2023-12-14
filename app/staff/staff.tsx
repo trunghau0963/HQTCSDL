@@ -7,7 +7,7 @@ const StaffPage = ({ children }: elements.Children) => {
   return (
     <BaseHtml>
       <Navbar children={children} url={"/staff"} NAVIGATIONS={NAVIGATIONS} />
-      <div class="w-100">{children}</div>
+      <div class="w-100 min-vh-100" >{children}</div>
       <Footer/>
     </BaseHtml>
   );

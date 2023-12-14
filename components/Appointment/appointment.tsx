@@ -95,7 +95,7 @@ const Appointment = () => {
             <div class="my-3">
               <a
                 href="/admin/schedule/add_appointment"
-                class="text-center btn btn-warning btn-rounded float-right w-100 py-3 text-white"
+                class="text-center btn btn-tertiary btn-rounded float-right w-100 py-3 text-white"
               >
                 <i class="bi bi-calendar2-plus-fill"></i> Add Appointment
               </a>

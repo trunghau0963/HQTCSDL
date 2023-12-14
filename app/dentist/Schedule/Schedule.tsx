@@ -1,12 +1,20 @@
 import * as elements from "typed-html";
 import DentistPage from "../dentist";
+import ScheduleComponent from "../../../components/Dentist/Schedule/ScheduleComponent";
+import { Schedule } from "../../../model/model";
 
-const Schedule = () => {
+const SchedulePage = ({
+  Free,
+  Registered,
+}: {
+  Free: Schedule[];
+  Registered: Schedule[];
+}) => {
   return (
     <DentistPage>
-      <div>Schedule</div>
+      <ScheduleComponent Free={Free} Registered={Registered} />
     </DentistPage>
   );
 };
 
-export default Schedule;
+export default SchedulePage;

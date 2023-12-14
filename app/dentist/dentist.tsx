@@ -11,7 +11,7 @@ const DentistPage = ({ children }: elements.Children) => {
         url={"/dentist"}
         NAVIGATIONS={DENTISTNAVIGATIONS}
       />
-      <div class="w-100">{children}</div>
+      <div class="w-100  min-vh-100">{children}</div>
       <Footer/>
     </BaseHtml>
   );

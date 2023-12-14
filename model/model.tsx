@@ -66,11 +66,11 @@ export type Admin = {
   DIACHI?: string;
 };
 
-export type AppointmentProps = {
-  idDentist: string;
-  idPatient: string;
-  date: Date;
-};
+// export type AppointmentProps = {
+//   idDentist: string;
+//   idPatient: string;
+//   date: Date;
+// };
 
 export type Appointment = {
   MABN: string;
@@ -82,17 +82,18 @@ export type Appointment = {
 export type Invoice = {
   MACT: string;
   DIENTHOAI: string;
-  HOTEN: string[];
   MABN: string;
+  HOTENBENHNHAN: string;
   MANS: string;
+  HOTENNHASI: string;
   NGAYKHAM: Date;
-  GIOKHAM: string;
+  GIOKHAM: Date;
   TONGTIEN: number;
   CHANDOAN: string;
   TRIEUCHUNG: string;
 };
 
-export type Schedule= {
+export type Schedule = {
   MANS: string;
   HOTEN: string;
   NGAYKHAM: Date;
@@ -102,9 +103,11 @@ export type Schedule= {
 export type Prescription = {
   MACT: string;
   MALO: string;
+  TENTHUOC: string;
   MATHUOC: string;
   SOLUONG: number;
-  LIEULUONG: string;
+  LIEULUONG: number;
+  DONGIA: number;
   THANHTIEN: number;
 };
 
@@ -112,7 +115,7 @@ export type Service = {
   MADV: string;
   TENDV: string;
   DONGIA: number;
-  DAXOA: boolean
+  DAXOA: boolean;
 };
 
 export type drugProps = {
@@ -124,7 +127,7 @@ export type drugProps = {
   DONVI: string;
   NGAYHETHAN: Date;
   DONGIA: number;
-  DAXOA: boolean
+  DAXOA: boolean;
 };
 
 export type serviceIndicators = {
