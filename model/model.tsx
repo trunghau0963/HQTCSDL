@@ -66,10 +66,13 @@ export type Admin = {
   DIACHI?: string;
 };
 
-export type AppointmentProps = {
-  idDentist: string;
-  idPatient: string;
-  date: Date;
+export type AppointmentDetailProps = {
+  MANS: string;
+  TENNS: string;
+  MABN: string;
+  TENBN: string;
+  NGAYKHAM: Date;
+  GIOKHAM: Date;
 };
 
 export type Appointment = {

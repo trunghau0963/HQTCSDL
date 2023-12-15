@@ -7,10 +7,14 @@ import Dentist from "../../app/patient/Dentist/Dentist";
 import ScheduleComponent from "../../app/patient/Schedule/Schedule";
 import ProfilePage from "../../app/patient/Profile/Profile";
 import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
-import Service from "../../app/patient/Service/Service";
 import Security from "../../app/patient/Security/Security";
 import { patient } from "../auth/router";
-import { Patient, Schedule, drugProps } from "../../model/model";
+import {
+  AppointmentDetailProps,
+  Patient,
+  Schedule,
+  drugProps,
+} from "../../model/model";
 import middlewareToken from "../../middleware/tokenMiddleware";
 import { getPatientById } from "../../controller/patientController";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -19,7 +23,13 @@ import {
   getSchedule,
   getScheduleIsFree,
 } from "../../controller/scheduleController";
-import { registerAppointment } from "../../controller/appoinmentController";
+import {
+  deleteAppointment,
+  getAppointmentIsDoneOfPatient,
+  getAppointmentNotDone,
+  registerAppointment,
+} from "../../controller/appoinmentController";
+import Appointment from "../../app/patient/Appointment/Appointment";
 
 const patientRouter = Router();
 
@@ -32,12 +42,11 @@ patientRouter.get("/home", patient, async (req, res) => {
 });
 
 patientRouter.get("/drug", patient, async (req, res) => {
-  const drugList: drugProps[]= (
-    await (await req.db())
-    .execute("GET_INFO_THUOC")
+  const drugList: drugProps[] = (
+    await (await req.db()).execute("GET_INFO_THUOC")
   ).recordset;
-  console.log(drugList)
-  return res.send(<Drug drugs={drugList}/>);
+  console.log(drugList);
+  return res.send(<Drug drugs={drugList} />);
 });
 
 patientRouter.get("/dentist", patient, async (req, res) => {
@@ -94,7 +103,6 @@ patientRouter.get("/information", patient, async (req, res) => {
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
-
   } catch {}
   return res.send(<ProfilePage data={patient} />);
 });
@@ -103,7 +111,6 @@ patientRouter.get(
   "/schedule/date/add_appointment",
   patient,
   async (req, res) => {
-    
     let data: Schedule = {
       MANS: "",
       HOTEN: "",
@@ -146,8 +153,23 @@ patientRouter.post(
   registerAppointment
 );
 
-patientRouter.get("/service", patient, async (req, res) => {
-  return res.send(<Service />);
+patientRouter.get("/appointment", patient, async (req, res) => {
+  const token = req.cookies.token as string;
+  const data = (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+  const { MABN } = data.user;
+
+  const appointments: AppointmentDetailProps[] =
+    (await getAppointmentNotDone(req, res, MABN)) ?? [];
+    
+
+  const appointmentsFinished: AppointmentDetailProps[] =
+    (await getAppointmentIsDoneOfPatient(req, res, MABN)) ?? [];
+
+  return res.send(<Appointment appointments={appointments} appointmentsFinished={appointmentsFinished}/>);
+});
+
+patientRouter.delete("/appointment", patient, async (req, res) => {
+  await deleteAppointment(req, res)
 });
 
 patientRouter.get("/about", patient, async (req, res) => {
