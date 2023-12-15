@@ -97,3 +97,4 @@ export const getPrescriptionById = async (
     return undefined;
   }
 };
+

@@ -136,5 +136,7 @@ export type drugProps = {
 export type serviceIndicators = {
   MACT: string;
   MADV: string;
+  TENDV: string;
+  DONGIA: Number;
   THANHTIEN: number;
 };

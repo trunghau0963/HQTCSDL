@@ -1,5 +1,6 @@
 import * as elements from "typed-html";
 import { AppointmentDetailProps } from "../../model/model";
+import PreviewPage from "../../app/staff/Invoice/Preview/previewPageForPatient";
 
 const Appointment = ({
   appointments,
@@ -48,29 +49,23 @@ const Appointment = ({
                           </td>
 
                           <td class="text-right">
-                            <div class="dropdown">
-                              <button
-                                class="btn btn-outline-primary"
-                                type="button"
-                                hx-delete="/patient/appointment"
-                                hx-vars={`{'MANS': '${
-                                  appointment.MANS
-                                }', 'MABN': '${
-                                  appointment.MABN
-                                }', 'NGAYKHAM': '${
-                                  appointment.NGAYKHAM.toISOString().split(
-                                    "T"
-                                  )[0]
-                                }', 'GIOKHAM': '${
-                                  appointment.GIOKHAM.toISOString()
-                                    .split("T")[1]
-                                    .split(".")[0]
-                                }'}`}
-                              >
-                                <i class="bi bi-eraser"></i>
-                                Delete
-                              </button>
-                            </div>
+                            <button
+                              class="btn btn-outline-primary"
+                              type="button"
+                              hx-delete="/patient/appointment"
+                              hx-vars={`{'MANS': '${
+                                appointment.MANS
+                              }', 'MABN': '${appointment.MABN}', 'NGAYKHAM': '${
+                                appointment.NGAYKHAM.toISOString().split("T")[0]
+                              }', 'GIOKHAM': '${
+                                appointment.GIOKHAM.toISOString()
+                                  .split("T")[1]
+                                  .split(".")[0]
+                              }'}`}
+                            >
+                              <i class="bi bi-eraser"></i>
+                              Delete
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -119,29 +114,26 @@ const Appointment = ({
                           </td>
 
                           <td class="text-right">
-                            <div class="dropdown">
-                              <button
-                                class="btn btn-outline-primary dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                Action
-                              </button>
-                              <div
-                                class="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <a
-                                  class="dropdown-item"
-                                  href="/admin/schedule/edit_appointment/"
-                                >
-                                  <i class="bi bi-info-circle-fill"></i> Detail
-                                </a>
-                              </div>
-                            </div>
+                            <button
+                              class="btn btn-outline-primary"
+                              type="button"
+                              data-toggle="modal"
+                              data-target=".appoinment"
+                              hx-get="/patient/appointment/id"
+                              hx-vars={`{'MANS': '${
+                                appointment.MANS
+                              }', 'MABN': '${appointment.MABN}', 'NGAYKHAM': '${
+                                appointment.NGAYKHAM.toISOString().split("T")[0]
+                              }', 'GIOKHAM': '${
+                                appointment.GIOKHAM.toISOString()
+                                  .split("T")[1]
+                                  .split(".")[0]
+                              }'}`}
+                              hx-target="#invoiceDetail"
+                            >
+                              <i class="bi bi-info-circle-fill"></i> Detail
+                            </button>
+                            <PreviewPage />
                           </td>
                         </tr>
                       ))}

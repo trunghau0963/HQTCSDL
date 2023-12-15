@@ -95,14 +95,14 @@ export const getServiceIndicators = async (req: Request, res: Response) => {
 export const getServiceIndicatorsById = async (
   req: Request,
   res: Response,
-  id: string
+  id?: string
 ) => {
   try {
-    const data: serviceIndicators = (
+    const data: serviceIndicators[] = (
       await (await req.db())
         .input("MACT", id)
         .execute("GET_DICHVUCHIDINH_DETAIL")
-    ).recordset[0];
+    ).recordset;
     return data;
   } catch (error) {
     if (error instanceof Error) {
