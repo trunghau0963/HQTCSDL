@@ -4,16 +4,22 @@ import BaseHtml from "../../../layouts/baseHtml";
 const Signup = () => {
   return (
     <BaseHtml>
-      <section class="vh-100 bg-image">
-        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-          <div class="container h-100">
+      <div>
+        <section class="h-100 h-custom" >
+          <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-              <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                <div class="card" style="border-radius: 15px;">
-                  <div class="card-body p-5">
-                    <h2 class="text-uppercase text-center mb-5">
-                      Create an account
-                    </h2>
+              <div class="col-lg-8 col-xl-6">
+                <div class="card rounded-3">
+                  <img
+                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img3.webp"
+                    class="w-100"
+                    style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                    alt="Sample photo"
+                  />
+                  <div class="card-body p-4 p-md-5">
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">
+                      Registration Info
+                    </h3>
 
                     <form id="signup-form" hx-post="/signup">
                       <div class="form-outline mb-4">
@@ -120,30 +126,8 @@ const Signup = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      {/* <h2>Sign Up</h2>
-
-      <form id="signup-form" hx-post="/signup">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required="" />
-
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required="" />
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required="" />
-
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" required="" />
-
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" required=""></textarea>
-
-        <button type="submit" hx-target="#signup-form" hx-swap="outerHTML">
-          Sign Up
-        </button>
-      </form> */}
+        </section>
+      </div>
     </BaseHtml>
   );
 };

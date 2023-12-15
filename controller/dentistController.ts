@@ -119,6 +119,24 @@ export const getAllDentist = async (req: Request, res: Response) => {
   }
 };
 
+export const getIdAllDentist = async (req: Request, res: Response) => {
+  try {
+    const dentists: Dentist[] = (
+      await (await req.db()).execute("GET_INFO_NHASI")
+    ).recordset as Dentist[];
+    const idArray: string[] = dentists.map((dentist) =>
+      dentist.MANS.toString()
+    );
+    return idArray;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
 export const updateDentist = async (req: Request, res: Response) => {
   try {
     const input = req.body;

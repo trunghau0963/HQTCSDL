@@ -3,11 +3,10 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import mssql from "mssql";
 import { Role, getDatabase } from "../../config/config";
 import * as elements from "typed-html";
+import Error from "../../components/Error/ErrorPage";
+import LandingPage from "../../app/landing/LandingPage";
 import Signup from "../../app/auth/Signup/Signup";
 import Login from "../../app/auth/Login/Login";
-import { convertRoleViToEn } from "../../utils/convertRole";
-// import Warning from "../../components/warning";
-// import Topbar from "../../components/topbar";
 import {
   SignupController,
   SigninController,
@@ -76,7 +75,7 @@ const role = async (
       return next();
     }
 
-    return res.status(402).send("You are not authenticated");
+    return res.status(402).send(<Error />);
   });
 };
 
@@ -91,7 +90,7 @@ export const patient = async (
       return next();
     }
 
-    return res.status(401).send("You are not authenticated");
+    return res.status(401).send(<Error />);
   });
 };
 
@@ -108,6 +107,10 @@ export const dentist = async (
 ) => role("NHASI", req, res, next);
 
 const authRouter = Router();
+
+authRouter.get("/", async (req, res) => {
+  return res.send(<LandingPage />);
+});
 
 authRouter.get("/signup", async (req, res) => {
   return res.send(<Signup />);

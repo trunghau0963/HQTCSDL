@@ -1,23 +1,16 @@
 import * as elements from "typed-html";
-import AddDrugPage from "../../../app/admin/Drugs/AddDrug";
-import DeleteDrugPage from "../../../app/admin/Drugs/DeleteDrug";
-import EditDrugPage from "../../../app/admin/Drugs/EditDrug";
-import { drugData } from "../../../config/hardcode/hardcode";
 import { drugProps } from "../../../model/model";
+import { AddDrug, DeleteDrug, EditDrug } from "./functionDrug";
 
-const Drug = ({ drugs }: { drugs: drugProps[] }) => {
-
+const DrugComponent = ({ drugs, url }: { drugs: drugProps[]; url: string }) => {
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
         <div class="content">
           <div class="row">
-            <div class="col-sm-4 col-3">
-              <h4 class="page-title">Drug</h4>
-            </div>
             <div class="row">
               <div class="col-sm-6 col-md-12 my-2 mx-2">
-                <AddDrugPage />
+                <AddDrug url={url} />
               </div>
               <div class="col-sm-6 col-md-12 my-2 mx-2">
                 <form action="" method="POST">
@@ -28,8 +21,8 @@ const Drug = ({ drugs }: { drugs: drugProps[] }) => {
                       class="form-control floating w-100"
                       name="search"
                       placeholder="Search here..."
-                      hx-post="/drug/search" 
-                      hx-trigger="input changed delay:500ms, search" 
+                      hx-post="/drug/search"
+                      hx-trigger="input changed delay:500ms, search"
                     />
                   </div>
                 </form>
@@ -54,7 +47,7 @@ const Drug = ({ drugs }: { drugs: drugProps[] }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {drugs.map((data:any) => (
+                    {drugs.map((data: any) => (
                       <tr>
                         <td>{data.MALO}</td>
                         <td>{data.MATHUOC}</td>
@@ -62,11 +55,11 @@ const Drug = ({ drugs }: { drugs: drugProps[] }) => {
                         <td>{data.CHIDINH}</td>
                         <td>{data.SOLUONG}</td>
                         <td>{data.DONVI}</td>
-                        <td>{data.NGAYHETHAN.toISOString().split('T')[0]}</td>
+                        <td>{data.NGAYHETHAN.toISOString().split("T")[0]}</td>
                         <td>{data.DONGIA}</td>
                         <td class="text-right">
-                          <EditDrugPage Data={data} />
-                          <DeleteDrugPage Data={data} />
+                          <EditDrug Data={data} url={url} />
+                          <DeleteDrug Data={data} url={url} />
                         </td>
                       </tr>
                     ))}
@@ -81,4 +74,4 @@ const Drug = ({ drugs }: { drugs: drugProps[] }) => {
   );
 };
 
-export default Drug;
+export default DrugComponent;

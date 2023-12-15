@@ -10,7 +10,7 @@ const PrintInvoice = () => {
         data-bs-toggle="modal"
         data-bs-target="#receiptPrint"
       >
-        <i class="bi bi-receipt-cutoff"></i>Print
+        <i class="bi bi-printer"></i> Preview
       </button>
 
       <div
@@ -35,7 +35,7 @@ const PrintInvoice = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body printable"  id="receiptPrintBody">
+            <div class="modal-body printable" id="receiptPrintBody">
               <Reciept />
             </div>
             <div class="modal-footer">

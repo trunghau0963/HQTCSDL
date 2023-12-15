@@ -117,7 +117,7 @@ const AddAppointment = ({ data }: { data: Schedule }) => {
                   </div>
                 </div>
                 <div class="m-t-20 text-center">
-                  <button class="btn btn-warning submit-btn">
+                  <button class="btn btn-tertiary submit-btn">
                     Create Appointment
                   </button>
                 </div>

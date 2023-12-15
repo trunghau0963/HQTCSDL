@@ -6,6 +6,7 @@ import { Prescription } from "../model/model";
 export const addDrugIntoPrescription = async (req: Request, res: Response) => {
   try {
     const input = req.body;
+    console.log("input", input);
     const user = await (await req.db())
       .input("MACT", input.MACT)
       .input("TENTHUOC", input.TENTHUOC)
@@ -13,7 +14,7 @@ export const addDrugIntoPrescription = async (req: Request, res: Response) => {
       .input("LIEULUONG", input.LIEULUONG)
       .execute("INSERT_INTO_TOATHUOC");
     res
-      .header("HX-Redirect", "/admin/drug")
+      .header("HX-Redirect", "/staff/invoice")
       .status(200)
       .json(user.recordset[0])
       .send("successful add drug into Prescription");
@@ -28,9 +29,13 @@ export const addDrugIntoPrescription = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteDrugIntoPrescription = async (req: Request, res: Response) => {
+export const deleteDrugIntoPrescription = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const input = req.body;
+    console.log("input", input);
     const user = await (await req.db())
       .input("MACT", input.MACT)
       .input("MATHUOC", input.MATHUOC)
@@ -54,8 +59,9 @@ export const deleteDrugIntoPrescription = async (req: Request, res: Response) =>
 
 export const getPrescription = async (req: Request, res: Response) => {
   try {
-    const Prescription: Prescription[] = (await (await req.db()).execute("GET_TOATHUOC"))
-      .recordset as Prescription[];
+    const Prescription: Prescription[] = (
+      await (await req.db()).execute("GET_TOATHUOC")
+    ).recordset as Prescription[];
 
     return Prescription;
   } catch (error) {
@@ -63,7 +69,9 @@ export const getPrescription = async (req: Request, res: Response) => {
       console.error(error.message);
       throw new Error(error.message);
     }
-    console.error("Can't get Prescription information. Please try again later.");
+    console.error(
+      "Can't get Prescription information. Please try again later."
+    );
     return undefined;
   }
 };
@@ -71,19 +79,21 @@ export const getPrescription = async (req: Request, res: Response) => {
 export const getPrescriptionById = async (
   req: Request,
   res: Response,
-  id: string
+  id?: string
 ) => {
   try {
-    const Prescription: Prescription = (
+    const Prescription: Prescription[] = (
       await (await req.db()).input("MACT", id).execute("GET_TOATHUOC_DETAIL")
-    ).recordset[0];
+    ).recordset;
     return Prescription;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
       throw new Error(error.message);
     }
-    console.error("Can't get Prescription information. Please try again later.");
+    console.error(
+      "Can't get Prescription information. Please try again later."
+    );
     return undefined;
   }
 };

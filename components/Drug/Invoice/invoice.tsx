@@ -1,7 +1,5 @@
 import * as elements from "typed-html";
-import AddInvoicePage from "../../../app/admin/Drugs/AddInvoice";
-import DeleteInvoicePage from "../../../app/admin/Drugs/DeleteInvoice";
-import EditInvoicePage from "../../../app/admin/Drugs/EditInvoice";
+import AddInvoice from "./add_invoice";
 import { Invoice } from "../../../model/model";
 import PrintInvoice from "./print_invoice";
 
@@ -20,7 +18,7 @@ const InvoiceComponent = ({ Data }: InvoiceProps) => {
             </div>
             <div class="row">
               <div class="col-sm-6 col-md-12 my-2 mx-2">
-                <AddInvoicePage />
+                <AddInvoice />
               </div>
               <div class="col-sm-6 col-md-12 my-2 mx-2">
                 <form action="" method="POST">
@@ -69,7 +67,7 @@ const InvoiceComponent = ({ Data }: InvoiceProps) => {
                         </td>
                         <td>
                           <div class="d-flex">
-                            {data.HOTEN[1]}{" "}
+                            {data.HOTENNHASI}{" "}
                             <img
                               src="/toolkit/warning.svg"
                               class="mx-2"
@@ -82,7 +80,7 @@ const InvoiceComponent = ({ Data }: InvoiceProps) => {
                         </td>
                         <td>
                           <div class="d-flex">
-                            {data.HOTEN[0]}
+                            {data.HOTENBENHNHAN}
                             <img
                               src="/toolkit/warning.svg"
                               class="mx-2"
@@ -99,8 +97,6 @@ const InvoiceComponent = ({ Data }: InvoiceProps) => {
                         <td>{data.CHANDOAN}</td>
                         <td>{data.TRIEUCHUNG}</td>
                         <td class="text-right">
-                          {/* <EditInvoicePage Data={data} />
-                          <DeleteInvoicePage Data={data} /> */}
                           <PrintInvoice />
                         </td>
                       </tr>

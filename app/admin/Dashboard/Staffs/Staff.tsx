@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import StaffComponent from "../../../../components/Staff/staff";
+import StaffComponent from "../../../../components/Admin/Staff/staff";
 import AdminPage from "../../admin";
 import { Staff } from "../../../../model/model";
 

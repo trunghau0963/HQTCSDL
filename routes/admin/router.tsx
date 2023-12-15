@@ -1,8 +1,9 @@
 import { Router } from "express";
+import { Request, Response } from "express";
 import * as elements from "typed-html";
 import AdminPage from "../../app/admin/admin";
 import DashBoard from "../../app/admin/Dashboard/Dashboard";
-import Drug from "../../app/admin/Drugs/Drugs";
+import DrugPage from "../../app/admin/Drugs/Drugs";
 import Schedule from "../../app/admin/Schedule/Schedule";
 import AddAppointmentPage from "../../app/admin/Schedule/AddAppointment";
 import DeleteAppointmentPage from "../../app/admin/Schedule/DeleteAppointment";
@@ -72,7 +73,7 @@ adminRouter.get("/drug", [
     try {
       const drugs: drugProps[] = (await getDrugInfo(req, res)) || [];
       const invoices: Invoice[] = (await getInvoice(req, res)) || [];
-      return res.send(<Drug drugs={drugs} invoices={invoices} />);
+      return res.send(<DrugPage drugs={drugs} invoices={invoices} />);
     } catch (error) {
       console.error(error);
       return res.status(500).send("Internal Server Error");
@@ -80,9 +81,15 @@ adminRouter.get("/drug", [
   },
 ]);
 
-adminRouter.post("/drug", addDrug);
-adminRouter.delete("/drug", deleteDrug);
-adminRouter.put("/drug", updateInfoDrug);
+adminRouter.post("/drug", admin, async (req: any, res: any) => {
+  addDrug(req, res, "admin");
+});
+adminRouter.delete("/drug", admin, async (req: any, res: any) => {
+  deleteDrug(req, res, "admin");
+});
+adminRouter.put("/drug", admin, async (req: any, res: any) => {
+  updateInfoDrug(req, res, "admin");
+});
 
 adminRouter.get("/schedule", admin, async (req, res) => {
   let data: Appointment[] = [];
@@ -144,10 +151,15 @@ adminRouter.get("/service", admin, async (req, res) => {
   return res.send(<ServicePage services={data} />);
 });
 
-adminRouter.post("/service", admin, addService);
-adminRouter.put("/service", admin, updateService);
-adminRouter.delete("/service", admin, deleteService);
-
+adminRouter.post("/service", admin, (req: Request, res: Response) =>
+  addService(req, res, "admin")
+);
+adminRouter.put("/service", admin, (req: Request, res: Response) =>
+  updateService(req, res, "admin")
+);
+adminRouter.delete("/service", admin, (req: Request, res: Response) =>
+  deleteService(req, res, "admin")
+);
 adminRouter.get("/profile", admin, async (req, res) => {
   return res.send(<Profile />);
 });

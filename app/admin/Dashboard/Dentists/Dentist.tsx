@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import DentistComponent from "../../../../components/Dentist/dentist";
+import DentistComponent from "../../../../components/Admin/Dentist/dentist";
 import AdminPage from "../../admin";
 import { Dentist } from "../../../../model/model";
 

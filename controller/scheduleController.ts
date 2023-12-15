@@ -82,10 +82,9 @@ export const updateSchedule = async (req: Request, res: Response) => {
 export const getSchedule = async (req: Request, res: Response) => {
   try {
     const data: Schedule[] = (
-      await (await req.db())
-      .execute("GET_LICHLAMVIEC_DETAIL")
+      await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL")
     ).recordset;
-    
+
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -114,35 +113,37 @@ export const getScheduleIsFree = async (req: Request, res: Response) => {
         await (await req.db())
         .input("NGAYKHAM", date)
         .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
-      ).recordset as Schedule[];
-  
-      return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        throw new Error(error.message);
-      }
-      console.error("Can't get Schedule which is free. Please try again later.");
-      return undefined;
+    ).recordset as Schedule[];
+    console.log("data", data);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
     }
-  };
+    console.error("Can't get Schedule which is free. Please try again later.");
+    return undefined;
+  }
+};
 
-  export const getScheduleIsRegistered = async (req: Request, res: Response) => {
-    try {
-      const data: Schedule[] = (
-        await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL_REGISTRED")
-      ).recordset as Schedule[];
-  
-      return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        throw new Error(error.message);
-      }
-      console.error("Can't get Schedule which is registerd. Please try again later.");
-      return undefined;
+export const getScheduleIsRegistered = async (req: Request, res: Response) => {
+  try {
+    const data: Schedule[] = (
+      await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL_REGISTRED")
+    ).recordset as Schedule[];
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
     }
-  };
+    console.error(
+      "Can't get Schedule which is registerd. Please try again later."
+    );
+    return undefined;
+  }
+};
 
 export const getScheduleOfDentist = async (
   req: Request,
@@ -150,11 +151,11 @@ export const getScheduleOfDentist = async (
   id: string
 ) => {
   try {
-    const data: Schedule = (
+    const data: Schedule[] = (
       await (await req.db())
         .input("MANS", id)
-        .execute("GET_LICHLAMVIEC_DETAIL_FREE_OF_NHASI")
-    ).recordset[0];
+        .execute("GET_LICHLAMVIEC_DETAIL_OF_NHASI")
+    ).recordset;
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -167,48 +168,52 @@ export const getScheduleOfDentist = async (
 };
 
 export const getScheduleIsFreeOfDentist = async (
-    req: Request,
-    res: Response,
-    id: string
-  ) => {
-    try {
-      const data: Schedule = (
-        await (await req.db())
-          .input("MANS", id)
-          .execute("GET_LICHLAMVIEC_DETAIL_OF_NHASI")
-      ).recordset[0];
-      return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        throw new Error(error.message);
-      }
-      console.error("Can't get Schedule of dentist which is free. Please try again later.");
-      return undefined;
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Schedule[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .execute("GET_LICHLAMVIEC_DETAIL_FREE_OF_NHASI")
+    ).recordset;
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
     }
-  };
+    console.error(
+      "Can't get Schedule of dentist which is free. Please try again later."
+    );
+    return undefined;
+  }
+};
 
-  export const getScheduleIsRegisteredOfDentist = async (
-    req: Request,
-    res: Response,
-    id: string
-  ) => {
-    try {
-      const data: Schedule = (
-        await (await req.db())
-          .input("MANS", id)
-          .execute("GET_LICHLAMVIEC_DETAIL_REGISTRED_OF_NHASI")
-      ).recordset[0];
-      return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-        throw new Error(error.message);
-      }
-      console.error("Can't get Schedule of dentist which is registered. Please try again later.");
-      return undefined;
+export const getScheduleIsRegisteredOfDentist = async (
+  req: Request,
+  res: Response,
+  id: string
+) => {
+  try {
+    const data: Schedule[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .execute("GET_LICHLAMVIEC_DETAIL_REGISTRED_OF_NHASI")
+    ).recordset;
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
     }
-  };
+    console.error(
+      "Can't get Schedule of dentist which is registered. Please try again later."
+    );
+    return undefined;
+  }
+};
 
 export const getScheduleOfPatient = async (
   req: Request,
@@ -216,11 +221,11 @@ export const getScheduleOfPatient = async (
   id: string
 ) => {
   try {
-    const data: Schedule = (
+    const data: Schedule[] = (
       await (await req.db())
         .input("MABN", id)
         .execute("GET_LICHKHAM_DETAIL_FOR_BENHNHAN")
-    ).recordset[0];
+    ).recordset;
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -247,9 +252,7 @@ export const getScheduleIsDone = async (
       console.error(error.message);
       throw new Error(error.message);
     }
-    console.error(
-      "Can't get Schedule which is done. Please try again later."
-    );
+    console.error("Can't get Schedule which is done. Please try again later.");
     return undefined;
   }
 };
@@ -260,11 +263,11 @@ export const getScheduleIsDoneOfDentist = async (
   id: string
 ) => {
   try {
-    const data: Schedule = (
+    const data: Schedule[] = (
       await (await req.db())
         .input("MANS", id)
         .execute("GET_LICHKHAM_DETAIL_DONE_OF_NHASI")
-    ).recordset[0];
+    ).recordset;
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -306,11 +309,11 @@ export const getScheduleNotDoneOfDentist = async (
   id: string
 ) => {
   try {
-    const data: Schedule = (
+    const data: Schedule[] = (
       await (await req.db())
         .input("MANS", id)
         .execute("GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI")
-    ).recordset[0];
+    ).recordset;
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -323,4 +326,3 @@ export const getScheduleNotDoneOfDentist = async (
     return undefined;
   }
 };
-

@@ -18,7 +18,7 @@ const DentistAvailable = () => {
             </h5>
             <div class="d-flex align-items-center gap-3">
               <button
-                class="close btn btn-warning icon-h-sm icon-w-sm border-0 rounded"
+                class="close btn btn-tertiary icon-h-sm icon-w-sm border-0 rounded"
                 data-dismiss="modal"
                 aria-label="Close"
               >
