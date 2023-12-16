@@ -27,16 +27,16 @@ export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
 export const PATIENTNAVIGATIONS = (baseUrl: string) => [
   ...TOOLS(baseUrl),
   {
-    title: "Orders",
+    title: "Drugs",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",
     slug: "drug",
   },
   {
-    title: "Service",
+    title: "Appointment",
     icon: "/icons/service.svg",
-    url: `${baseUrl}/service`,
+    url: `${baseUrl}/appointment`,
     color: "btn btn-outline-danger",
     slug: "drug",
   },

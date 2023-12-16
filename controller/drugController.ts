@@ -23,9 +23,9 @@ export const addDrug = async (req: Request, res: Response, url: string) => {
     console.log(drug);
 
     return res
-      .header("HX-Redirect", directUrl)
-      .json("Add successfully" + `<a href='/'>Continue Login<a>`)
-      .status(201);
+      .header("HX-Redirect", "/admin/drug")
+      .json({ message: "Success" })
+      .status(200);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

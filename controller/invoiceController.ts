@@ -128,3 +128,26 @@ export const getInvoiceDetailById = async (req: Request, res: Response) => {
     return undefined;
   }
 };
+
+export const getInvoiceDetailByIdWithHtmx = async (req: Request, res: Response) => {
+ 
+  try {
+    const { MANS, MABN, NGAYKHAM, GIOKHAM } = req.query;
+
+    const data: Invoice = (
+      await (await req.db())
+        .input("MABN", MABN)
+        .input("NGAYKHAM", NGAYKHAM)
+        .input("GIOKHAM", GIOKHAM)
+        .execute("GET_CHITIETPHIENKHAM_DETAIL")
+    ).recordset[0];
+    // console.log("Invoice detail", data);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};

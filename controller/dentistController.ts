@@ -107,15 +107,16 @@ export const getAllDentist = async (req: Request, res: Response) => {
     const dentists: Dentist[] = (
       await (await req.db()).execute("GET_INFO_NHASI")
     ).recordset as Dentist[];
+    
     return dentists;
+
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
-      return res.status(400).send(error.message);
+      throw new Error(error.message);
     }
-    return res
-      .status(500)
-      .send("Can't get all dentist. Please try again later.");
+    console.error("Can't get all dentist. Please try again later.");
+    return [];
   }
 };
 

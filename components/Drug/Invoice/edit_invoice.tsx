@@ -131,8 +131,8 @@ const EditInvoice = ({ Data }: DeleteInvoiceProps) => {
                                 type="text"
                                 name="GIOKHAM"
                                 required=""
-                                value={Data.GIOKHAM}
-                                placeholder={Data.GIOKHAM}
+                                value={Data.GIOKHAM.toDateString()}
+                                placeholder={Data.GIOKHAM.toDateString()}
                               />
                             </div>
                           </div>

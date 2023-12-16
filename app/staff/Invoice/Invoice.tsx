@@ -1,16 +1,12 @@
 import * as elements from "typed-html";
 import StaffPage from "../staff";
-import { Patient } from "../../../model/model";
+import { AppointmentDetailProps, Invoice, Patient } from "../../../model/model";
 import PatientInvoiceComponent from "../../../components/Staff/Invoice/invoicePage";
 
-type PatientProps = {
-  Data: Patient[];
-};
-
-const InvoicePage = ({ Data }: PatientProps) => {
+const InvoicePage = ({ invoices }: {invoices:Invoice[]}) => {
   return (
     <StaffPage>
-      <PatientInvoiceComponent Data={Data} />
+      <PatientInvoiceComponent invoices={invoices} />
     </StaffPage>
   );
 };

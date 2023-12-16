@@ -1,14 +1,8 @@
 import * as elements from "typed-html";
-import { Patient } from "../../../model/model";
+import { AppointmentDetailProps, Invoice, Patient } from "../../../model/model";
 import { PreviewInvoice } from "./functionInvoice";
-type PatientProps = {
-  Data: Patient[];
-};
 
-const PatientInvoiceComponent = ({ Data }: PatientProps) => {
-  Data.forEach((data) => {
-    if (data.MATKHAU == undefined) data.MATKHAU = "NULL";
-  });
+const PatientInvoiceComponent = ({ invoices }: { invoices: Invoice[] }) => {
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -44,18 +38,17 @@ const PatientInvoiceComponent = ({ Data }: PatientProps) => {
                   <thead>
                     <tr>
                       <th style="min-width:100px;">Image</th>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Password</th>
-                      <th>DOB</th>
-                      <th>Address</th>
-                      <th>Locked</th>
+                      <th>Patient Id</th>
+                      <th>Patient Name</th>
+                      <th>Dentist Id</th>
+                      <th>Dentist Name</th>
+                      <th>Date</th>
+                      <th>Hours</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {Data.map((data, idx) => (
+                    {invoices.map((invoice, idx) => (
                       <tr>
                         <td>
                           <img
@@ -68,119 +61,21 @@ const PatientInvoiceComponent = ({ Data }: PatientProps) => {
                           />{" "}
                           <h2></h2>
                         </td>
-                        <td>{data.MABN}</td>
-                        <td>{data.HOTEN}</td>
-                        <td>{data.DIENTHOAI}</td>
-                        <td>{data.MATKHAU ? data.MATKHAU : "NULL"}</td>
-                        <td>{data.NGAYSINH.toLocaleDateString()}</td>
-                        <td>{data.DIACHI}</td>
+                        <td>{invoice?.MANS}</td>
+                        <td>{invoice?.HOTENBENHNHAN}</td>
+                        <td>{invoice?.MABN}</td>
+                        <td>{invoice?.HOTENNHASI}</td>
+                        <td>{invoice?.NGAYKHAM.toISOString().split("T")[0]}</td>
                         <td>
-                          {data.DAKHOA ? (
-                            <div class="form-check form-switch">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                role="switch"
-                                id={`flexSwitchCheck_${data.MABN}`}
-                                checked
-                              />
-                              <label
-                                class="form-check-label"
-                                for={`flexSwitchCheck_${data.MABN}`}
-                              ></label>
-                            </div>
-                          ) : (
-                            <div class="form-check form-switch">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                role="switch"
-                                id={`flexSwitchCheck_${data.MABN}`}
-                              />
-                              <label
-                                class="form-check-label"
-                                for={`flexSwitchCheck_${data.MABN}`}
-                              ></label>
-                            </div>
-                          )}
+                          {
+                            invoice?.GIOKHAM.toISOString()
+                              .split("T")[1]
+                              .split(".")[0]
+                          }
                         </td>
+
                         <td class="text-right">
-                          <div class="dropdown dropend" id="prescription">
-                            <button
-                              class="btn btn-link dropdown-toggle text-decoration-none"
-                              type="button"
-                              id={`prescription-button-${data.MABN}`}
-                              data-bs-toggle="dropdown"
-                              data-bs-target={`#prescription-${data.MABN}`}
-                              aria-controls={`prescription-${data.MABN}`}
-                              aria-expanded="false"
-                            >
-                              <i class="bi bi-receipt-cutoff"></i>
-                              Prescription
-                            </button>
-
-                            <ul
-                              class="dropdown-menu"
-                              id={`prescription-${data.MABN}`}
-                              aria-labelledby={`prescription-button-${data.MABN}`}
-                            >
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/add-prescription/${data.MABN}`}
-                                >
-                                  Add Prescription
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/delete-prescription/${data.MABN}`}
-                                >
-                                  Delete Prescription
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                          <div class="dropdown dropend" id="serviceIndicators">
-                            <button
-                              class="btn btn-link dropdown-toggle text-decoration-none"
-                              type="button"
-                              id={`service-indicators-button-${data.MABN}`}
-                              data-bs-toggle="dropdown"
-                              data-bs-target={`#service-indicators-${data.MABN}`}
-                              aria-controls={`service-indicators-${data.MABN}`}
-                              aria-expanded="false"
-                            >
-                              <i class="bi bi-app-indicator"></i>
-                              Service Indicators
-                            </button>
-
-                            <ul
-                              class="dropdown-menu"
-                              id={`service-indicators-${data.MABN}`}
-                              aria-labelledby={`service-indicators-button-${data.MABN}`}
-                            >
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/add-service-indicators/${data.MABN}`}
-                                >
-                                  Add Indicators
-                                </a>
-                              </li>
-
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/delete-service-indicators/${data.MABN}`}
-                                >
-                                  Delete Indicators
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                          <PreviewInvoice idPatient={data.MABN} />
+                          <PreviewInvoice invoice={invoice} />
                         </td>
                       </tr>
                     ))}

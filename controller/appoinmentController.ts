@@ -1,6 +1,7 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
+import { AppointmentDetailProps } from "../model/model";
 import { Appointment, AppointmentDetail } from "../model/model";
 
 export const registerAppointment = async (req: Request, res: Response) => {
@@ -37,17 +38,18 @@ export const registerAppointment = async (req: Request, res: Response) => {
 
 export const deleteAppointment = async (req: Request, res: Response) => {
   try {
-    const input = req.body;
+    const {MANS, MABN, NGAYKHAM, GIOKHAM} = req.body
+
     const user = await (await req.db())
-      .input("MANS", input.MANS)
-      .input("NGAYKHAM", input.NGAYKHAM)
-      .input("GIOKHAM", input.GIOKHAM)
+      .input("MANS", MANS)
+      .input("NGAYKHAM", NGAYKHAM)
+      .input("GIOKHAM", GIOKHAM)
       .execute("DROP_LICHKHAM");
-    res
-      // .header("HX-Redirect", "/admin/appointment")
-      .status(200)
-      .json(user.recordset[0])
-      .send("successful delete Appointment");
+  
+      return res
+        .header("HX-Redirect", "/patient/appointment")
+        .json({ message: "Success" })
+        .status(200);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -89,9 +91,9 @@ export const updateAppointment = async (req: Request, res: Response) => {
 
 export const getAppointment = async (req: Request, res: Response) => {
   try {
-    const data: Appointment[] = (
+    const data: AppointmentDetailProps[] = (
       await (await req.db()).execute("GET_LICHKHAM_DETAIL")
-    ).recordset as Appointment[];
+    ).recordset as AppointmentDetailProps[];
 
     return data;
   } catch (error) {
@@ -110,7 +112,7 @@ export const getAppointmentOfDentist = async (
   id: string
 ) => {
   try {
-    const data: Appointment = (
+    const data: AppointmentDetailProps = (
       await (await req.db())
         .input("MANS", id)
         .execute("GET_LICHKHAM_DETAIL_OF_NHASI")
@@ -132,7 +134,7 @@ export const getAppointmentOfPatient = async (
   id: string
 ) => {
   try {
-    const data: Appointment = (
+    const data: AppointmentDetailProps = (
       await (await req.db())
         .input("MABN", id)
         .execute("GET_LICHKHAM_DETAIL_FOR_BENHNHAN")
@@ -150,13 +152,35 @@ export const getAppointmentOfPatient = async (
 
 export const getAppointmentIsDone = async (
   req: Request,
+  res: Response
+) => {
+  try {
+    const data: AppointmentDetailProps[] = (
+      await (await req.db()).execute("GET_LICHKHAM_DETAIL_DONE")
+    ).recordset as AppointmentDetailProps[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is done. Please try again later."
+    );
+    return undefined;
+  }
+};
+export const getAppointmentIsDoneOfPatient = async (
+  req: Request,
   res: Response,
   id: string
 ) => {
   try {
-    const data: Appointment[] = (
-      await (await req.db()).execute("GET_LICHKHAM_DETAIL_DONE")
-    ).recordset as Appointment[];
+    const data: AppointmentDetailProps[] = (
+      await (await req.db())
+      .input("MABN", id)
+      .execute("GET_LICHKHAM_DETAIL_DONE_OF_BENHNHAN")
+    ).recordset as AppointmentDetailProps[];
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -176,7 +200,7 @@ export const getAppointmentIsDoneOfDentist = async (
   id: string
 ) => {
   try {
-    const data: Appointment = (
+    const data: AppointmentDetailProps = (
       await (await req.db())
         .input("MANS", id)
         .execute("GET_LICHKHAM_DETAIL_DONE_OF_NHASI")
@@ -197,12 +221,14 @@ export const getAppointmentIsDoneOfDentist = async (
 export const getAppointmentNotDone = async (
   req: Request,
   res: Response,
-  id: string
+  id: Number
 ) => {
   try {
-    const data: Appointment[] = (
-      await (await req.db()).execute("GET_LICHKHAM_DETAIL_UNFINISHED")
-    ).recordset as Appointment[];
+    const data: AppointmentDetailProps[] = (
+      await (await req.db())
+      .input("MABN", id)
+      .execute("GET_LICHKHAM_DETAIL_UNFINISHED_OF_BENHNHAN")
+    ).recordset as AppointmentDetailProps[];
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -222,7 +248,7 @@ export const getAppointmentNotDoneOfDentist = async (
   id: string
 ) => {
   try {
-    const data: Appointment = (
+    const data: AppointmentDetailProps[] = (
       await (await req.db())
         .input("MANS", id)
         .execute("GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI")
