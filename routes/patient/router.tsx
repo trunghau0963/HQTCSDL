@@ -34,7 +34,7 @@ import {
   registerAppointment,
 } from "../../controller/appoinmentController";
 import Appointment from "../../app/patient/Appointment/Appointment";
-import PreviewPage from "../../app/staff/Invoice/Preview/previewPageForPatient";
+import PreviewPage from "../../app/patient/Invoice/previewPage";
 import {
   getInvoiceDetailById,
   getInvoiceDetailByIdWithHtmx,
@@ -52,8 +52,8 @@ patientRouter.get("/dashboard", patient, async (req, res) => {
 });
 
 patientRouter.get("/appointment/id", patient, async (req, res) => {
-  let prescriptions: Prescription[] = [];
   let services: serviceIndicators[] = [];
+  let prescriptions: Prescription[] = [];
   let invoices: Invoice | undefined = await getInvoiceDetailByIdWithHtmx(
     req,
     res
@@ -233,8 +233,6 @@ patientRouter.get("/appointment/id", patient, async (req, res) => {
                       </tbody>
                     </table>
                   </div>
-      
-
                   <hr />
                   <h2>Service</h2>
                   <div class="row my-2 mx-1 justify-content-center">
@@ -391,15 +389,14 @@ patientRouter.get("/home/edit-profile", patient, async (req, res) => {
 });
 
 patientRouter.put("/home/edit-profile", patient, async (req, res) => {
-  
-  const {MABN, HOTEN, DIACHI, NGAYSINH, MATKHAU} = req.body
+  const { MABN, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
 
-  console.log(MABN)
-  console.log(HOTEN)
-  console.log(DIACHI)
-  console.log(NGAYSINH)
-  console.log(MATKHAU)
-  
+  console.log(MABN);
+  console.log(HOTEN);
+  console.log(DIACHI);
+  console.log(NGAYSINH);
+  console.log(MATKHAU);
+
   const data: Patient = (
     await (await req.db())
       .input("MABN", MABN)
@@ -409,7 +406,7 @@ patientRouter.put("/home/edit-profile", patient, async (req, res) => {
       .input("DIACHI", DIACHI)
       .execute("UPDATE_INFO_BENHNHAN")
   ).recordset[0];
-  console.log('aaa')
+  console.log("aaa");
 
   return res
     .header("HX-Redirect", `/patient/information`)

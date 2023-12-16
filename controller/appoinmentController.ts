@@ -149,8 +149,7 @@ export const getAppointmentOfPatient = async (
 
 export const getAppointmentIsDone = async (
   req: Request,
-  res: Response,
-  id: string
+  res: Response
 ) => {
   try {
     const data: AppointmentDetailProps[] = (

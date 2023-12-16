@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import { AppointmentDetailProps } from "../../model/model";
-import PreviewPage from "../../app/staff/Invoice/Preview/previewPageForPatient";
+import PreviewPage from "../../app/patient/Invoice/previewPage";
 
 const Appointment = ({
   appointments,
@@ -98,7 +98,7 @@ const Appointment = ({
                   </thead>
                   <tbody>
                     {appointmentsFinished &&
-                      appointmentsFinished.map((appointment) => (
+                      appointmentsFinished.map((appointment, idx) => (
                         <tr>
                           <td>{appointment.TENNS}</td>
                           <td>{appointment.TENBN}</td>
@@ -118,7 +118,7 @@ const Appointment = ({
                               class="btn btn-outline-primary"
                               type="button"
                               data-toggle="modal"
-                              data-target=".appoinment"
+                              data-target={`#_${idx.toString()}`}
                               hx-get="/patient/appointment/id"
                               hx-vars={`{'MANS': '${
                                 appointment.MANS
@@ -129,11 +129,11 @@ const Appointment = ({
                                   .split("T")[1]
                                   .split(".")[0]
                               }'}`}
-                              hx-target="#invoiceDetail"
+                              hx-target={`#_${idx.toString()}`}
                             >
                               <i class="bi bi-info-circle-fill"></i> Detail
                             </button>
-                            <PreviewPage />
+                            <PreviewPage id={idx.toString()} />
                           </td>
                         </tr>
                       ))}

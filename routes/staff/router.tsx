@@ -16,6 +16,8 @@ import {
   Staff,
   drugProps,
   Service,
+  AppointmentDetailProps,
+  serviceIndicators,
 } from "../../model/model";
 import { getStaffById } from "../../controller/staffController";
 import ProfilePage from "../../app/staff/Profile/Profile";
@@ -30,6 +32,8 @@ import {
   getInvoiceDetailById,
   directNewUrl,
   addInvoice,
+  getInvoice,
+  getInvoiceDetailByIdWithHtmx,
 } from "../../controller/invoiceController";
 import {
   addDrugIntoPrescription,
@@ -48,6 +52,7 @@ import DeleteServiceIndicators from "../../app/staff/Invoice/ServiceIndicators/d
 import {
   addServiceIndicators,
   deleteServiceIndicators,
+  getServiceIndicatorsById,
 } from "../../controller/serviceIndicatorsController";
 import NullInvoice from "../../app/staff/Error/nullInvoice";
 import { getPrescriptionById } from "../../controller/prescriptionController";
@@ -62,6 +67,7 @@ import {
 } from "../../controller/serviceController";
 import AddInvoice from "../../app/staff/Invoice/add-invoice";
 import { getIdAllDentist } from "../../controller/dentistController";
+import { getAppointmentIsDone } from "../../controller/appoinmentController";
 
 const staffRouter = Router();
 
@@ -121,11 +127,124 @@ staffRouter.delete("/service", staff, (req: Request, res: Response) =>
 );
 
 staffRouter.get("/invoice", staff, async (req, res) => {
-  let patients: Patient[] = [];
+  let invoices: Invoice[] = [];
   try {
-    patients = (await getAllPatient(req, res)) as Patient[];
+    invoices = (await getInvoice(req, res)) as Invoice[];
   } catch {}
-  return res.send(<InvoicePage Data={patients} />);
+
+  return res.send(<InvoicePage invoices={invoices} />);
+});
+
+staffRouter.get("/invoice/serviceIndicator", staff, async (req, res) => {
+  const { MACT } = req.query;
+  console.log(MACT)
+  let services: serviceIndicators[] = [];
+  let prescriptions: Prescription[] = [];
+
+  if (typeof MACT === "string") {
+    prescriptions = (await getPrescriptionById(
+      req,
+      res,
+      MACT
+    )) as Prescription[];
+    services = (await getServiceIndicatorsById(
+      req,
+      res,
+      MACT
+    )) as serviceIndicators[];
+  }
+
+  const htmxContent = `
+  <hr />
+                  <h2>Prescription</h2>
+                  <div class="row my-2 mx-1 justify-content-center">
+                    <table class="table table-striped table-borderless">
+                      <thead
+                        style="background-color:#84B0CA ;"
+                        class="text-white"
+                      >
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Batch code</th>
+                          <th scope="col">Id of drug</th>
+                          <th scope="col">Name of drug</th>
+                          <th scope="col">Amount Indicate</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Unit Price</th>
+                          <th scope="col">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${prescriptions.map((data: Prescription, idx) => (
+                          <tr>
+                            <td>{idx + 1}</td>
+                            <td>{data.MALO}</td>
+                            <td>{data.MATHUOC}</td>
+                            <td>{data.TENTHUOC}</td>
+                            <td>{data.LIEULUONG}</td>
+                            <td>{data.SOLUONG}</td>
+                            <td>{data.DONGIA}</td>
+                            <td>{data.THANHTIEN}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+    <hr />
+    <h2>Service</h2>
+    <div class="row my-2 mx-1 justify-content-center">
+    <table class="table table-striped table-borderless">
+      <thead
+        style="background-color:#84B0CA ;"
+        class="text-white"
+      >
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Id of Service</th>
+          <th scope="col">Name of drug</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${services.map((data: serviceIndicators, idx) => (
+          <tr>
+            <td>{idx + 1}</td>
+            <td>{data.MADV}</td>
+            <td>{data.TENDV}</td>
+            <td>{data.DONGIA}</td>
+            <td>{data.THANHTIEN}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <button
+                      class="btn btn-success text-capitalize border-0"
+                      data-mdb-ripple-color="dark"
+                      onclick=${`const invoiceBody = document.getElementById("invoiceBody-${invoice?.MACT}");
+                      alert("button was clicked");
+                      if (invoiceBody) {
+                        const originalContents = document.body.innerHTML;
+                        const printContents = invoiceBody.innerHTML;
+                  
+                        // Apply additional styles for landscape layout
+                        const additionalStyles = '<style>@page { size: landscape; }</style>';
+                        document.body.innerHTML = additionalStyles + printContents;
+                  
+                        window.print();
+                  
+                        // Restore the original contents
+                        document.body.innerHTML = originalContents;
+                      } else {
+                        console.error("Element with id 'invoiceBody' not found.");
+                      }`}
+                    >
+                      <i class="bi bi-printer"></i> Print
+                    </button>
+ 
+    `;
+  return res.send(htmxContent);
 });
 
 staffRouter.get("/invoice/failed", staff, async (req, res) => {
@@ -202,18 +321,18 @@ staffRouter.post(
 
 staffRouter.post("/invoice", staff, directNewUrl);
 
-staffRouter.get("/invoice/:id", staff, async (req, res) => {
-  let prescriptions: Prescription[] = [];
-  let invoices: Invoice | undefined = await getInvoiceDetailById(req, res);
-  prescriptions = (await getPrescriptionById(
-    req,
-    res,
-    invoices?.MACT
-  )) as Prescription[];
-  return res.send(
-    <PreviewPage invoice={invoices} prescription={prescriptions} />
-  );
-});
+// staffRouter.get("/invoice/:id", staff, async (req, res) => {
+//   let prescriptions: Prescription[] = [];
+//   let invoices: Invoice | undefined = await getInvoiceDetailById(req, res);
+//   prescriptions = (await getPrescriptionById(
+//     req,
+//     res,
+//     invoices?.MACT
+//   )) as Prescription[];
+//   return res.send(
+//     <PreviewPage invoices={invoices} prescription={prescriptions} />
+//   );
+// });
 
 staffRouter.get("/invoice/add/invoice", staff, async (req, res) => {
   let idPatient: string[] = (await getIdAllPatient(req, res)) || [];

@@ -6,15 +6,22 @@ import { number } from "joi";
 
 const PreviewPage = ({
   invoice,
-  prescription,
+  prescriptions,
 }: {
-  invoice: Invoice | undefined;
-  prescription: Prescription[];
+  invoice: Invoice;
+  prescriptions: Prescription[];
 }) => {
-  console.log(invoice);
   return (
-    <StaffPage>
-      <div class="container rounded vh-100">
+    <div
+      class="container rounded vh-100 modal fade invoice"
+      id={`receiptPrint-${invoice?.MACT}`}
+      tabindex="0"
+      role="dialog"
+      aria-labelledby={`receiptPrint-${invoice?.MACT}-button`}
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded bg-light"></div>
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="card">
             <div class="card-body">
@@ -29,8 +36,8 @@ const PreviewPage = ({
                     <button
                       class="btn btn-success text-capitalize border-0"
                       data-mdb-ripple-color="dark"
-                      onclick={`const invoiceBody = document.getElementById("invoiceBody");
-
+                      onclick={`const invoiceBody = document.getElementById("invoiceBody-${invoice?.MACT}");
+                      alert("button was clicked");
                       if (invoiceBody) {
                         const originalContents = document.body.innerHTML;
                         const printContents = invoiceBody.innerHTML;
@@ -52,7 +59,7 @@ const PreviewPage = ({
                     <button
                       class="btn btn-danger text-capitalize"
                       data-mdb-ripple-color="dark"
-                      onclick={`const element = document.getElementById("invoiceBody");
+                      onclick={`const element = document.getElementById("invoiceBody-${invoice?.MACT}");
 
                       if (element) {
                         const pdfOptions = {
@@ -72,7 +79,7 @@ const PreviewPage = ({
                   <hr />
                 </div>
 
-                <div class="container" id="invoiceBody">
+                <div class="container" id={`invoiceBody-${invoice?.MACT}`}>
                   <div class="col-md-12">
                     <div class="text-center">
                       <i
@@ -108,7 +115,7 @@ const PreviewPage = ({
                         <li class="text-muted">
                           <i class="bi bi-circle" style="color:#84B0CA ;"></i>{" "}
                           <span class="fw-bold">Creation Date: </span>
-                          {`${invoice?.NGAYKHAM.toDateString()}`}
+                          {`${invoice?.NGAYKHAM.toISOString().split("T")[0]}`}
                         </li>
                         <li class="text-muted">
                           <i class="bi bi-circle" style="color:#84B0CA ;"></i>{" "}
@@ -172,49 +179,60 @@ const PreviewPage = ({
                               />
                             </div>
                           </td>
-                          <td>{invoice?.NGAYKHAM.toDateString()}</td>
-                          <td>{invoice?.GIOKHAM.toLocaleTimeString()}</td>
+                          <td>
+                            {invoice?.NGAYKHAM.toISOString().split("T")[0]}
+                          </td>
+                          <td>
+                            {
+                              invoice?.GIOKHAM.toISOString()
+                                .split("T")[1]
+                                .split(".")[0]
+                            }
+                          </td>
                           <td>{invoice?.CHANDOAN}</td>
                           <td>{invoice?.TRIEUCHUNG}</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-
-                  <hr />
-
-                  <div class="row my-2 mx-1 justify-content-center">
-                    <table class="table table-striped table-borderless">
-                      <thead
-                        style="background-color:#84B0CA ;"
-                        class="text-white"
-                      >
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Batch code</th>
-                          <th scope="col">Id of drug</th>
-                          <th scope="col">Name of drug</th>
-                          <th scope="col">Amount Indicate</th>
-                          <th scope="col">Quantity</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {prescription.map((data: Prescription, idx) => (
+                  <div id={`detail-${invoice?.MACT}`}>
+                    <hr />
+                    <h2>Prescription</h2>
+                    <div class="row my-2 mx-1 justify-content-center">
+                      <table class="table table-striped table-borderless">
+                        <thead
+                          style="background-color:#84B0CA ;"
+                          class="text-white"
+                        >
                           <tr>
-                            <td>{idx + 1}</td>
-                            <td>{data.MALO}</td>
-                            <td>{data.MATHUOC}</td>
-                            <td>{data.TENTHUOC}</td>
-                            <td>{data.LIEULUONG}</td>
-                            <td>{data.SOLUONG}</td>
-                            <td>{data.DONGIA}</td>
-                            <td>{data.THANHTIEN}</td>
+                            <th scope="col">#</th>
+                            <th scope="col">Batch code</th>
+                            <th scope="col">Id of drug</th>
+                            <th scope="col">Name of drug</th>
+                            <th scope="col">Amount Indicate</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Price</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {prescriptions.map((data: Prescription, idx) => (
+                            <tr>
+                              <td>{idx + 1}</td>
+                              <td>{data.MALO}</td>
+                              <td>{data.MATHUOC}</td>
+                              <td>{data.TENTHUOC}</td>
+                              <td>{data.LIEULUONG}</td>
+                              <td>{data.SOLUONG}</td>
+                              <td>{data.DONGIA}</td>
+                              <td>{data.THANHTIEN}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <hr />
+                    <h2>Service</h2>
                   </div>
                   <div class="row">
                     <div class="col-xl-8">
@@ -267,7 +285,7 @@ const PreviewPage = ({
           </div>
         </div>
       </div>
-    </StaffPage>
+    </div>
   );
 };
 
