@@ -11,6 +11,7 @@ import Security from "../../app/patient/Security/Security";
 import { patient } from "../auth/router";
 import {
   AppointmentDetailProps,
+  Dentist as DentistProps,
   Invoice,
   Patient,
   Prescription,
@@ -41,6 +42,8 @@ import {
 import { getPrescriptionById } from "../../controller/prescriptionController";
 import { getServiceById } from "../../controller/serviceController";
 import { getServiceIndicatorsById } from "../../controller/serviceIndicatorsController";
+import { getAllDentist } from "../../controller/dentistController";
+import EditProfile from "../../app/patient/Profile/EditProfile";
 
 const patientRouter = Router();
 
@@ -315,7 +318,11 @@ patientRouter.get("/drug", patient, async (req, res) => {
 });
 
 patientRouter.get("/dentist", patient, async (req, res) => {
-  return res.send(<Dentist />);
+  const dentists: DentistProps[] = (await getAllDentist(req, res))
+    ? await getAllDentist(req, res)
+    : [];
+
+  return res.send(<Dentist dentists={dentists} />);
 });
 
 patientRouter.get("/schedule", patient, async (req, res) => {
@@ -370,6 +377,44 @@ patientRouter.get("/information", patient, async (req, res) => {
     patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
   } catch {}
   return res.send(<ProfilePage data={patient} />);
+});
+
+patientRouter.get("/home/edit-profile", patient, async (req, res) => {
+  let patient: Patient | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
+  } catch {}
+  return res.send(<EditProfile data={patient} />);
+});
+
+patientRouter.put("/home/edit-profile", patient, async (req, res) => {
+  
+  const {MABN, HOTEN, DIACHI, NGAYSINH, MATKHAU} = req.body
+
+  console.log(MABN)
+  console.log(HOTEN)
+  console.log(DIACHI)
+  console.log(NGAYSINH)
+  console.log(MATKHAU)
+  
+  const data: Patient = (
+    await (await req.db())
+      .input("MABN", MABN)
+      .input("MATKHAU", MATKHAU)
+      .input("HOTEN", HOTEN)
+      .input("NGAYSINH", NGAYSINH)
+      .input("DIACHI", DIACHI)
+      .execute("UPDATE_INFO_BENHNHAN")
+  ).recordset[0];
+  console.log('aaa')
+
+  return res
+    .header("HX-Redirect", `/patient/information`)
+    .json("Directed")
+    .status(200);
 });
 
 patientRouter.get(

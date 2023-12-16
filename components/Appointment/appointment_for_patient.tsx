@@ -100,8 +100,8 @@ const Appointment = ({
                     {appointmentsFinished &&
                       appointmentsFinished.map((appointment) => (
                         <tr>
-                          <td>{appointment.TENBN}</td>
                           <td>{appointment.TENNS}</td>
+                          <td>{appointment.TENBN}</td>
                           <td>
                             {appointment.NGAYKHAM.toISOString().split("T")[0]}
                           </td>

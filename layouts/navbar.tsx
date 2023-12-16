@@ -191,7 +191,7 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
                   <a class="dropdown-item" href={`${url}/information`}>
                     My Profile
                   </a>
-                  <a class="dropdown-item" href="/home/edit-profile">
+                  <a class="dropdown-item" href={`${url}/home/edit-profile`}>
                     Edit Profile
                   </a>
 
