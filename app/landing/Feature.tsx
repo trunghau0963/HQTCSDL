@@ -32,7 +32,10 @@ const TOOLS = (baseUrl: string): any[] => [
 ];
 const Feature = () => {
   return (
-    <div  id="features" class="relative d-flex align-items-center justify-content-center">
+    <div
+      id="features"
+      class="relative d-flex align-items-center justify-content-center"
+    >
       <div class="text-center mb-14">
         <h1 class="text-muted-foreground text-lg mt-2">Features</h1>
         <div class="d-flex text-white">

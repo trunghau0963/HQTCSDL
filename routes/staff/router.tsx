@@ -49,7 +49,7 @@ import {
   addServiceIndicators,
   deleteServiceIndicators,
 } from "../../controller/serviceIndicatorsController";
-import NullInvoice from "../../app/staff/Error/nullInvoice";
+import NullPage from "../../components/Error/NullPage";
 import { getPrescriptionById } from "../../controller/prescriptionController";
 import PreviewPage from "../../app/staff/Invoice/Preview/previewPage";
 import InvoicePage from "../../app/staff/Invoice/Invoice";
@@ -129,7 +129,7 @@ staffRouter.get("/invoice", staff, async (req, res) => {
 });
 
 staffRouter.get("/invoice/failed", staff, async (req, res) => {
-  return res.send(<NullInvoice />);
+  return res.send(<NullPage title="invoice"/>);
 });
 
 staffRouter.get("/invoice/add-prescription/:id", staff, async (req, res) => {

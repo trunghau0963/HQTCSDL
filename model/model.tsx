@@ -76,8 +76,20 @@ export type Appointment = {
   MABN: string;
   MANS: string;
   NGAYKHAM: Date;
-  GIOKHAM: Date;
+  GIOKHAM: string;
 };
+
+  export type AppointmentDetail = {
+    MABN: string;
+    MANS: string;
+    HOTENNHASI: string;
+    HOTENBENHNHAN: string;
+    DIENTHOAI: string;
+    DIACHI: string;
+    NGAYSINH: Date;
+    NGAYKHAM: Date;
+    GIOKHAM: Date;
+  };
 
 export type Invoice = {
   MACT: string;

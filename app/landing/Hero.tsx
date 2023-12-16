@@ -31,7 +31,7 @@ const Hero = () => {
               </p>
               <div class="mt-10 lg:flex items-center justify-center gap-x-6">
                 <a href="/login">
-                  <button class="btn btn-dark text-white gradient-btn w-full lg:w-auto mb-8 lg:mb-0">
+                  <button class="btn text-white gradient-btn w-full lg:w-auto mb-8 lg:mb-0">
                     Try Scheduler Free
                   </button>
                 </a>

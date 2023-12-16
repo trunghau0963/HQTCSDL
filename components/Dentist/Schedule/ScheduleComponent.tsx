@@ -1,11 +1,13 @@
 import * as elements from "typed-html";
 import { Schedule } from "../../../model/model";
+import { GetAppointment } from "./functionSchedule";
 type ScheduleProps = {
   Free: Schedule[];
   Registered: Schedule[];
 };
 
 const ScheduleComponent = ({ Free, Registered }: ScheduleProps) => {
+  let idx = 1;
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -38,6 +40,7 @@ const ScheduleComponent = ({ Free, Registered }: ScheduleProps) => {
                   <thead>
                     <tr>
                       <th style="min-width:100px;">Image</th>
+                      <th>Number</th>
                       <th>ID</th>
                       <th>Name</th>
                       <th>Date</th>
@@ -46,7 +49,7 @@ const ScheduleComponent = ({ Free, Registered }: ScheduleProps) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Free.map((data, idx) => (
+                    {Free.map((data) => (
                       <tr>
                         <td>
                           <img
@@ -59,10 +62,17 @@ const ScheduleComponent = ({ Free, Registered }: ScheduleProps) => {
                           />{" "}
                           <h2></h2>
                         </td>
+                        <td>{idx++}</td>
                         <td>{data.MANS}</td>
                         <td>{data.HOTEN}</td>
                         <td>{data.NGAYKHAM.toLocaleDateString()}</td>
-                        <td>{data.GIOKHAM.toLocaleDateString()}</td>
+                        <td>
+                          {
+                            data.GIOKHAM.toISOString()
+                              .split("T")[1]
+                              .split(".")[0]
+                          }
+                        </td>
                         <td class="text-right">
                           <button
                             type="button"
@@ -77,7 +87,7 @@ const ScheduleComponent = ({ Free, Registered }: ScheduleProps) => {
                         </td>
                       </tr>
                     ))}
-                    {Registered.map((data, idx) => (
+                    {Registered.map((data) => (
                       <tr>
                         <td>
                           <img
@@ -90,14 +100,47 @@ const ScheduleComponent = ({ Free, Registered }: ScheduleProps) => {
                           />{" "}
                           <h2></h2>
                         </td>
+                        <td>{idx++}</td>
                         <td>{data.MANS}</td>
                         <td>{data.HOTEN}</td>
                         <td>{data.NGAYKHAM.toLocaleDateString()}</td>
-                        <td>{data.GIOKHAM.toLocaleDateString()}</td>
+                        <td>
+                          {
+                            data.GIOKHAM.toISOString()
+                              .split("T")[1]
+                              .split(".")[0]
+                          }
+                        </td>
                         <td class="text-right">
-                          <button class="btn btn-sm btn-danger">
-                            Registered
+                          {/* <button
+                            class="btn btn-sm btn-danger"
+                            id={`get-registered-${idx}-button`}
+                            data-bs-toggle="modal"
+                            data-bs-target={`#get-registered-${idx}`}
+                            aria-controls={`get-registered-${idx}`}
+                            hx-get="/dentist/schedule/appointment"
+                            hx-vars={`{'MANS': '${
+                              data.MANS
+                            }', 'NGAYKHAM': '${data.NGAYKHAM.toLocaleDateString()} '}`}
+                            hx-target=".appointment"
+                          >
+                            <i class="bi bi-person-add"></i>Registered
                           </button>
+
+                          <div
+                            class="modal fade"
+                            id={`get-registered-${idx}`}
+                            tabindex="0"
+                            aria-labelledby={`get-registered-${idx}-button`}
+                            aria-hidden="true"
+                          >
+                            <GetAppointment />
+                          </div> */}
+                          <GetAppointment
+                            idDentist={data.MANS}
+                            date={data.NGAYKHAM}
+                            idx={idx}
+                          />
                         </td>
                       </tr>
                     ))}

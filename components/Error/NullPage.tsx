@@ -1,7 +1,7 @@
 import * as elements from "typed-html";
-import StaffPage from "../staff";
+import StaffPage from "../../app/staff/staff";
 
-const NullInvoice = () => {
+const NullPage = ({ title }: { title: string }) => {
   return (
     <StaffPage>
       <div class="d-flex align-items-center justify-content-center vh-100">
@@ -11,7 +11,7 @@ const NullInvoice = () => {
             {" "}
             <span class="text-danger">Opps!</span> Page not found.
           </p>
-          <p class="lead">The Invoice you're looking for doesn't exist.</p>
+          <p class="lead">{`The ${title} you're looking for doesn't exist.`}</p>
           <a href="/staff/invoice" class="btn btn-primary">
             Previous
           </a>
@@ -21,4 +21,4 @@ const NullInvoice = () => {
   );
 };
 
-export default NullInvoice;
+export default NullPage;

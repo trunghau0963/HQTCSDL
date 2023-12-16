@@ -1,7 +1,7 @@
 $secondary: #7790c5;
-$primary: #9EB8D9;
-$mynewcolor: #A25772;
-$muted: #EEF5FF;
+$primary: #9eb8d9;
+$mynewcolor: #a25772;
+$muted: #eef5ff;
 $sizeCalendar: 60px;
 $fontSizeCalendar: 20px;
 $min-contrast-ratio: 3;
@@ -13,7 +13,7 @@ body {
   font-family: "Open Sans", sans-serif;
   background-color: $muted;
   overflow-x: hidden;
-	height: 100%;
+  height: 100%;
 }
 
 .datetime {
@@ -128,7 +128,8 @@ body {
   font-size: $fontSizeCalendar;
 }
 
-.month, .year {
+.month,
+.year {
   border: none;
   text-transform: uppercase;
   letter-spacing: 5px;
@@ -146,7 +147,7 @@ option {
 
 .week {
   margin-top: 20px;
-  
+
   &__day {
     color: gray;
     margin: 5px;
@@ -157,21 +158,20 @@ option {
 }
 
 .date {
-  
   &__number {
     margin: 5px;
     width: $sizeCalendar;
     height: $sizeCalendar;
     transition: 0.5s ease;
-    
+
     &:hover {
       cursor: pointer;
-      background-color: #189AB4;
+      background-color: #189ab4;
       color: #fff;
     }
-      
+
     &--true {
-      background-color: #189AB4;
+      background-color: #189ab4;
       color: #fff;
     }
   }
@@ -181,17 +181,32 @@ option {
   text-align: center;
   margin-top: 40px;
   color: gray;
-  
 }
 
 .btn-tertiary {
-  @include button-variant($mynewcolor, darken($mynewcolor, 7.5%), darken($mynewcolor, 10%), lighten($mynewcolor,5%), lighten($mynewcolor, 10%), darken($mynewcolor,30%));
+  @include button-variant(
+    $mynewcolor,
+    darken($mynewcolor, 7.5%),
+    darken($mynewcolor, 10%),
+    lighten($mynewcolor, 5%),
+    lighten($mynewcolor, 10%),
+    darken($mynewcolor, 30%)
+  );
 }
 
 .btn-outline-tertiary {
-  @include button-outline-variant($mynewcolor, #222222, lighten($mynewcolor,5%), $mynewcolor);
+  @include button-outline-variant(
+    $mynewcolor,
+    #222222,
+    lighten($mynewcolor, 5%),
+    $mynewcolor
+  );
 }
 
 .bg-tertiary {
   background-color: $mynewcolor !important;
+}
+
+.gradient-btn {
+  background: linear-gradient(to right, #6466f1, #ad54ef, #ea489b);
 }

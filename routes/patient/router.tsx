@@ -32,12 +32,11 @@ patientRouter.get("/home", patient, async (req, res) => {
 });
 
 patientRouter.get("/drug", patient, async (req, res) => {
-  const drugList: drugProps[]= (
-    await (await req.db())
-    .execute("GET_INFO_THUOC")
+  const drugList: drugProps[] = (
+    await (await req.db()).execute("GET_INFO_THUOC")
   ).recordset;
-  console.log(drugList)
-  return res.send(<Drug drugs={drugList}/>);
+  console.log(drugList);
+  return res.send(<Drug drugs={drugList} />);
 });
 
 patientRouter.get("/dentist", patient, async (req, res) => {
@@ -94,7 +93,6 @@ patientRouter.get("/information", patient, async (req, res) => {
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
-
   } catch {}
   return res.send(<ProfilePage data={patient} />);
 });
@@ -103,7 +101,6 @@ patientRouter.get(
   "/schedule/date/add_appointment",
   patient,
   async (req, res) => {
-    
     let data: Schedule = {
       MANS: "",
       HOTEN: "",

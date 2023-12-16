@@ -1,153 +1,67 @@
 import * as elements from "typed-html";
-import { Dentist } from "../../../model/model";
 
-interface DentistProps {
-  Data: Dentist;
-}
-export const getAppointment = ({ idDentist }: { idDentist: string }) => {
+export const GetAppointment = ({
+  idDentist,
+  date,
+  idx,
+}: {
+  idDentist: string;
+  date: Date;
+  idx: number;
+}) => {
   return (
     <div>
-      <a
+      <button
         class="btn btn-sm btn-danger"
-        id={`get-registered-${idDentist}-button`}
-        data-toggle="modal"
-        data-bs-target={`#get-registered-${idDentist}`}
-        aria-controls={`get-registered-${idDentist}`}
+        id={`get-registered-${idx}-button`}
+        data-bs-toggle="modal"
+        data-bs-target={`#get-registered-${idx}`}
+        aria-controls={`get-registered-${idx}`}
+        hx-get="/dentist/schedule/appointment"
+        hx-vars={`{'MANS': '${idDentist}', 'NGAYKHAM': '${date.toLocaleDateString()} '}`}
+        hx-target={`.appointment-${idx}`}
       >
-        <i class="bi bi-person-plus"></i>Registered
-      </a>
+        <i class="bi bi-person-add"></i>Registered
+      </button>
+
       <div
         class="modal fade"
-        id={`get-registered-${idDentist}`}
+        id={`get-registered-${idx}`}
         tabindex="0"
-        role="dialog"
-        aria-labelledby={`get-registered-${idDentist}-button`}
+        aria-labelledby={`get-registered-${idx}-button`}
         aria-hidden="true"
       >
         <div class="modal-dialog modal-lg bg-muted">
           <div class="modal-content">
-            <div>
-              <div>
-                <div class="p-5">
-                  <div class="row">
-                    <div class="col-lg-8 offset-lg-2">
-                      <h4 class="page-title">Information Of Appointment</h4>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-8 offset-lg-2">
-                      <form id="add-dentist-form" hx-post="/admin/dentist">
-                        <div class="row">
-                          <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label
-                                  class="form-label font-weight-bold"
-                                  for="name"
-                                >
-                                  Name <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  id="name"
-                                  class="form-control form-control-lg"
-                                  name="name"
-                                  required=""
-                                />
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label
-                                  class="form-label font-weight-bold"
-                                  for="password"
-                                >
-                                  Password<span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  type="password"
-                                  id="password"
-                                  class="form-control form-control-lg"
-                                  name="password"
-                                  required=""
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row my-3">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label
-                                  class="form-label font-weight-bold"
-                                  for="phone"
-                                >
-                                  Phone <span class="text-danger">*</span>
-                                </label>
-                                <input
-                                  type="tel"
-                                  id="phone"
-                                  class="form-control form-control-lg"
-                                  name="phone"
-                                  required=""
-                                />
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <div class="form-outline mb-4">
-                                  <label
-                                    class="form-label font-weight-bold"
-                                    for="dob"
-                                  >
-                                    Date of Birth
-                                  </label>
-                                  <input
-                                    type="date"
-                                    id="dob"
-                                    class="form-control form-control-lg"
-                                    name="dob"
-                                    required=""
-                                    max={new Date().toISOString().split("T")[0]}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row my-3">
-                            <div class="col-sm-12">
-                              <div class="form-group">
-                                <label
-                                  class="form-label font-weight-bold"
-                                  for="address"
-                                >
-                                  Address
-                                </label>
-                                <textarea
-                                  id="address"
-                                  class="form-control form-control-lg"
-                                  name="address"
-                                  required=""
-                                ></textarea>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="d-flex justify-content-center m-t-20 text-center">
-                          <button
-                            type="submit"
-                            hx-target="#add-dentist-form"
-                            hx-swap="outerHTML"
-                            class="btn btn-tertiary btn-block btn-lg gradient-custom-4 text-body rounded-pill"
-                          >
-                            Create dentist
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="modal-header">
+              <h1
+                class="modal-title d-flex flex-column justify-content-center text-center "
+                id="get-registeredLabel"
+              >
+                <h3 class="fw-bold mx-3 my-3">Appointment Detail</h3>
+                <button
+                  class="fw-bold btn btn-warning rounded-pill"
+                  disabled=""
+                >
+                  Upcoming
+                </button>
+              </h1>
+            </div>
+            <div class="modal-body">
+              <div class={`appointment-${idx}`} id={`appointment-${idx}`}></div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="submit"
+                hx-target="#get-appointment-form"
+                hx-swap="outerHTML"
+                class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
+              >
+                Search
+              </button>
+              <button class="btn btn-tertiary" data-bs-dismiss="modal">
+                Close
+              </button>
             </div>
           </div>
         </div>

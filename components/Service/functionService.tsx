@@ -9,7 +9,7 @@ export const AddService = ({ url }: { url: string }) => {
   return (
     <div>
       <a
-        class="text-center btn btn-warning btn-rounded float-right w-100 py-3 text-white"
+        class="text-center btn btn-tertiary btn-rounded float-right w-100 py-3 text-white"
         data-toggle="modal"
         data-target=".add-Service"
       >

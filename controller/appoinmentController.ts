@@ -1,22 +1,24 @@
 import { getDatabase } from "../config/config";
 import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
-import { Appointment } from "../model/model";
+import { Appointment, AppointmentDetail } from "../model/model";
 
 export const registerAppointment = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    console.log(input)
-    
-    const user = (await (await req.db())
-      .input("TEN", input.patient_name)
-      .input("DIENTHOAI", input.phoneNum)
-      .input("NGAYSINH", input.dob)
-      .input("DIACHI", input.address)
-      .input("MANS", input.dentist_id)
-      .input("NGAYKHAM", input.doa)
-      .input("GIOKHAM", input.hour)
-      .execute("REGISTER_LICHKHAM")).recordset;
+    console.log(input);
+
+    const user = (
+      await (await req.db())
+        .input("TEN", input.patient_name)
+        .input("DIENTHOAI", input.phoneNum)
+        .input("NGAYSINH", input.dob)
+        .input("DIACHI", input.address)
+        .input("MANS", input.dentist_id)
+        .input("NGAYKHAM", input.doa)
+        .input("GIOKHAM", input.hour)
+        .execute("REGISTER_LICHKHAM")
+    ).recordset;
 
     return res
       .header("HX-Redirect", "/patient/schedule/")
@@ -238,3 +240,98 @@ export const getAppointmentNotDoneOfDentist = async (
   }
 };
 
+export const directNewUrl = async (req: Request, res: Response) => {
+  try {
+    const { MANS, NGAYKHAM } = req.body;
+    console.log("MANS", MANS);
+    console.log("NGAYKHAM: ", NGAYKHAM);
+
+    const data: AppointmentDetail = (
+      await (await req.db())
+        .input("MANS", MANS)
+        .input("NGAYKHAM", NGAYKHAM)
+        .execute("GET_LICHKHAM_DETAIL_OF_NHASI_BY_DATE")
+    ).recordset[0];
+
+    console.log("data", data);
+    const parts = data.NGAYKHAM.toLocaleDateString().split("/");
+    const formattedDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+    // console.log("formattedDate", formattedDate);
+    if (!data || data.MABN === undefined || data.MABN === null) {
+      res
+        .header("HX-Redirect", "/dentist/schedule/failed")
+        .status(404)
+        .send("Not found schedule");
+    } else {
+      const scheduleURL = `/dentist/schedule/${data.MABN}/${formattedDate}`;
+      res
+        .header("HX-Redirect", scheduleURL)
+        .status(200)
+        .send("successful found schedule");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getAppointmentOfDentistByDate = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { MANS, NGAYKHAM } = req.query;
+    console.log("MANS", MANS);
+    console.log("NGAYKHAM: ", NGAYKHAM);
+
+    const data: AppointmentDetail = (
+      await (await req.db())
+        .input("MANS", MANS)
+        .input("NGAYKHAM", NGAYKHAM)
+        .execute("GET_LICHKHAM_DETAIL_OF_NHASI_BY_DATE")
+    ).recordset[0];
+
+    // console.log("data", data);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getAppointmentPatientByDate = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    // console.log("getAppointmentPatientByDate")
+    const { id, date } = req.params;
+    console.log("MABN", id);
+    console.log("NGAYKHAM", date);
+
+    const data: AppointmentDetail = (
+      await (await req.db())
+        .input("MABN", id)
+        .input("NGAYKHAM", date)
+        .execute("GET_LICHKHAM_DETAIL_FOR_BENHNHAN_BY_DATE")
+    ).recordset[0];
+
+    // console.log("data", data);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
