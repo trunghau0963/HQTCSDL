@@ -1,10 +1,7 @@
 import * as elements from "typed-html";
-import StaffPage from "../../staff/staff";
-import { Invoice, Prescription } from "../../../model/model";
-import { html2pdf } from "html2pdf-ts";
-import { number } from "joi";
 
 const PreviewPage = ({id}:{id:string}) => {
+    console.log(id)
   return (
     <div
       class="container rounded vh-100 modal fade appoinment"
@@ -24,7 +21,7 @@ const PreviewPage = ({id}:{id:string}) => {
               <div class="d-flex align-items-center gap-3">
                 <button
                   class="close btn btn-tertiary icon-h-sm icon-w-sm border-0 rounded"
-                  data-dismiss="modal"
+                  data-bs-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>

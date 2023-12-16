@@ -219,30 +219,6 @@ staffRouter.get("/invoice/serviceIndicator", staff, async (req, res) => {
       </tbody>
     </table>
   </div>
-  <button
-                      class="btn btn-success text-capitalize border-0"
-                      data-mdb-ripple-color="dark"
-                      onclick=${`const invoiceBody = document.getElementById("invoiceBody-${invoice?.MACT}");
-                      alert("button was clicked");
-                      if (invoiceBody) {
-                        const originalContents = document.body.innerHTML;
-                        const printContents = invoiceBody.innerHTML;
-                  
-                        // Apply additional styles for landscape layout
-                        const additionalStyles = '<style>@page { size: landscape; }</style>';
-                        document.body.innerHTML = additionalStyles + printContents;
-                  
-                        window.print();
-                  
-                        // Restore the original contents
-                        document.body.innerHTML = originalContents;
-                      } else {
-                        console.error("Element with id 'invoiceBody' not found.");
-                      }`}
-                    >
-                      <i class="bi bi-printer"></i> Print
-                    </button>
- 
     `;
   return res.send(htmxContent);
 });

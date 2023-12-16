@@ -2,11 +2,7 @@ import * as elements from "typed-html";
 import { AppointmentDetailProps, Invoice, Patient } from "../../../model/model";
 import { PreviewInvoice } from "./functionInvoice";
 
-const PatientInvoiceComponent = ({
-  invoices,
-}: {
-  invoices: Invoice[];
-}) => {
+const PatientInvoiceComponent = ({ invoices }: { invoices: Invoice[] }) => {
   return (
     <div class="main-wrapper h-100">
       <div class="page-wrapper">
@@ -70,84 +66,15 @@ const PatientInvoiceComponent = ({
                         <td>{invoice?.MABN}</td>
                         <td>{invoice?.HOTENNHASI}</td>
                         <td>{invoice?.NGAYKHAM.toISOString().split("T")[0]}</td>
-                        <td>{invoice?.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+                        <td>
+                          {
+                            invoice?.GIOKHAM.toISOString()
+                              .split("T")[1]
+                              .split(".")[0]
+                          }
+                        </td>
 
                         <td class="text-right">
-                          <div class="dropdown dropend" id="prescription">
-                            <button
-                              class="btn btn-link dropdown-toggle text-decoration-none"
-                              type="button"
-                              id={`prescription-button-${invoice.MABN}`}
-                              invoice-bs-toggle="dropdown"
-                              invoice-bs-target={`#prescription-${invoice.MABN}`}
-                              aria-controls={`prescription-${invoice.MABN}`}
-                              aria-expanded="false"
-                            >
-                              <i class="bi bi-receipt-cutoff"></i>
-                              Prescription
-                            </button>
-
-                            <ul
-                              class="dropdown-menu"
-                              id={`prescription-${invoice.MABN}`}
-                              aria-labelledby={`prescription-button-${invoice.MABN}`}
-                            >
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/add-prescription/${invoice.MABN}`}
-                                >
-                                  Add Prescription
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/delete-prescription/${invoice.MABN}`}
-                                >
-                                  Delete Prescription
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                          <div class="dropdown dropend" id="serviceIndicators">
-                            <button
-                              class="btn btn-link dropdown-toggle text-decoration-none"
-                              type="button"
-                              id={`service-indicators-button-${invoice.MABN}`}
-                              invoice-bs-toggle="dropdown"
-                              invoice-bs-target={`#service-indicators-${invoice.MABN}`}
-                              aria-controls={`service-indicators-${invoice.MABN}`}
-                              aria-expanded="false"
-                            >
-                              <i class="bi bi-app-indicator"></i>
-                              Service Indicators
-                            </button>
-
-                            <ul
-                              class="dropdown-menu"
-                              id={`service-indicators-${invoice.MABN}`}
-                              aria-labelledby={`service-indicators-button-${invoice.MABN}`}
-                            >
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/add-service-indicators/${invoice.MABN}`}
-                                >
-                                  Add Indicators
-                                </a>
-                              </li>
-
-                              <li>
-                                <a
-                                  class="dropdown-item"
-                                  href={`invoice/delete-service-indicators/${invoice.MABN}`}
-                                >
-                                  Delete Indicators
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
                           <PreviewInvoice invoice={invoice} />
                         </td>
                       </tr>
