@@ -20,6 +20,7 @@ import {
   Dentist,
   Staff,
   Appointment,
+  AppointmentDetailProps,
   Service,
   Invoice,
 } from "../../model/model";
@@ -92,9 +93,9 @@ adminRouter.put("/drug", admin, async (req: any, res: any) => {
 });
 
 adminRouter.get("/schedule", admin, async (req, res) => {
-  let data: Appointment[] = [];
+  let data: AppointmentDetailProps[] = [];
   try {
-    data = (await getAppointment(req, res)) as Appointment[];
+    data = (await getAppointment(req, res)) || ([] as AppointmentDetailProps[]);
   } catch {}
   return res.send(<Schedule />);
 });

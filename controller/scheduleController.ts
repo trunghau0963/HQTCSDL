@@ -4,18 +4,28 @@ import { Request, RequestHandler, response, Response } from "express";
 import { Schedule } from "../model/model";
 import { number } from "joi";
 
-export const addSchedule = async (req: Request, res: Response) => {
+export const addSchedule = async (req: Request, res: Response, url: string) => {
   try {
-    const {NGAYKHAM, GIOKHAM, MANS} = req.body;
-    console.log(req.body)
-  
-    const user = (await (await req.db())
+    const formatTime = (timeString: string): string => {
+      const date = new Date(`2000-01-01T${timeString}`);
+      return date.toISOString().slice(11, -1);
+    };
+    const { NGAYKHAM, GIOKHAM, MANS } = req.body;
+    console.log(req.body);
+    const formattedGIOKHAM = formatTime(GIOKHAM);
+
+    console.log("format time", formattedGIOKHAM);
+
+    await (await req.db())
       .input("MANS", MANS)
       .input("NGAYKHAM", NGAYKHAM)
-      .input("GIOKHAM", GIOKHAM)
-      .execute("INSERT_INTO_LICHLAMVIEC")).recordset[0];
+      .input("GIOKHAM", formattedGIOKHAM)
+      .execute("INSERT_INTO_LICHLAMVIEC");
+
+    console.log("da insert");
+    const directNewUrl = `/${url}/schedule`;
     return res
-      .header("HX-Redirect", "/admin/schedule")
+      .header("HX-Redirect", directNewUrl)
       .status(200)
       .send("successful register Schedule");
   } catch (error) {
@@ -97,20 +107,20 @@ export const getSchedule = async (req: Request, res: Response) => {
 };
 
 export const getScheduleIsFree = async (req: Request, res: Response) => {
-    try {
-      const { year, mon, day } = req.query;
-      const date = `${year}-${mon}-${day}`;
- 
-      const getDaysInMonth = (year: number, month: number) => {
-        return new Date(year, month, 0).getDate();
-      }
+  try {
+    const { year, mon, day } = req.query;
+    const date = `${year}-${mon}-${day}`;
 
-      if(getDaysInMonth(Number(year), Number(mon)) < Number(day)){
-          return [];
-      }
-      
-      const data: Schedule[] = (
-        await (await req.db())
+    const getDaysInMonth = (year: number, month: number) => {
+      return new Date(year, month, 0).getDate();
+    };
+
+    if (getDaysInMonth(Number(year), Number(mon)) < Number(day)) {
+      return [];
+    }
+
+    const data: Schedule[] = (
+      await (await req.db())
         .input("NGAYKHAM", date)
         .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
     ).recordset as Schedule[];
@@ -178,6 +188,7 @@ export const getScheduleIsFreeOfDentist = async (
         .input("MANS", id)
         .execute("GET_LICHLAMVIEC_DETAIL_FREE_OF_NHASI")
     ).recordset;
+    // console.log("data", data);
     return data;
   } catch (error) {
     if (error instanceof Error) {

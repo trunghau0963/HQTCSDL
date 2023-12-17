@@ -4,7 +4,7 @@ import { PreviewInvoice } from "./functionInvoice";
 
 const PatientInvoiceComponent = ({ invoices }: { invoices: Invoice[] }) => {
   return (
-    <div class="main-wrapper h-100">
+    <div class="main-wrapper h-100" id="invoice-staff-information">
       <div class="page-wrapper">
         <div class="content">
           <div class="row">

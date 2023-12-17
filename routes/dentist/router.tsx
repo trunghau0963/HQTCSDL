@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import * as elements from "typed-html";
 import DentistPage from "../../app/dentist/dentist";
 import Dashboard from "../../app/dentist/Dashboard/Dashboard";
@@ -15,6 +15,7 @@ import {
   getScheduleOfDentist,
   getScheduleIsFreeOfDentist,
   getScheduleIsRegisteredOfDentist,
+  addSchedule,
 } from "../../controller/scheduleController";
 import {
   directNewUrl,
@@ -40,35 +41,39 @@ dentistRouter.get("/patient", dentist, async (req, res) => {
 dentistRouter.get("/schedule", dentist, async (req, res) => {
   let scheduleFree: Schedule[] = [];
   let scheduleRegistered: Schedule[] = [];
-
+  let idDentist;
   try {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    scheduleFree = (await getScheduleIsFreeOfDentist(
-      req,
-      res,
-      data.user.MANS
-    )) as Schedule[];
+    idDentist = data.user.MANS;
+    console.log("idDentist: ", idDentist);
+    scheduleFree =
+      (await getScheduleIsFreeOfDentist(req, res, data.user.MANS)) || [];
+    console.log("scheduleFree: ", scheduleFree);
     scheduleRegistered = (await getScheduleIsRegisteredOfDentist(
       req,
       res,
       data.user.MANS
-    )) as Schedule[];
+    )) as [];
+    console.log("scheduleRegistered: ", scheduleRegistered);
   } catch {}
   return res.send(
-    <SchedulePage Free={scheduleFree} Registered={scheduleRegistered} />
+    <SchedulePage
+      Free={scheduleFree}
+      Registered={scheduleRegistered}
+      idDentist={idDentist}
+    />
   );
 });
 
 dentistRouter.post("/schedule", dentist, directNewUrl);
-dentistRouter.get("/schedule/:id/:date", dentist, async (req, res) => {
-  let appointments = (await getAppointmentPatientByDate(
-    req,
-    res
-  )) as AppointmentDetail;
-  console.log("appointments: ", appointments);
-});
+
+dentistRouter.post(
+  "/schedule/freeSchedule",
+  dentist,
+  (req: Request, res: Response) => addSchedule(req, res, "dentist")
+);
 
 dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
   const appointment: AppointmentDetail = (await getAppointmentOfDentistByDate(
