@@ -378,28 +378,22 @@ patientRouter.get("/information", patient, async (req, res) => {
 });
 
 patientRouter.get("/home/edit-profile", patient, async (req, res) => {
-  let patient: Patient | undefined;
+  let data: Patient|undefined;
   try {
     const token = req.cookies.token as string;
-    const data =
+    const patient =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
+    data = (await getPatientById(req, res, patient.user.MABN)) as Patient;
   } catch {}
-  return res.send(<EditProfile data={patient} />);
+  return res.send(<EditProfile data={data} role={'patient'}/>);
 });
 
 patientRouter.put("/home/edit-profile", patient, async (req, res) => {
-  const { MABN, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
-
-  console.log(MABN);
-  console.log(HOTEN);
-  console.log(DIACHI);
-  console.log(NGAYSINH);
-  console.log(MATKHAU);
+  const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
 
   const data: Patient = (
     await (await req.db())
-      .input("MABN", MABN)
+      .input("MABN", MA)
       .input("MATKHAU", MATKHAU)
       .input("HOTEN", HOTEN)
       .input("NGAYSINH", NGAYSINH)
@@ -421,7 +415,7 @@ patientRouter.get(
     const token = req.cookies.token as string;
     const infoPatient =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-   
+
     let detailSchedule: Schedule = {
       MANS: "",
       HOTEN: "",
@@ -434,7 +428,12 @@ patientRouter.get(
       detailSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
       detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
     }
-    return res.send(<AddAppointment detailSchedule={detailSchedule} infoPatient={infoPatient.user}/>);
+    return res.send(
+      <AddAppointment
+        detailSchedule={detailSchedule}
+        infoPatient={infoPatient.user}
+      />
+    );
   }
 );
 
@@ -463,8 +462,8 @@ patientRouter.post(
   patient,
   async (req, res) => {
     try {
-      const input = req.body
-  
+      const input = req.body;
+
       const user = (
         await (await req.db())
           .input("TEN", input.patient_name)
@@ -476,7 +475,7 @@ patientRouter.post(
           .input("GIOKHAM", input.hour)
           .execute("REGISTER_LICHKHAM")
       ).recordset;
-  
+
       return res
         .header("HX-Redirect", "/patient/schedule")
         .json({ message: "Success" })

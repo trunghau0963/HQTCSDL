@@ -1,9 +1,12 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-import { DentistProps, PatientProps, StaffProps } from "../../model/temp";
-import { Admin } from "../../model/model";
-
-const Info = ({ data }: { data: any }) => {
+import { Admin, Dentist, Patient } from "../../model/model";
+type dataProps = {
+  data?: Patient | Admin | Patient;
+  role: string;
+};
+const Info = ({ data, role }: dataProps) => {
+  console.log(role)
   return (
     <BaseHtml>
       <div class="d-flex flex-column align-items-center text-primary mt-5 bg-light">
@@ -30,7 +33,7 @@ const Info = ({ data }: { data: any }) => {
               type="date"
               class="form-control w-100"
               id="dob"
-              value={data?.NGAYSINH.toISOString().split("T")[0]}
+              value={data?.NGAYSINH?.toISOString().split("T")[0] ?? ""}
             />
           </div>
         </div>
@@ -76,16 +79,25 @@ const Info = ({ data }: { data: any }) => {
         <div class="d-flex m-5">
           <button
             class="btn btn-danger mx-3"
-            hx-put="/patient/home/edit-profile"
-            hx-vars={
-            `{
-                'MABN': '${data.MABN}', 
+            hx-put={`/${role}/home/edit-profile`}
+            hx-vars={`{
+                'MA': '${
+                  (data?.hasOwnProperty("MANS") &&
+                    "MANS" in data &&
+                    data.MANS) ||
+                  (data?.hasOwnProperty("MABN") &&
+                    "MABN" in data &&
+                    data.MABN) ||
+                  (data?.hasOwnProperty("MANV") &&
+                    "MANV" in data &&
+                    data.MANV) ||
+                  (data?.hasOwnProperty("MAQT") && "MAQT" in data && data.MAQT)
+                }', 
                 'HOTEN': document.querySelector('#name').value, 
                 'DIACHI': document.querySelector('#address').value,
                 'NGAYSINH': document.querySelector('#dob').value,
                 'MATKHAU': document.querySelector('#pwd').value
-            }`
-        }
+            }`}
           >
             Lưu
           </button>

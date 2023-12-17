@@ -103,9 +103,9 @@ export const ADMINNAVIGATIONS = (baseUrl: string) => [
   {
     title: "Accounts",
     icon: "/icons/schedule.svg",
-    url: `${baseUrl}/account`,
+    url: `${baseUrl}/manageAccount`,
     color: "btn btn-outline-primary",
-    slug: "schedule",
+    slug: "manageAccount",
   },
   {
     title: "Service",
