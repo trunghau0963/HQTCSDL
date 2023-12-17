@@ -16,7 +16,6 @@ import {
   Dentist,
   Staff,
   Appointment,
-  AppointmentDetailProps,
   Service,
   Invoice,
   AppointmentDetailProps,
