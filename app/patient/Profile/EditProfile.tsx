@@ -3,12 +3,12 @@ import PatientPage from "../patient";
 import Info from "../../../components/info/info";
 import Profile from "../../../components/info/Profile";
 import { getPatientById } from "../../../controller/patientController";
-import { Admin, Patient } from "../../../model/model";
+import { Admin, Dentist, Patient, Staff } from "../../../model/model";
 import DentistPage from "../../dentist/dentist";
 import AdminPage from "../../admin/admin";
 import StaffPage from "../../staff/staff";
 type dataProps = {
-  data?: Patient | Admin | Patient;
+  data?: Patient | Admin | Staff | Dentist;
   role: string;
 };
 const EditProfile = ({ data, role }: dataProps) => {

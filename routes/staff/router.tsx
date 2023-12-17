@@ -4,7 +4,6 @@ import * as elements from "typed-html";
 import StaffPage from "../../app/staff/staff";
 import Dashboard from "../../app/staff/Dashboard/Dashboard";
 import Home from "../../app/staff/Home/Home";
-import Schedule from "../../app/staff/Schedule/Schedule";
 import Drug from "../../app/staff/Drug/Drug";
 import { staff } from "../auth/router";
 import ServicePage from "../../app/staff/Service/Service";
@@ -68,6 +67,11 @@ import {
 import AddInvoice from "../../app/staff/Invoice/add-invoice";
 import { getIdAllDentist } from "../../controller/dentistController";
 import { getAppointmentIsDone } from "../../controller/appoinmentController";
+import Schedule from "../../app/staff/Schedule/Schedule";
+import { getScheduleIsFree } from "../../controller/scheduleController";
+import AddAppointment from "../../components/Appointment/add_appointment";
+import PreviewAppointment from "../../app/staff/Invoice/Preview/previewAppointmentCard";
+import EditProfile from "../../app/patient/Profile/EditProfile";
 
 const staffRouter = Router();
 
@@ -106,7 +110,163 @@ staffRouter.put("/drug", staff, async (req: any, res: any) => {
 });
 
 staffRouter.get("/schedule", staff, async (req, res) => {
-  return res.send(<Schedule />);
+  return res.send(<Schedule role={"staff"} />);
+});
+
+staffRouter.get("/schedule/date", staff, async (req, res) => {
+  const dentistSchedule: Schedule[] = (await getScheduleIsFree(req, res)) || [];
+
+  if (dentistSchedule.length === 0) {
+    return res.send(
+      `<h1 class="text-danger">Không tìm thấy lịch khám trong ngày</h1>`
+    );
+  }
+
+  const htmlContent = dentistSchedule
+    .map((item) => {
+      return `
+    <div class="row w-auto py-3 m-3">
+      <img class="col-sm-3 col-md-3 p-0 rounded-2 w-auto" />
+      <div class="col-sm-9 col-md-9">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1 class="text-4xl">${item.HOTEN}</h1>
+          <a 
+            href="/staff/schedule/date/${item.MANS}/${item.HOTEN}/${
+        item.NGAYKHAM
+      }/${item.GIOKHAM}" 
+            class="btn btn-primary">
+            <h1 class="text-lg text-success">Available</h1>
+          </a>
+        </div>
+        <h2 class="fw-lighter text-2xl">${
+          item.NGAYKHAM.toISOString().split("T")[0]
+        }</h2>
+        <h2 class="fw-lighter text-xl">${
+          item.GIOKHAM.toISOString().split("T")[1].split(".")[0]
+        }</h2>
+      </div>
+    </div>`;
+    })
+    .join("");
+
+  return res.send(htmlContent);
+});
+staffRouter.get("/schedule/date/add_appointment", staff, async (req, res) => {
+  const token = req.cookies.token as string;
+  const infoPatient =
+    (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+
+  let detailSchedule: Schedule = {
+    MANS: "",
+    HOTEN: "",
+    NGAYKHAM: new Date(),
+    GIOKHAM: new Date(),
+  };
+  if (Object.entries(req.query).length !== 0) {
+    detailSchedule.MANS = (req.query.MANS as string) || "";
+    detailSchedule.HOTEN = (req.query.HOTEN as string) || "";
+    detailSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
+    detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
+  }
+  return res.send(<AddAppointment detailSchedule={detailSchedule} />);
+});
+
+staffRouter.get(
+  "/schedule/date/:MANS/:HOTEN/:NGAYKHAM/:GIOKHAM",
+  staff,
+  async (req, res) => {
+    const { MANS, HOTEN, NGAYKHAM, GIOKHAM } = req.params;
+
+    return res
+      .header(
+        "HX-Redirect",
+        `/staff/schedule/date/add_appointment?MANS=${encodeURIComponent(
+          MANS
+        )}&HOTEN=${encodeURIComponent(HOTEN)}&NGAYKHAM=${encodeURIComponent(
+          NGAYKHAM
+        )}&GIOKHAM=${encodeURIComponent(GIOKHAM)}`
+      )
+      .json("Directed")
+      .status(200);
+  }
+);
+
+staffRouter.post("/schedule/date/add_appointment", staff, async (req, res) => {
+  try {
+    const input = req.body;
+
+    const user = (
+      await (await req.db())
+        .input("TEN", input.patient_name)
+        .input("DIENTHOAI", input.phoneNum)
+        .input("NGAYSINH", input.dob)
+        .input("DIACHI", input.address)
+        .input("MANS", input.dentist_id)
+        .input("NGAYKHAM", input.doa)
+        .input("GIOKHAM", input.hour)
+        .execute("REGISTER_LICHKHAM")
+    ).recordset[0];
+
+    return res
+      .header(
+        "HX-Redirect",
+        `/staff/schedule/previewAppointment?MANS=${encodeURIComponent(
+          user.MANS
+        )}&HOTEN=${encodeURIComponent(
+          user.HOTENNHASI
+        )}&NGAYKHAM=${encodeURIComponent(
+          user.NGAYKHAM
+        )}&GIOKHAM=${encodeURIComponent(user.GIOKHAM)}`
+      )
+      .json({ message: "Success" })
+      .status(200);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+});
+
+staffRouter.get("/schedule/previewAppointment", staff, async (req, res) => {
+  try {
+    let infoSchedule: Schedule = {
+      MANS: "",
+      HOTEN: "",
+      NGAYKHAM: new Date(),
+      GIOKHAM: new Date(),
+    };
+    if (Object.entries(req.query).length !== 0) {
+      infoSchedule.MANS = (req.query.MANS as string) || "";
+      infoSchedule.HOTEN = (req.query.HOTEN as string) || "";
+      infoSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
+      infoSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
+    }
+
+    const detailSchedule = (
+      await (await req.db())
+        .input("MANS", infoSchedule.MANS)
+        .input("NGAYKHAM", infoSchedule.NGAYKHAM.toISOString().split("T")[0])
+        .input(
+          "GIOKHAM",
+          infoSchedule.GIOKHAM.toISOString().split("T")[1].split(".")[0]
+        )
+        .execute("GET_LICHKHAM_DETAIL_BY_ID_DATE")
+    ).recordset[0];
+
+    return res.send(<PreviewAppointment detailSchedule={detailSchedule} />);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
 });
 
 staffRouter.get("/service", staff, async (req, res) => {
@@ -137,7 +297,7 @@ staffRouter.get("/invoice", staff, async (req, res) => {
 
 staffRouter.get("/invoice/serviceIndicator", staff, async (req, res) => {
   const { MACT } = req.query;
-  console.log(MACT)
+
   let services: serviceIndicators[] = [];
   let prescriptions: Prescription[] = [];
 
@@ -224,7 +384,7 @@ staffRouter.get("/invoice/serviceIndicator", staff, async (req, res) => {
 });
 
 staffRouter.get("/invoice/failed", staff, async (req, res) => {
-  return res.send(<NullPage title="invoice"/>);
+  return res.send(<NullPage title="invoice" />);
 });
 
 staffRouter.get("/invoice/add-prescription/:id", staff, async (req, res) => {
@@ -322,14 +482,46 @@ staffRouter.post("/invoice/add/invoice", staff, addInvoice);
 
 staffRouter.get("/information", staff, async (req, res) => {
   let staff: Staff | undefined;
+
   try {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    console.log("data: ", data.user.HOTEN);
+
     staff = (await getStaffById(req, res, data.user.MANV)) as Staff;
   } catch {}
   return res.send(<ProfilePage data={staff} />);
+});
+
+staffRouter.get("/home/edit-profile", staff, async (req, res) => {
+  let data: Staff | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const staff =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    data = (await getStaffById(req, res, staff.user.MANV)) as Staff;
+  } catch {}
+  return res.send(<EditProfile data={data} role={"staff"} />);
+});
+
+staffRouter.put("/home/edit-profile", staff, async (req, res) => {
+  const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+
+  const data: Staff = (
+    await (await req.db())
+      .input("MANV", MA)
+      .input("MATKHAU", MATKHAU)
+      .input("HOTEN", HOTEN)
+      .input("NGAYSINH", NGAYSINH)
+      .input("DIACHI", DIACHI)
+      .execute("UPDATE_INFO_NHANVIEN")
+  ).recordset[0];
+  
+
+  return res
+    .header("HX-Redirect", `/staff/information`)
+    .json("Directed")
+    .status(200);
 });
 
 export default staffRouter;

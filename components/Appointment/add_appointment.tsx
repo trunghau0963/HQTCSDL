@@ -2,11 +2,11 @@ import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
 import { Schedule } from "../../model/model";
 
-const AddAppointment = ({ data }: { data: Schedule }) => {
-  const hour = data.GIOKHAM.toISOString().split("T")[1].split(".")[0];
-  const date = data.NGAYKHAM.toISOString().split("T")[0];
-  const id = data.MANS;
-  const name = data.HOTEN;
+const AddAppointment = ({ detailSchedule }: { detailSchedule: Schedule }) => {
+  const hour = detailSchedule.GIOKHAM.toISOString().split("T")[1].split(".")[0];
+  const date = detailSchedule.NGAYKHAM.toISOString().split("T")[0];
+  const id = detailSchedule.MANS;
+  const name = detailSchedule.HOTEN;
   return (
     <BaseHtml>
       <div class="page-wrapper">
@@ -117,7 +117,7 @@ const AddAppointment = ({ data }: { data: Schedule }) => {
                   </div>
                 </div>
                 <div class="m-t-20 text-center">
-                  <button class="btn btn-tertiary submit-btn">
+                  <button class="btn btn-danger submit-btn">
                     Create Appointment
                   </button>
                 </div>

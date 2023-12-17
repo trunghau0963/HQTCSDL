@@ -6,7 +6,7 @@ import { DentistData } from "../../../config/hardcode/hardcode";
 import FormContact from "../../../components/Appointment/patientAppointment/addAppoinment";
 import { Schedule, drugProps } from "../../../model/model";
 
-const Schedule = () => {
+const Schedule = ({role}:{role:string}) => {
   // const dates = Array.from({ length: 31 }, (_, index) => index + 1);
   // const storage: any[][] = new Array(5).fill(null).map(() => new Array(7).from({ length: 31 }, (_, index) => index + 1).fill(null));
   return (
@@ -24,7 +24,7 @@ const Schedule = () => {
         </div>
       </div>
       <main class="d-flex align-items-center justify-content-center min-vh-100 p-5">
-        <Calendar />
+        <Calendar role={role}/>
         <DentistAvailable/>
       </main>
     </PatientPage>

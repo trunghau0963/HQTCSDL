@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-import { Admin, Dentist, Patient } from "../../model/model";
+import { Admin, Dentist, Patient, Staff } from "../../model/model";
 type dataProps = {
-  data?: Patient | Admin | Patient;
+  data?: Patient | Admin | Staff | Dentist;
   role: string;
 };
 const Info = ({ data, role }: dataProps) => {

@@ -1,7 +1,8 @@
 import * as elements from "typed-html";
 import StaffPage from "../staff";
-import DrugComponent from "../../../components/Drug/Drug/drug";
+
 import { drugProps } from "../../../model/model";
+import DrugComponent from "./DrugComponent";
 
 type drugPageProps = {
   drugs: drugProps[];

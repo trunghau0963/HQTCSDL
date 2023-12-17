@@ -311,7 +311,7 @@ patientRouter.get("/drug", patient, async (req, res) => {
   const drugList: drugProps[] = (
     await (await req.db()).execute("GET_INFO_THUOC")
   ).recordset;
-  console.log(drugList);
+  
   return res.send(<Drug drugs={drugList} />);
 });
 
@@ -324,7 +324,7 @@ patientRouter.get("/dentist", patient, async (req, res) => {
 });
 
 patientRouter.get("/schedule", patient, async (req, res) => {
-  return res.send(<ScheduleComponent />);
+  return res.send(<ScheduleComponent role={'patient'}/>);
 });
 
 patientRouter.get("/schedule/date", patient, async (req, res) => {
@@ -400,7 +400,7 @@ patientRouter.put("/home/edit-profile", patient, async (req, res) => {
       .input("DIACHI", DIACHI)
       .execute("UPDATE_INFO_BENHNHAN")
   ).recordset[0];
-  console.log("aaa");
+  
 
   return res
     .header("HX-Redirect", `/patient/information`)

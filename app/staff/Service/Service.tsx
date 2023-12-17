@@ -1,7 +1,8 @@
 import * as elements from "typed-html";
 import StaffPage from "../staff";
-import ServiceComponent from "../../../components/Service/service";
+
 import { Service } from "../../../model/model";
+import ServiceComponent from "./ServiceComponent";
 
 const ServicePage = ({ services  }: { services: Service[] }) => {
   return (
