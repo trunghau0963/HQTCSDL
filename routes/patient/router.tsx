@@ -311,7 +311,7 @@ patientRouter.get("/drug", patient, async (req, res) => {
   const drugList: drugProps[] = (
     await (await req.db()).execute("GET_INFO_THUOC")
   ).recordset;
-  console.log(drugList);
+  
   return res.send(<Drug drugs={drugList} />);
 });
 
@@ -324,7 +324,7 @@ patientRouter.get("/dentist", patient, async (req, res) => {
 });
 
 patientRouter.get("/schedule", patient, async (req, res) => {
-  return res.send(<ScheduleComponent />);
+  return res.send(<ScheduleComponent role={'patient'}/>);
 });
 
 patientRouter.get("/schedule/date", patient, async (req, res) => {
@@ -378,35 +378,29 @@ patientRouter.get("/information", patient, async (req, res) => {
 });
 
 patientRouter.get("/home/edit-profile", patient, async (req, res) => {
-  let patient: Patient | undefined;
+  let data: Patient|undefined;
   try {
     const token = req.cookies.token as string;
-    const data =
+    const patient =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
+    data = (await getPatientById(req, res, patient.user.MABN)) as Patient;
   } catch {}
-  return res.send(<EditProfile data={patient} />);
+  return res.send(<EditProfile data={data} role={'patient'}/>);
 });
 
 patientRouter.put("/home/edit-profile", patient, async (req, res) => {
-  const { MABN, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
-
-  console.log(MABN);
-  console.log(HOTEN);
-  console.log(DIACHI);
-  console.log(NGAYSINH);
-  console.log(MATKHAU);
+  const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
 
   const data: Patient = (
     await (await req.db())
-      .input("MABN", MABN)
+      .input("MABN", MA)
       .input("MATKHAU", MATKHAU)
       .input("HOTEN", HOTEN)
       .input("NGAYSINH", NGAYSINH)
       .input("DIACHI", DIACHI)
       .execute("UPDATE_INFO_BENHNHAN")
   ).recordset[0];
-  console.log("aaa");
+  
 
   return res
     .header("HX-Redirect", `/patient/information`)
@@ -418,19 +412,28 @@ patientRouter.get(
   "/schedule/date/add_appointment",
   patient,
   async (req, res) => {
-    let data: Schedule = {
+    const token = req.cookies.token as string;
+    const infoPatient =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+
+    let detailSchedule: Schedule = {
       MANS: "",
       HOTEN: "",
       NGAYKHAM: new Date(),
       GIOKHAM: new Date(),
     };
     if (Object.entries(req.query).length !== 0) {
-      data.MANS = (req.query.MANS as string) || "";
-      data.HOTEN = (req.query.HOTEN as string) || "";
-      data.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
-      data.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
+      detailSchedule.MANS = (req.query.MANS as string) || "";
+      detailSchedule.HOTEN = (req.query.HOTEN as string) || "";
+      detailSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
+      detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
     }
-    return res.send(<AddAppointment data={data} />);
+    return res.send(
+      <AddAppointment
+        detailSchedule={detailSchedule}
+        infoPatient={infoPatient.user}
+      />
+    );
   }
 );
 
@@ -457,7 +460,36 @@ patientRouter.get(
 patientRouter.post(
   "/schedule/date/add_appointment",
   patient,
-  registerAppointment
+  async (req, res) => {
+    try {
+      const input = req.body;
+
+      const user = (
+        await (await req.db())
+          .input("TEN", input.patient_name)
+          .input("DIENTHOAI", input.phoneNum)
+          .input("NGAYSINH", input.dob)
+          .input("DIACHI", input.address)
+          .input("MANS", input.dentist_id)
+          .input("NGAYKHAM", input.doa)
+          .input("GIOKHAM", input.hour)
+          .execute("REGISTER_LICHKHAM")
+      ).recordset;
+
+      return res
+        .header("HX-Redirect", "/patient/schedule")
+        .json({ message: "Success" })
+        .status(200);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        return res.status(400).send(error.message);
+      }
+      return res
+        .status(500)
+        .send("Something went wrong. Please try again later.");
+    }
+  }
 );
 
 patientRouter.get("/appointment", patient, async (req, res) => {

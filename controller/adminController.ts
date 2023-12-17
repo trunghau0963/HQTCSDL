@@ -40,7 +40,6 @@ export const getAdminById = async (req: Request, res: Response, id : string) => 
         .execute("GET_INFO_QUANTRI_BY_ID")
     ).recordset[0];
 
-    console.log(user);
     return user;
   } catch (error) {
     if (error instanceof Error) {

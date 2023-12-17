@@ -124,7 +124,7 @@ export const getScheduleIsFree = async (req: Request, res: Response) => {
         .input("NGAYKHAM", date)
         .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
     ).recordset as Schedule[];
-    console.log("data", data);
+
     return data;
   } catch (error) {
     if (error instanceof Error) {

@@ -31,7 +31,7 @@ export const createStaff = async (req: Request, res: Response) => {
 };
 
 export const getStaffById = async (req: Request, res: Response, id: string) => {
-  // const { id } = req.body;
+
   try {
     const user: Staff = (
       await (await req.db())
@@ -39,7 +39,7 @@ export const getStaffById = async (req: Request, res: Response, id: string) => {
         .execute("GET_INFO_NHANVIEN_BY_ID")
     ).recordset[0];
 
-    console.log(user);
+
     return user;
   } catch (error) {
     if (error instanceof Error) {

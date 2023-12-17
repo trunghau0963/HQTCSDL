@@ -4,10 +4,6 @@ import * as elements from "typed-html";
 import AdminPage from "../../app/admin/admin";
 import DashBoard from "../../app/admin/Dashboard/Dashboard";
 import DrugPage from "../../app/admin/Drugs/Drugs";
-import Schedule from "../../app/admin/Schedule/Schedule";
-import AddAppointmentPage from "../../app/admin/Schedule/AddAppointment";
-import DeleteAppointmentPage from "../../app/admin/Schedule/DeleteAppointment";
-import EditAppointmentPage from "../../app/admin/Schedule/EditAppointment";
 import DentistPage from "../../app/admin/Dashboard/Dentists/Dentist";
 import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
@@ -23,6 +19,7 @@ import {
   AppointmentDetailProps,
   Service,
   Invoice,
+  AppointmentDetailProps,
 } from "../../model/model";
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -62,6 +59,8 @@ import {
 } from "../../controller/appoinmentController";
 
 import { getInvoice } from "../../controller/invoiceController";
+import ListAccounts from "../../app/admin/Account/ListAccount";
+import EditProfile from "../../app/patient/Profile/EditProfile";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
@@ -90,26 +89,6 @@ adminRouter.delete("/drug", admin, async (req: any, res: any) => {
 });
 adminRouter.put("/drug", admin, async (req: any, res: any) => {
   updateInfoDrug(req, res, "admin");
-});
-
-adminRouter.get("/schedule", admin, async (req, res) => {
-  let data: AppointmentDetailProps[] = [];
-  try {
-    data = (await getAppointment(req, res)) || ([] as AppointmentDetailProps[]);
-  } catch {}
-  return res.send(<Schedule />);
-});
-
-adminRouter.post("/schedule/add_appointment", admin, async (req, res) => {
-  return res.send(<AddAppointmentPage />);
-});
-
-adminRouter.get("/schedule/delete_appointment", admin, async (req, res) => {
-  return res.send(<DeleteAppointmentPage />);
-});
-
-adminRouter.get("/schedule/edit_appointment", admin, async (req, res) => {
-  return res.send(<EditAppointmentPage />);
 });
 
 adminRouter.get("/dentist", admin, async (req, res) => {
@@ -174,6 +153,74 @@ adminRouter.get("/information", admin, async (req, res) => {
     admin = (await getAdminById(req, res, data.user.MAQT)) as Admin;
   } catch {}
   return res.send(<ProfilePage data={admin} />);
+});
+
+adminRouter.get("/home/edit-profile", admin, async (req, res) => {
+  let data: Admin | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const admin =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    data = (await getAdminById(req, res, admin.user.MAQT)) as Admin;
+  } catch {}
+  return res.send(<EditProfile data={data} role={'admin'}/>);
+});
+
+adminRouter.put("/home/edit-profile", admin, async (req, res) => {
+  const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+
+  const data: Patient = (
+    await (await req.db())
+      .input("MAQT", MA)
+      .input("MATKHAU", MATKHAU)
+      .input("HOTEN", HOTEN)
+      .input("NGAYSINH", NGAYSINH)
+      .input("DIACHI", DIACHI)
+      .execute("UPDATE_INFO_QUANTRI")
+  ).recordset[0];
+  console.log("aaa");
+
+  return res
+    .header("HX-Redirect", `/admin/information`)
+    .json("Directed")
+    .status(200);
+});
+
+adminRouter.get("/manageAccount", admin, async (req, res) => {
+  const patients: Patient[] = (
+    await (await req.db()).execute("GET_INFO_BENHNHAN")
+  ).recordset;
+  const staffs: Staff[] = (await (await req.db()).execute("GET_INFO_NHANVIEN"))
+    .recordset;
+  const dentists: Dentist[] = (await (await req.db()).execute("GET_INFO_NHASI"))
+    .recordset;
+  return res.send(
+    <ListAccounts patients={patients} dentists={dentists} staffs={staffs} />
+  );
+});
+
+adminRouter.put("/manageAccount", admin, async (req, res) => {
+  const { id, role, isBlock } = req.body;
+
+  if (isBlock === "false") {
+    const result: Dentist[] = (
+      await (await req.db())
+        .input("MA", id)
+        .input("ROLE", role)
+        .execute("BLOCK_ACCOUNT")
+    ).recordset;
+  } else {
+    const result: Dentist[] = (
+      await (await req.db())
+        .input("MA", id)
+        .input("ROLE", role)
+        .execute("UNBLOCK_ACCOUNT")
+    ).recordset;
+  }
+  return res
+    .header("HX-Redirect", `/admin/manageAccount`)
+    .json("Directed")
+    .status(200);
 });
 
 export default adminRouter;

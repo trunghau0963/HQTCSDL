@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../../layouts/baseHtml";
-const Calendar = () => {
+const Calendar = ({role}:{role:string}) => {
   return (
     <div>
       <div class="calendar bg-light rounded p-3 shadow-lg w-100">
@@ -91,7 +91,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="1"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 1}"
               hx-target=".schedule"
             >
@@ -104,7 +104,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="2"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 2}"
               hx-target=".schedule"
             >
@@ -117,7 +117,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="3"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 3}"
               hx-target=".schedule"
             >
@@ -130,7 +130,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="4"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 4}"
               hx-target=".schedule"
             >
@@ -143,7 +143,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="5"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 5}"
               hx-target=".schedule"
             >
@@ -156,7 +156,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="6"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 6}"
               hx-target=".schedule"
             >
@@ -169,7 +169,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="7"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 7}"
               hx-target=".schedule"
             >
@@ -184,7 +184,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="8"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 8}"
               hx-target=".schedule"
             >
@@ -197,7 +197,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="9"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 9}"
               hx-target=".schedule"
             >
@@ -210,7 +210,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="10"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 10}"
               hx-target=".schedule"
             >
@@ -223,7 +223,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="11"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 11}"
               hx-target=".schedule"
             >
@@ -236,7 +236,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="12"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 12}"
               hx-target=".schedule"
             >
@@ -249,7 +249,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="13"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 13}"
               hx-target=".schedule"
             >
@@ -262,7 +262,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="14"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 14}"
               hx-target=".schedule"
             >
@@ -277,7 +277,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="15"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 15}"
               hx-target=".schedule"
             >
@@ -290,7 +290,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="16"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 16}"
               hx-target=".schedule"
             >
@@ -303,7 +303,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="17"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 17}"
               hx-target=".schedule"
             >
@@ -316,7 +316,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="18"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 18}"
               hx-target=".schedule"
             >
@@ -329,7 +329,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="19"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 19}"
               hx-target=".schedule"
             >
@@ -342,7 +342,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="20"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 20}"
               hx-target=".schedule"
             >
@@ -355,7 +355,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="21"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 21}"
               hx-target=".schedule"
             >
@@ -370,7 +370,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="22"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 22}"
               hx-target=".schedule"
             >
@@ -383,7 +383,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="23"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 23}"
               hx-target=".schedule"
             >
@@ -396,7 +396,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="24"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 24}"
               hx-target=".schedule"
             >
@@ -409,7 +409,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="25"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 25}"
               hx-target=".schedule"
             >
@@ -422,7 +422,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="26"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 26}"
               hx-target=".schedule"
             >
@@ -435,7 +435,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="27"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 27}"
               hx-target=".schedule"
             >
@@ -448,7 +448,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="28"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 28}"
               hx-target=".schedule"
             >
@@ -463,7 +463,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="29"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 29}"
               hx-target=".schedule"
             >
@@ -476,7 +476,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="30"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 30}"
               hx-target=".schedule"
             >
@@ -489,7 +489,7 @@ const Calendar = () => {
               data-target=".appoinment"
               name="day"
               value="31"
-              hx-get="/patient/schedule/date"
+              hx-get={`/${role}/schedule/date`}
               hx-vars="{'year': document.querySelector('.year').value, 'mon': document.querySelector('.month').value, 'day': 31}"
               hx-target=".schedule"
             >

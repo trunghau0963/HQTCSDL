@@ -101,11 +101,11 @@ export const ADMINNAVIGATIONS = (baseUrl: string) => [
     slug: "dashboard",
   },
   {
-    title: "Schedule",
+    title: "Accounts",
     icon: "/icons/schedule.svg",
-    url: `${baseUrl}/schedule`,
+    url: `${baseUrl}/manageAccount`,
     color: "btn btn-outline-primary",
-    slug: "schedule",
+    slug: "manageAccount",
   },
   {
     title: "Service",
