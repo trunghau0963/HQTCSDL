@@ -1,18 +1,32 @@
 import * as elements from "typed-html";
-import StaffComponent from "../../../../components/Admin/Staff/staff";
 import AdminPage from "../../admin";
-import { Staff } from "../../../../model/model";
+import AccountPage from "../../Account/Account";
+import { Patient, Staff } from "../../../../model/model";
+import { AddPatient } from "../../../../components/Admin/Patient/functionPatient";
 
 type StaffProps = {
-  Data: Staff[];
+  staffs: Staff[];
 };
 
-const StaffPage = ({ Data }: StaffProps) => {
+const DentistPage = ({ staffs }: StaffProps) => {
+  // console.log('dentist page: ', Data);
   return (
     <AdminPage>
-      <StaffComponent Data={Data}/>
+      <div class="main-wrapper h-100">
+        <div class="page-wrapper">
+          <div class="content">
+            <div class="row">
+              <div class="col-sm-4 col-3">
+                <h4 class="page-title">Staff List</h4>
+              </div>
+            </div>
+            <AddPatient />
+            <AccountPage users={staffs} role={"NHANVIEN"} />
+          </div>
+        </div>
+      </div>
     </AdminPage>
   );
 };
 
-export default StaffPage;
+export default DentistPage;

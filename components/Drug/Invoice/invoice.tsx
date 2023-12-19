@@ -82,7 +82,7 @@ const InvoiceComponent = ({ Data }: InvoiceProps) => {
                           <div class="d-flex">
                             {data.HOTENBENHNHAN}
                             <img
-                              src="/toolkit/warning.svg"
+                              src="/icons/warning.svg"
                               class="mx-2"
                               style="width: 20px; height: 20px;"
                               data-bs-toggle="tooltip"

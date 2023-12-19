@@ -1,8 +1,6 @@
 import * as elements from "typed-html";
-import { Staff } from "../../../model/model";
-type StaffProps = {
-  Data: Staff;
-};
+import { Dentist, Patient, Staff } from "../../../model/model";
+type User = Patient | Dentist | Staff;
 export const AddStaff = () => {
   return (
     <div>
@@ -151,192 +149,31 @@ export const AddStaff = () => {
     </div>
   );
 };
-export const DeleteStaff = ({ Data }: StaffProps) => {
-  return (
-    <div>
-      <button
-        type="button"
-        class="btn btn-link text-decoration-none"
-        id={`delete-staff-${Data.MANV}-button`}
-        data-bs-toggle="modal"
-        data-bs-target={`#delete-staff-${Data.MANV}`}
-        aria-controls={`delete-staff-${Data.MANV}`}
-      >
-        <i class="bi bi-eraser"></i>
-        Delete
-      </button>
 
-      <div
-         class="modal fade"
-         id={`delete-staff-${Data.MANV}`}
-         tabindex="0"
-         role="dialog"
-         aria-labelledby={`delete-staff-${Data.MANV}-button`}
-         aria-hidden="true"
-      >
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5 page-title" id="edit-staffLabel">
-                Delete staff
-              </h1>
-              <button class="btn btn-secondary" data-bs-dismiss="modal">
-                Close
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-lg-8 offset-lg-2">
-                  <form
-                    id="delete-staff-form"
-                    hx-delete="/admin/staff"
-                    hx-target="#delete-staff-form"
-                    hx-confirm="Are you sure you want to delete?"
-                    hx-vals={`{"id": ${Data.MANV}}`}
-                  >
-                    <div class="row">
-                      <div class="row">
-                        <div class="form-group">
-                          <label class="form-label font-weight-bold" for="id">
-                            ID <span class="text-danger"></span>
-                          </label>
-                          <input
-                            type="text"
-                            id="id"
-                            class="form-control form-control-lg"
-                            name="id"
-                            required=""
-                            value={Data.MANV}
-                            placeholder={Data.MANV}
-                            readonly="true"
-                          />
-                        </div>
-                      </div>
-                      <div class="row my-3">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label
-                              class="form-label font-weight-bold"
-                              for="name"
-                            >
-                              Name <span class="text-danger">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              id="name"
-                              class="form-control form-control-lg"
-                              name="name"
-                              required=""
-                              value={Data.HOTEN}
-                              placeholder={Data.HOTEN}
-                            />
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label
-                              class="form-label font-weight-bold"
-                              for="password"
-                            >
-                              Password<span class="text-danger">*</span>
-                            </label>
-                            <input
-                              type="password"
-                              id="password"
-                              class="form-control form-control-lg"
-                              name="password"
-                              value={Data.MATKHAU}
-                              required="********"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row my-3">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <div class="form-outline mb-4">
-                              <label
-                                class="form-label font-weight-bold"
-                                for="dob"
-                              >
-                                Date of Birth
-                              </label>
-                              <input
-                                type="date"
-                                id="dob"
-                                class="form-control form-control-lg"
-                                name="dob"
-                                required=""
-                                max={new Date().toISOString().split("T")[0]}
-                                value={
-                                  Data.NGAYSINH.toISOString().split("T")[0]
-                                }
-                                placeholder={Data.NGAYSINH.toDateString()}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label
-                              class="form-label font-weight-bold"
-                              for="address"
-                            >
-                              Address
-                            </label>
-                            <input
-                              id="address"
-                              class="form-control form-control-lg"
-                              name="address"
-                              required=""
-                              value={Data.DIACHI}
-                              placeholder={Data.DIACHI}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center m-t-20 text-center">
-                      <button
-                        type="submit"
-                        hx-target="#delete-staff-form"
-                        hx-swap="outerHTML"
-                        class="btn btn-tertiary btn-block btn-lg gradient-custom-4 text-body rounded-pill"
-                      >
-                        Delete staff
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-export const EditStaff = ({ Data }: StaffProps) => {
+export const EditStaff = ({ data }: { data: User }) => {
+    const id: string | undefined =
+    (data.hasOwnProperty("MANS") && "MANS" in data && data.MANS) ||
+    (data.hasOwnProperty("MABN") && "MABN" in data && data.MABN) ||
+    (data.hasOwnProperty("MANV") && "MANV" in data && data.MANV) || undefined;
   return (
     <div>
       <button
          type="button"
          class="btn btn-link text-decoration-none"
-         id={`update-staff-${Data.MANV}-button`}
+         id={`update-staff-${id}-button`}
          data-bs-toggle="modal"
-         data-bs-target={`#update-staff-${Data.MANV}`}
-         aria-controls={`update-staff-${Data.MANV}`}
+         data-bs-target={`#update-staff-${id}`}
+         aria-controls={`update-staff-${id}`}
       >
         <i class="bi bi-pencil-square"></i> Edit
       </button>
 
       <div
        class="modal fade"
-       id={`update-staff-${Data.MANV}`}
+       id={`update-staff-${id}`}
        tabindex="0"
        role="dialog"
-       aria-labelledby={`update-staff-${Data.MANV}-button`}
+       aria-labelledby={`update-staff-${id}-button`}
        aria-hidden="true"
       >
         <div class="modal-dialog modal-lg">
@@ -356,7 +193,7 @@ export const EditStaff = ({ Data }: StaffProps) => {
                     <form
                       id="update-staff-form"
                       hx-put="/admin/staff"
-                      hx-vals={`{"id": ${Data.MANV}}`}
+                      hx-vals={`{"id": ${id}}`}
                     >
                       <div class="row">
                         <div class="row">
@@ -370,8 +207,8 @@ export const EditStaff = ({ Data }: StaffProps) => {
                               class="form-control form-control-lg"
                               name="id"
                               required=""
-                              value={Data.MANV}
-                              placeholder={Data.MANV}
+                              value={id}
+                              placeholder={id}
                               readonly="true"
                             />
                           </div>
@@ -391,8 +228,8 @@ export const EditStaff = ({ Data }: StaffProps) => {
                                 class="form-control form-control-lg"
                                 name="name"
                                 required=""
-                                value={Data.HOTEN}
-                                placeholder={Data.HOTEN}
+                                value={data.HOTEN}
+                                placeholder={data.HOTEN}
                               />
                             </div>
                           </div>
@@ -409,7 +246,7 @@ export const EditStaff = ({ Data }: StaffProps) => {
                                 id="password"
                                 class="form-control form-control-lg"
                                 name="password"
-                                value={Data.MATKHAU}
+                                value={data.MATKHAU}
                                 required="********"
                               />
                             </div>
@@ -433,9 +270,9 @@ export const EditStaff = ({ Data }: StaffProps) => {
                                   required=""
                                   max={new Date().toISOString().split("T")[0]}
                                   value={
-                                    Data.NGAYSINH.toISOString().split("T")[0]
+                                    data.NGAYSINH.toISOString().split("T")[0]
                                   }
-                                  placeholder={Data.NGAYSINH.toDateString()}
+                                  placeholder={data.NGAYSINH.toDateString()}
                                 />
                               </div>
                             </div>
@@ -453,8 +290,8 @@ export const EditStaff = ({ Data }: StaffProps) => {
                                 class="form-control form-control-lg"
                                 name="address"
                                 required=""
-                                value={Data.DIACHI}
-                                placeholder={Data.DIACHI}
+                                value={data.DIACHI}
+                                placeholder={data.DIACHI}
                               />
                             </div>
                           </div>
@@ -466,7 +303,7 @@ export const EditStaff = ({ Data }: StaffProps) => {
                           type="submit"
                           hx-target="#update-staff-form"
                           hx-swap="outerHTML"
-                          class="btn btn-tertiary btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                          class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
                         >
                           Update staff
                         </button>

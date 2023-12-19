@@ -1,15 +1,13 @@
 import * as elements from "typed-html";
-import { Patient } from "../../../model/model";
+import { Dentist, Patient, Staff } from "../../../model/model";
 
-interface PatientProps {
-  Data: Patient;
-}
+type User = Patient | Dentist | Staff;
 
 export const AddPatient = () => {
   return (
     <div>
       <a
-        class="text-center btn btn-tertiary btn-rounded float-right w-100 py-3 text-white"
+        class="text-center btn btn-warning btn-rounded float-right w-100 py-3 text-white"
         data-toggle="modal"
         data-target=".add-patient"
       >
@@ -136,7 +134,7 @@ export const AddPatient = () => {
                             type="submit"
                             hx-target="#add-patient-form"
                             hx-swap="outerHTML"
-                            class="btn btn-tertiary btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                            class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
                           >
                             Create Patient
                           </button>
@@ -153,192 +151,33 @@ export const AddPatient = () => {
     </div>
   );
 };
-export const DeletePatient = ({ Data }: PatientProps) => {
+
+export const EditPatient = ({ data }: { data: User }) => {
+
+  const id: string | undefined =
+    (data.hasOwnProperty("MANS") && "MANS" in data && data.MANS) ||
+    (data.hasOwnProperty("MABN") && "MABN" in data && data.MABN) ||
+    (data.hasOwnProperty("MANV") && "MANV" in data && data.MANV) || undefined;
+
   return (
     <div>
       <button
         type="button"
         class="btn btn-link text-decoration-none"
-        id={`delete-patient-${Data.MABN}-button`}
+        id={`update-patient-${id}-button`}
         data-bs-toggle="modal"
-        data-bs-target={`#delete-patient-${Data.MABN}`}
-        aria-controls={`delete-patient-${Data.MABN}`}
-      >
-        <i class="bi bi-eraser"></i>
-        Delete
-      </button>
-
-      <div
-        class="modal fade"
-        id={`delete-patient-${Data.MABN}`}
-        tabindex="0"
-        role="dialog"
-        aria-labelledby={`delete-patient-${Data.MABN}-button`}
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5 page-title" id="edit-patientLabel">
-                Delete patient
-              </h1>
-              <button class="btn btn-secondary" data-bs-dismiss="modal">
-                Close
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-lg-8 offset-lg-2">
-                  <form
-                    id="delete-patient-form"
-                    hx-delete="/admin/patient"
-                    hx-target="#delete-patient-form"
-                    hx-confirm="Are you sure you want to delete?"
-                    hx-vals={`{"id": ${Data.MABN}}`}
-                  >
-                    <div class="row">
-                      <div class="row">
-                        <div class="form-group">
-                          <label class="form-label font-weight-bold" for="id">
-                            ID <span class="text-danger"></span>
-                          </label>
-                          <input
-                            type="text"
-                            id="id"
-                            class="form-control form-control-lg"
-                            name="id"
-                            required=""
-                            value={Data.MABN}
-                            placeholder={Data.MABN}
-                            readonly="true"
-                          />
-                        </div>
-                      </div>
-                      <div class="row my-3">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label
-                              class="form-label font-weight-bold"
-                              for="name"
-                            >
-                              Name <span class="text-danger">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              id="name"
-                              class="form-control form-control-lg"
-                              name="name"
-                              required=""
-                              value={Data.HOTEN}
-                              placeholder={Data.HOTEN}
-                            />
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label
-                              class="form-label font-weight-bold"
-                              for="password"
-                            >
-                              Password<span class="text-danger">*</span>
-                            </label>
-                            <input
-                              type="password"
-                              id="password"
-                              class="form-control form-control-lg"
-                              name="password"
-                              value={Data.MATKHAU}
-                              required="********"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row my-3">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <div class="form-outline mb-4">
-                              <label
-                                class="form-label font-weight-bold"
-                                for="dob"
-                              >
-                                Date of Birth
-                              </label>
-                              <input
-                                type="date"
-                                id="dob"
-                                class="form-control form-control-lg"
-                                name="dob"
-                                required=""
-                                max={new Date().toISOString().split("T")[0]}
-                                value={
-                                  Data.NGAYSINH.toISOString().split("T")[0]
-                                }
-                                placeholder={Data.NGAYSINH.toDateString()}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label
-                              class="form-label font-weight-bold"
-                              for="address"
-                            >
-                              Address
-                            </label>
-                            <input
-                              id="address"
-                              class="form-control form-control-lg"
-                              name="address"
-                              required=""
-                              value={Data.DIACHI}
-                              placeholder={Data.DIACHI}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center m-t-20 text-center">
-                      <button
-                        type="submit"
-                        hx-target="#delete-patient-form"
-                        hx-swap="outerHTML"
-                        class="btn btn-tertiary btn-block btn-lg gradient-custom-4 text-body rounded-pill"
-                      >
-                        Delete Patient
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-export const EditPatient = ({ Data }: PatientProps) => {
-  return (
-    <div>
-      <button
-        type="button"
-        class="btn btn-link text-decoration-none"
-        id={`update-patient-${Data.MABN}-button`}
-        data-bs-toggle="modal"
-        data-bs-target={`#update-patient-${Data.MABN}`}
-        aria-controls={`update-patient-${Data.MABN}`}
+        data-bs-target={`#update-patient-${id}`}
+        aria-controls={`update-patient-${id}`}
       >
         <i class="bi bi-pencil-square"></i> Edit
       </button>
 
       <div
        class="modal fade"
-       id={`update-patient-${Data.MABN}`}
+       id={`update-patient-${id}`}
        tabindex="0"
        role="dialog"
-       aria-labelledby={`update-patient-${Data.MABN}-button`}
+       aria-labelledby={`update-patient-${id}-button`}
        aria-hidden="true"
       >
         <div class="modal-dialog modal-lg">
@@ -358,7 +197,7 @@ export const EditPatient = ({ Data }: PatientProps) => {
                     <form
                       id="update-patient-form"
                       hx-put="/admin/patient"
-                      hx-vals={`{"id": ${Data.MABN}}`}
+                      hx-vals={`{"id": ${id}}`}
                     >
                       <div class="row">
                         <div class="row">
@@ -372,8 +211,8 @@ export const EditPatient = ({ Data }: PatientProps) => {
                               class="form-control form-control-lg"
                               name="id"
                               required=""
-                              value={Data.MABN}
-                              placeholder={Data.MABN}
+                              value={id}
+                              placeholder={id}
                               readonly="true"
                             />
                           </div>
@@ -393,8 +232,8 @@ export const EditPatient = ({ Data }: PatientProps) => {
                                 class="form-control form-control-lg"
                                 name="name"
                                 required=""
-                                value={Data.HOTEN}
-                                placeholder={Data.HOTEN}
+                                value={data.HOTEN}
+                                placeholder={data.HOTEN}
                               />
                             </div>
                           </div>
@@ -411,7 +250,7 @@ export const EditPatient = ({ Data }: PatientProps) => {
                                 id="password"
                                 class="form-control form-control-lg"
                                 name="password"
-                                value={Data.MATKHAU}
+                                value={data.MATKHAU ? data.MATKHAU : ""}
                                 required="********"
                               />
                             </div>
@@ -435,9 +274,9 @@ export const EditPatient = ({ Data }: PatientProps) => {
                                   required=""
                                   max={new Date().toISOString().split("T")[0]}
                                   value={
-                                    Data.NGAYSINH.toISOString().split("T")[0]
+                                    data.NGAYSINH.toISOString().split("T")[0]
                                   }
-                                  placeholder={Data.NGAYSINH.toDateString()}
+                                  placeholder={data.NGAYSINH.toDateString()}
                                 />
                               </div>
                             </div>
@@ -455,8 +294,8 @@ export const EditPatient = ({ Data }: PatientProps) => {
                                 class="form-control form-control-lg"
                                 name="address"
                                 required=""
-                                value={Data.DIACHI}
-                                placeholder={Data.DIACHI}
+                                value={data.DIACHI}
+                                placeholder={data.DIACHI}
                               />
                             </div>
                           </div>
@@ -468,7 +307,7 @@ export const EditPatient = ({ Data }: PatientProps) => {
                           type="submit"
                           hx-target="#update-patient-form"
                           hx-swap="outerHTML"
-                          class="btn btn-tertiary btn-block btn-lg gradient-custom-4 text-body rounded-pill"
+                          class="btn btn-warning btn-block btn-lg gradient-custom-4 text-body rounded-pill"
                         >
                           Update Patient
                         </button>

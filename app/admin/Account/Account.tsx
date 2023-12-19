@@ -3,6 +3,9 @@ import { Staff, Patient, Dentist } from "../../../model/model";
 import { html2pdf } from "html2pdf-ts";
 import { number } from "joi";
 import AdminPage from "../admin";
+import { EditDentist } from "../../../components/Admin/Dentist/functionDentist";
+import { EditStaff } from "../../../components/Admin/Staff/functionStaff";
+import { EditPatient } from "../../../components/Admin/Patient/functionPatient";
 type User = Patient | Dentist | Staff;
 const AccountPage = ({ users, role }: { users: User[]; role: string }) => {
   return (
@@ -41,10 +44,11 @@ const AccountPage = ({ users, role }: { users: User[]; role: string }) => {
                   <th>Date of birth</th>
                   <th>Address</th>
                   <th>Is block ?</th>
+                  <th>Edit</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((data) => (
+                {users.map((data:User) => (
                   <tr id="service">
                     <td>
                       {(data.hasOwnProperty("MANS") && "MANS" in data && (
@@ -87,6 +91,7 @@ const AccountPage = ({ users, role }: { users: User[]; role: string }) => {
                           'isBlock': '${data.DAKHOA}'}`}
                         />
                       </div>
+                      <td>{(role === "NHASI" && <EditDentist data={data}/>) || ((role === "NHANVIEN" && <EditStaff data={data}/>)) || ((role === "BENHNHAN" && <EditPatient data={data}/>))}</td>
                     </td>
                   </tr>
                 ))}
