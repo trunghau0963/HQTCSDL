@@ -1,6 +1,5 @@
 import { Router } from "express";
 import * as elements from "typed-html";
-import Home from "../../app/patient/Home/Home";
 import Drug from "../../app/patient/Drug/Drug";
 import Dashboard from "../../app/patient/Dashboard/Dashboard";
 import Dentist from "../../app/patient/Dentist/Dentist";
@@ -19,6 +18,7 @@ import {
   Schedule,
   drugProps,
   serviceIndicators,
+  Service,
 } from "../../model/model";
 import middlewareToken from "../../middleware/tokenMiddleware";
 import { getPatientById } from "../../controller/patientController";
@@ -41,12 +41,31 @@ import {
   getInvoiceDetailByIdWithHtmx,
 } from "../../controller/invoiceController";
 import { getPrescriptionById } from "../../controller/prescriptionController";
-import { getServiceById } from "../../controller/serviceController";
+import { getService, getServiceById } from "../../controller/serviceController";
 import { getServiceIndicatorsById } from "../../controller/serviceIndicatorsController";
 import { getAllDentist } from "../../controller/dentistController";
 import EditProfile from "../../app/patient/Profile/EditProfile";
+import PatientPage from "../../app/patient/patient";
+import HomeComponent from "../../components/Home/Home";
 
 const patientRouter = Router();
+
+patientRouter.get("/home", patient, async (req, res) => {
+  let listDentist: DentistProps[] = [];
+  let listService: Service[] = [];
+
+  listDentist = (await getAllDentist(req, res)) as DentistProps[];
+  listService = (await getService(req, res)) as Service[];
+  return res.send(
+    <PatientPage>
+      <HomeComponent
+        listDentist={listDentist}
+        listService={listService}
+        role={"patient"}
+      />
+    </PatientPage>
+  );
+});
 
 patientRouter.get("/dashboard", patient, async (req, res) => {
   return res.send(<Dashboard />);
@@ -308,14 +327,6 @@ patientRouter.get("/appointment/id", patient, async (req, res) => {
   }
 });
 
-patientRouter.get("/home", patient, async (req, res) => {
-  try {
-    return res.send(<Home />);
-  } catch (err) {
-    console.error(err);
-  }
-});
-
 patientRouter.get("/drug", patient, async (req, res) => {
   try {
     const drugList: drugProps[] = (
@@ -539,8 +550,8 @@ patientRouter.get("/appointment", patient, async (req, res) => {
     const appointments: AppointmentDetailProps[] =
       (await getAppointmentNotDone(req, res, MABN)) ?? [];
 
-  const appointmentsFinished: AppointmentDetail[] =
-    (await getAppointmentIsDoneOfPatient(req, res, MABN)) ?? [];
+    const appointmentsFinished: AppointmentDetail[] =
+      (await getAppointmentIsDoneOfPatient(req, res, MABN)) ?? [];
 
     return res.send(
       <Appointment

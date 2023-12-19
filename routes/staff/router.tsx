@@ -16,6 +16,7 @@ import {
   Service,
   AppointmentDetailProps,
   serviceIndicators,
+  Dentist,
 } from "../../model/model";
 import { getStaffById } from "../../controller/staffController";
 import ProfilePage from "../../app/staff/Profile/Profile";
@@ -64,22 +65,35 @@ import {
   updateService,
 } from "../../controller/serviceController";
 import AddInvoice from "../../app/staff/Invoice/add-invoice";
-import { getIdAllDentist } from "../../controller/dentistController";
+import {
+  getAllDentist,
+  getIdAllDentist,
+} from "../../controller/dentistController";
 import { getAppointmentIsDone } from "../../controller/appoinmentController";
 import Schedule from "../../app/staff/Schedule/Schedule";
 import { getScheduleIsFree } from "../../controller/scheduleController";
 import AddAppointment from "../../components/Appointment/add_appointment";
 import PreviewAppointment from "../../app/staff/Invoice/Preview/previewAppointmentCard";
 import EditProfile from "../../app/patient/Profile/EditProfile";
+import HomeComponent from "../../components/Home/Home";
 
 const staffRouter = Router();
 
-staffRouter.get("/", staff, async (req, res) => {
-  try {
-    return res.send(<StaffPage />);
-  } catch (error) {
-    console.log(error);
-  }
+staffRouter.get("/home", staff, async (req, res) => {
+  let listDentist: Dentist[] = [];
+  let listService: Service[] = [];
+
+  listDentist = (await getAllDentist(req, res)) as Dentist[];
+  listService = (await getService(req, res)) as Service[];
+  return res.send(
+    <StaffPage>
+      <HomeComponent
+        listDentist={listDentist}
+        listService={listService}
+        role={"staff"}
+      />
+    </StaffPage>
+  );
 });
 
 staffRouter.get("/dashboard", staff, async (req, res) => {

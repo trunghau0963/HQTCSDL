@@ -69,6 +69,32 @@ export const deleteAppointment = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteAppointmentHtmx = async (req: Request, res: Response) => {
+  try {
+    const { MANS, MABN, NGAYKHAM, GIOKHAM } = req.body;
+
+    console.log("query", req.body);
+
+    const user = await (await req.db())
+      .input("MANS", MANS)
+      .input("NGAYKHAM", NGAYKHAM)
+      .input("GIOKHAM", GIOKHAM)
+      .execute("DROP_LICHKHAM");
+    return res
+      .header("HX-Redirect", "/dentist/schedule")
+      .json({ message: "Success" })
+      .status(200);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+};
+
 export const updateAppointment = async (req: Request, res: Response) => {
   try {
     const input = req.body;

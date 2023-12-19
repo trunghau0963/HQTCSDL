@@ -4,6 +4,7 @@ import {
   AddAppointment,
   AddScheduleFree,
   GetAppointment,
+  DeleteAppointment,
 } from "./functionSchedule";
 type ScheduleProps = {
   Free: Schedule[];
@@ -130,6 +131,7 @@ const ScheduleComponent = ({
                             <GetAppointment
                               idDentist={data.MANS}
                               date={data.NGAYKHAM}
+                              time={data.GIOKHAM}
                               idx={idx}
                               isDone={true}
                             />
@@ -164,6 +166,7 @@ const ScheduleComponent = ({
                             <GetAppointment
                               idDentist={data.MANS}
                               date={data.NGAYKHAM}
+                              time={data.GIOKHAM}
                               idx={idx}
                               isDone={false}
                             />

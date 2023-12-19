@@ -10,7 +10,7 @@ export const Guset = (baseUrl: string): ToolItemsProps[] => [
   {
     title: "Dentist",
     icon: "/icons/dentist.svg",
-    url: `${baseUrl}/dentist`,
+    url: "#dentist",
     color: "btn btn-outline-success",
   },
   {
@@ -21,7 +21,7 @@ export const Guset = (baseUrl: string): ToolItemsProps[] => [
   },
 ];
 
-export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
+export const PATIENTNAVIGATIONS = (baseUrl: string) => [
   {
     title: "Dashboard",
     icon: "/icons/dashboard.svg",
@@ -29,15 +29,17 @@ export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
     color: "btn btn-outline-warning",
   },
   {
+    title: "Home",
+    icon: "/icons/home.svg",
+    url: `${baseUrl}/home`,
+    color: "btn btn-outline-info",
+  },
+  {
     title: "Schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,
     color: "btn btn-outline-primary",
   },
-];
-
-export const PATIENTNAVIGATIONS = (baseUrl: string) => [
-  ...TOOLS(baseUrl),
   {
     title: "Drugs",
     icon: "/icons/drug.svg",
@@ -69,7 +71,18 @@ export const PATIENTNAVIGATIONS = (baseUrl: string) => [
 ];
 
 export const DENTISTNAVIGATIONS = (baseUrl: string) => [
-  ...TOOLS(baseUrl),
+  {
+    title: "Dashboard",
+    icon: "/icons/dashboard.svg",
+    url: `${baseUrl}/dashboard`,
+    color: "btn btn-outline-warning",
+  },
+  {
+    title: "Schedule",
+    icon: "/icons/schedule.svg",
+    url: `${baseUrl}/schedule`,
+    color: "btn btn-outline-primary",
+  },
   {
     title: "Patient",
     icon: "/icons/patient.svg",
@@ -79,8 +92,25 @@ export const DENTISTNAVIGATIONS = (baseUrl: string) => [
   },
 ];
 
-export const NAVIGATIONS = (baseUrl: string) => [
-  ...TOOLS(baseUrl),
+export const STAFFNAVIGATIONS = (baseUrl: string) => [
+  {
+    title: "Dashboard",
+    icon: "/icons/dashboard.svg",
+    url: `${baseUrl}/dashboard`,
+    color: "btn btn-outline-warning",
+  },
+  {
+    title: "Home",
+    icon: "/icons/home.svg",
+    url: `${baseUrl}/home`,
+    color: "btn btn-outline-info",
+  },
+  {
+    title: "Schedule",
+    icon: "/icons/schedule.svg",
+    url: `${baseUrl}/schedule`,
+    color: "btn btn-outline-primary",
+  },
   {
     title: "Service",
     icon: "/icons/service.svg",

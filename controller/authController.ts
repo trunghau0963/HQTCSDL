@@ -77,7 +77,7 @@ export const SigninController = async (req: Request, res: Response) => {
 
 export const LogoutController = async (req: Request, res: Response) => {
   return res
-    .header("HX-Redirect", "/login")
+    .header("HX-Redirect", "/auth/login")
     .clearCookie("token")
     .status(200)
     .json("Logged out successfully!")

@@ -110,17 +110,6 @@ export const dentist = async (
 
 const authRouter = Router();
 
-authRouter.get("/", async (req, res) => {
-  let listDentist: Dentist[] = [];
-
-  listDentist = (await getAllDentist(req, res)) as Dentist[];
-  return res.send(
-    <LandingPage>
-      <HomeComponent listDentist={listDentist} />
-    </LandingPage>
-  );
-});
-
 authRouter.get("/signup", async (req, res) => {
   return res.send(<Signup />);
 });

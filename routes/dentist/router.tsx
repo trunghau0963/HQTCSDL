@@ -25,6 +25,7 @@ import {
   addSchedule,
 } from "../../controller/scheduleController";
 import {
+  deleteAppointmentHtmx,
   directNewUrl,
   getAppointmentIsDoneOfDentist,
   getAppointmentNotDoneOfDentist,
@@ -883,6 +884,12 @@ dentistRouter.post(
   async (req, res) => {
     registerAppointment(req, res, "/dentist/schedule");
   }
+);
+
+dentistRouter.post(
+  "/schedule/delete-appointment",
+  dentist,
+  deleteAppointmentHtmx
 );
 
 dentistRouter.post("/schedule/add-action", dentist, addInvoice);

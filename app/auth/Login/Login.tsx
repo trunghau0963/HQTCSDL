@@ -27,7 +27,7 @@ const Login = () => {
               <div class="col-lg-6 mb-5 mb-lg-0">
                 <div class="card">
                   <div class="card-body py-5 px-md-5">
-                    <form id="login-form" hx-post="/login">
+                    <form id="login-form" hx-post="/auth/login">
                       <div class="form-outline mb-4">
                         <input
                           type="text"

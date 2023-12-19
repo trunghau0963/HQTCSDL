@@ -1,321 +1,96 @@
 import * as elements from "typed-html";
-import {
-  drugProps,
-} from "../../model/model";
-import { PatientProps, DentistProps, StaffProps } from "../../model/temp";
-export const DentistData: DentistProps[] = [
-  {
-    id: "1",
-    name: "Dr. Smith",
-    phone: "123-456-7890",
-    password: "password123",
-    gender: "Male",
-    address: "123 Main St, City",
-    isLocked: false,
-  },
-  {
-    id: "2",
-    name: "Dr. Johnson",
-    phone: "987-654-3210",
-    password: "securePass",
-    gender: "Female",
-    address: "456 Oak St, Town",
-    isLocked: false,
-  },
-  {
-    id: "3",
-    name: "Dr. Davis",
-    phone: "555-123-4567",
-    password: "letMeIn",
-    gender: "Male",
-    address: "789 Pine St, Village",
-    isLocked: true,
-  },
-  {
-    id: "4",
-    name: "Dr. Miller",
-    phone: "333-999-8888",
-    password: "password456",
-    gender: "Female",
-    address: "987 Elm St, City",
-    isLocked: false,
-  },
-  {
-    id: "5",
-    name: "Dr. Wilson",
-    phone: "777-222-1111",
-    password: "access123",
-    gender: null,
-    address: null,
-    isLocked: true,
-  },
-  {
-    id: "6",
-    name: "Dr. Brown",
-    phone: "111-444-7777",
-    password: "brownPass",
-    gender: "Male",
-    address: "543 Birch St, Town",
-    isLocked: false,
-  },
-  {
-    id: "7",
-    name: "Dr. Lee",
-    phone: "222-333-4444",
-    password: "leePass",
-    gender: null,
-    address: "654 Maple St, Village",
-    isLocked: true,
-  },
-  {
-    id: "8",
-    name: "Dr. Taylor",
-    phone: "888-777-6666",
-    password: "taylorPass",
-    gender: "Female",
-    address: "876 Pine St, City",
-    isLocked: false,
-  },
-  {
-    id: "9",
-    name: "Dr. Moore",
-    phone: "444-555-6666",
-    password: "moorePass",
-    gender: "Male",
-    address: "765 Oak St, Town",
-    isLocked: false,
-  },
-];
+import { Schedule } from "../../model/model";
 
-export const StaffData: StaffProps[] = [
-  {
-    id: "1",
-    phone: "555-1234",
-    password: "pass123",
-    name: "John Doe",
-    gender: "Male",
-    address: "123 Main St",
-    isLocked: false,
-  },
-  {
-    id: "2",
-    phone: "555-5678",
-    password: "pass456",
-    name: "Jane Smith",
-    gender: "Female",
-    address: "456 Oak Ave",
-    isLocked: true,
-  },
-  {
-    id: "3",
-    phone: "555-9876",
-    password: "pass789",
-    name: "Bob Johnson",
-    gender: "Male",
-    address: "789 Pine Ln",
-    isLocked: false,
-  },
-  {
-    id: "4",
-    phone: "555-4321",
-    password: "passabc",
-    name: "Alice Brown",
-    gender: "Female",
-    address: "321 Cedar Dr",
-    isLocked: true,
-  },
-  {
-    id: "5",
-    phone: "555-8765",
-    password: "passdef",
-    name: "Charlie Wilson",
-    gender: "Male",
-    address: "654 Birch Rd",
-    isLocked: false,
-  },
-];
+export const temp = ({ schedules }: { schedules: Schedule[] }) => {
+  return (
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      {schedules.map((schedule, idx) => {
+        <div class="accordion-item">
+          <h2 class="accordion-header" id={`flush-heading${idx}`}>
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target={`#flush-collapse${idx}`}
+              aria-expanded="false"
+              aria-controls={`flush-collapse${idx}`}
+            >
+              <div class="p-6 my-3 mx-3">
+                <div class="d-flex align-items-center my-3">
+                  <img
+                    src="/icons/date.svg"
+                    alt=""
+                    style="width: 1.5rem; height: 1.5rem;"
+                  />
+                  <h4 class="fw-bold ms-4">Date:</h4>
+                  <p class="ms-4">${schedule.NGAYKHAM.toDateString()}</p>
+                </div>
+                <div class="d-flex align-items-center my-3">
+                  <img
+                    src="/icons/time.svg"
+                    alt=""
+                    style="width: 1.5rem; height: 1.5rem;"
+                  />
+                  <h4 class="fw-bold ms-4">Time:</h4>
+                  <p class="ms-4">
+                    $
+                    {schedule.GIOKHAM.toISOString().split("T")[1].split(".")[0]}
+                  </p>
+                </div>
+              </div>
+            </button>
+          </h2>
+          <div
+            id={`flush-collapse${idx}`}
+            class="accordion-collapse collapse"
+            aria-labelledby={`flush-heading${idx}`}
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              Placeholder content for this accordion, which is intended to
+              demonstrate the <code>.accordion-flush</code> class. This is the
+              first item's accordion body.
+            </div>
+          </div>
+        </div>;
+      })}
 
-export const PatientData: PatientProps[] = [
-  {
-    id: "1",
-    phone: "555-1234",
-    password: "pass123",
-    gender: "Male",
-    name: "John Doe",
-    dob: new Date("1990-05-15"),
-    address: "123 Main St, Cityville",
-    isLocked: false,
-  },
-  {
-    id: "2",
-    phone: "555-5678",
-    password: "securePass",
-    gender: "Female",
-    name: "Jane Smith",
-    dob: new Date("1985-08-22"),
-    address: "456 Oak Ave, Townsville",
-    isLocked: true,
-  },
-  {
-    id: "3",
-    phone: "555-9876",
-    password: "undefined",
-    gender: null,
-    name: "Alex Johnson",
-    dob: new Date("1995-03-10"),
-    address: "789 Pine Rd, Villagetown",
-    isLocked: false,
-  },
-  {
-    id: "4",
-    phone: "555-4321",
-    password: "secret123",
-    gender: "Non-Binary",
-    name: "Sam Taylor",
-    dob: new Date("1988-11-28"),
-    address: "101 Cedar Ln, Hamlet City",
-    isLocked: true,
-  },
-  {
-    id: "5",
-    phone: "555-6543",
-    password: "userPass",
-    gender: "Female",
-    name: "Emily White",
-    dob: new Date("1992-07-03"),
-    address: "202 Maple Dr, Countryside",
-    isLocked: false,
-  },
-  {
-    id: "6",
-    phone: "555-8765",
-    password: "undefined",
-    gender: null,
-    name: "Chris Brown",
-    dob: new Date("1982-12-17"),
-    address: "303 Birch Ave, Suburbia",
-    isLocked: false,
-  },
-  {
-    id: "7",
-    phone: "555-1098",
-    password: "securePwd",
-    gender: "Male",
-    name: "Michael Miller",
-    dob: new Date("1998-04-05"),
-    address: "404 Elm St, Metropolis",
-    isLocked: true,
-  },
-];
-
-
-
-export const drugData: drugProps[] = [
-  {
-    MALO: "cons001",
-    MATHUOC: "drug001",
-    TENTHUOC: "Painkiller",
-    CHIDINH: "Relief of pain",
-    SOLUONG: "50",
-    NGAYHETHAN: new Date("2024-05-01"),
-    DONVI: 'pill',
-    DONGIA: 10.0,
-    DAXOA: false
-  },
-  {
-    MALO: "cons002",
-    MATHUOC: "drug002",
-    TENTHUOC: "Antibiotic",
-    CHIDINH: "Infection treatment",
-    SOLUONG: "30",
-    DONVI: 'pill',
-    NGAYHETHAN: new Date("2024-08-15"),
-    DONGIA: 15.0,
-    DAXOA: false
-
-  },
-  {
-    MALO: "cons003",
-    MATHUOC: "drug003",
-    TENTHUOC: "Mouthwash",
-    CHIDINH: "Oral hygiene",
-    SOLUONG: "20",
-    DONVI: 'pill',
-    NGAYHETHAN: new Date("2023-12-31"),
-    DONGIA: 8.5,
-    DAXOA: false
-
-  },
-  {
-    MALO: "cons004",
-    MATHUOC: "drug004",
-    TENTHUOC: "Dental Floss",
-    CHIDINH: "Interdental cleaning",
-    SOLUONG: "10",
-    DONVI: 'pill',
-    NGAYHETHAN: new Date("2024-06-30"),
-    DONGIA: 5.0,
-    DAXOA: false
-
-  },
-  {
-    MALO: "cons005",
-    MATHUOC: "drug005",
-    TENTHUOC: "Toothpaste",
-    CHIDINH: "Dental care",
-    SOLUONG: "40",
-    DONVI: 'pill',
-    NGAYHETHAN: new Date("2024-04-15"),
-    DONGIA: 7.0,
-    DAXOA: false
-
-  },
-];
-
-// export const invoiceData: invoiceProps[] = [
-//   {
-//     id: "inv001",
-//     idPatient: "pat001",
-//     idDentist: "dent001",
-//     date: "2023-11-17T12:30:00Z",
-//     total: 120.5,
-//     description: "Dental Checkup",
-//     symptom: "Toothache",
-//   },
-//   {
-//     id: "inv002",
-//     idPatient: "pat002",
-//     idDentist: "dent002",
-//     date: "2023-11-18T10:45:00Z",
-//     total: 75.0,
-//     description: "Teeth Cleaning",
-//     symptom: "Plaque buildup",
-//   },
-//   {
-//     id: "inv003",
-//     idPatient: "pat003",
-//     idDentist: "dent001",
-//     date: "2023-11-19T14:15:00Z",
-//     total: 200.0,
-//     description: "Root Canal",
-//     symptom: "Severe pain",
-//   },
-//   {
-//     id: "inv004",
-//     idPatient: "pat004",
-//     idDentist: "dent003",
-//     date: "2023-11-20T11:00:00Z",
-//     total: 90.75,
-//     description: "Dental Filling",
-//     symptom: "Cavity",
-//   },
-//   {
-//     id: "inv005",
-//     idPatient: "pat005",
-//     idDentist: "dent002",
-//     date: "2023-11-21T09:30:00Z",
-//     total: 150.0,
-//     description: "Tooth Extraction",
-//     symptom: "Impacted tooth",
-//   },
-// ];
+      <div class="accordion" id="accordionExample">
+        {schedules.map((schedule, idx) => {
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                Accordion Item #1
+              </button>
+            </h2>
+            <div
+              id="collapseOne"
+              class="accordion-collapse collapse show"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                <strong>This is the first item's accordion body.</strong> It is
+                shown by default, until the collapse plugin adds the appropriate
+                classes that we use to style each element. These classes control
+                the overall appearance, as well as the showing and hiding via
+                CSS transitions. You can modify any of this with custom CSS or
+                overriding our default variables. It's also worth noting that
+                just about any HTML can go within the{" "}
+                <code>.accordion-body</code>, though the transition does limit
+                overflow.
+              </div>
+            </div>
+          </div>;
+        })}
+      </div>
+    </div>
+  );
+};

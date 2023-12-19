@@ -21,7 +21,7 @@ const Signup = () => {
                       Registration Info
                     </h3>
 
-                    <form id="signup-form" hx-post="/signup">
+                    <form id="signup-form" hx-post="/auth/signup">
                       <div class="form-outline mb-4">
                         <input
                           type="text"

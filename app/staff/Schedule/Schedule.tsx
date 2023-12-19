@@ -1,7 +1,6 @@
 import * as elements from "typed-html";
 import Calendar from "../../../components/Appointment/patientAppointment/calendar";
 import DentistAvailable from "../../../components/Appointment/patientAppointment/dentistList";
-import { DentistData } from "../../../config/hardcode/hardcode";
 import FormContact from "../../../components/Appointment/patientAppointment/addAppoinment";
 import { Schedule, drugProps } from "../../../model/model";
 import StaffPage from "../staff";

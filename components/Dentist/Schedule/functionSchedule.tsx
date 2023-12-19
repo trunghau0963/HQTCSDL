@@ -2,27 +2,58 @@ import * as elements from "typed-html";
 export const GetAppointment = ({
   idDentist,
   date,
+  time,
   idx,
   isDone,
 }: {
   idDentist: string;
   date: Date;
+  time: Date;
   idx: number;
   isDone: boolean;
 }) => {
   return (
-    <div>
+    <div class="d-flex">
       {isDone ? (
-        <button type="button" class="btn btn-success btn-sm" disabled="">
+        <button type="button" class="btn btn-success btn-sm mx-1" disabled="">
           Success
         </button>
       ) : (
-        <button type="button" class="btn btn-warning btn-sm" disabled="">
-          New
-        </button>
+        <div class="d-flex">
+          <button type="button" class="btn btn-warning btn-sm" disabled="">
+            New
+          </button>
+          <form
+            id="delete-appointment-form"
+            hx-post="/dentist/schedule/delete-appointment"
+          >
+            <input type="hidden" name="MANS" value={idDentist} />
+            <input
+              type="hidden"
+              name="NGAYKHAM"
+              value={date.toLocaleDateString()}
+            />
+            <input
+              type="hidden"
+              name="GIOKHAM"
+              value={time.toISOString().split("T")[1].split(".")[0]}
+            />
+
+            <button
+              class="btn btn-sm btn-danger px-2 mx-1"
+              id={`drop-appointment-${idx}-button`}
+              hx-swap="outerHTML"
+              hx-target="#delete-appointment-form"
+            >
+              <i class="bi bi-calendar-x-fill"></i>
+              Delete
+            </button>
+          </form>
+        </div>
       )}
+
       <button
-        class={`btn btn-sm ${isDone ? "btn-secondary" : "btn-danger"}`}
+        class={`btn btn-sm ${isDone ? "btn-secondary" : "btn-dark"} px-2`}
         id={`get-registered-${idx}-button`}
         data-bs-toggle="modal"
         data-bs-target={`#get-registered-${idx}`}
@@ -213,7 +244,7 @@ export const AddAppointment = ({
         Free
       </button>
       <button
-        class="btn btn-sm btn-dark"
+        class="btn btn-sm btn-tertiary text-light px-2"
         id={`registered-appointment-${idx}-button`}
         data-bs-toggle="modal"
         data-bs-target={`#registered-appointment-${idx}`}
@@ -224,7 +255,81 @@ export const AddAppointment = ({
         }"}`}
         hx-target={`.add-appointment-${idx}`}
       >
+        <i class="bi bi-calendar2-plus-fill"></i>
         Add Appointment
+      </button>
+
+      <div
+        class="modal fade"
+        id={`registered-appointment-${idx}`}
+        tabindex="0"
+        aria-labelledby={`registered-appointment-${idx}-button`}
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-xl bg-muted">
+          <div class="modal-content">
+            <div class="modal-header  d-flex flex-column justify-content-center">
+              <div class="text-center">
+                <h1
+                  class="modal-title fw-bold mx-3 my-3 text-center"
+                  id="contactInfoModalLabel"
+                >
+                  Add Appoinmnent
+                </h1>
+                <button
+                  class="fw-bold btn btn-warning rounded-pill text-center"
+                  disabled=""
+                >
+                  Upcoming
+                </button>
+              </div>
+            </div>
+            <div class="modal-body">
+              <div
+                class={`add-appointment-${idx}`}
+                id={`add-appointment-${idx}`}
+              ></div>
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-tertiary text-light"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const DeleteAppointment = ({
+  idDentist,
+  nameOfDentist,
+  date,
+  time,
+  idx,
+}: {
+  idDentist: string;
+  nameOfDentist: string;
+  date: Date;
+  time: Date;
+  idx: number;
+}) => {
+  return (
+    <div>
+      <button
+        class="btn btn-sm btn-dark"
+        id={`registered-appointment-${idx}-button`}
+        hx-get="/dentist/schedule/add-appointment"
+        hx-vars={`{"MANS": "${idDentist}", "HOTENNHASI": "${nameOfDentist}" ,"NGAYKHAM": "${date.toLocaleDateString()}", "GIOKHAM": "${
+          time.toISOString().split("T")[1].split(".")[0]
+        }"}`}
+      >
+        <i class="bi bi-calendar-x-fill"></i>
+        Delete
       </button>
 
       <div

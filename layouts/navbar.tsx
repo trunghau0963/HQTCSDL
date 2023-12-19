@@ -197,7 +197,7 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
 
                   <button
                     class="dropdown-item"
-                    hx-post="/logout"
+                    hx-post="/auth/logout"
                     hx-trigger="click"
                     type="button"
                   >

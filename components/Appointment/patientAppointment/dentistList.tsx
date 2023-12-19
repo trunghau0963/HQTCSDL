@@ -1,5 +1,4 @@
 import * as elements from "typed-html";
-import { DentistData } from "../../../config/hardcode/hardcode";
 import { Schedule } from "../../../model/model";
 const DentistAvailable = () => {
   return (
