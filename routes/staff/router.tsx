@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import * as elements from "typed-html";
 import StaffPage from "../../app/staff/staff";
 import Dashboard from "../../app/staff/Dashboard/Dashboard";
-import Home from "../../app/staff/Home/Home";
 import Drug from "../../app/staff/Drug/Drug";
 import { staff } from "../auth/router";
 import ServicePage from "../../app/staff/Service/Service";
@@ -83,10 +82,6 @@ staffRouter.get("/dashboard", staff, async (req, res) => {
   return res.send(<Dashboard />);
 });
 
-staffRouter.get("/home", staff, async (req, res) => {
-  return res.send(<Home />);
-});
-
 staffRouter.get("/drug", [
   staff,
   async (req: any, res: any) => {
@@ -115,6 +110,7 @@ staffRouter.get("/schedule", staff, async (req, res) => {
 
 staffRouter.get("/schedule/date", staff, async (req, res) => {
   const dentistSchedule: Schedule[] = (await getScheduleIsFree(req, res)) || [];
+  
 
   if (dentistSchedule.length === 0) {
     return res.send(
@@ -444,16 +440,16 @@ staffRouter.get(
   }
 );
 
-staffRouter.post(
-  "/invoice/add-service-indicators/:id",
-  staff,
-  addServiceIndicators
-);
-staffRouter.post(
-  "/invoice/delete-service-indicators/:id",
-  staff,
-  deleteServiceIndicators
-);
+// staffRouter.post(
+//   "/invoice/add-service-indicators/:id",
+//   staff,
+//   addServiceIndicators
+// );
+// staffRouter.post(
+//   "/invoice/delete-service-indicators/:id",
+//   staff,
+//   deleteServiceIndicators
+// );
 
 staffRouter.post("/invoice", staff, directNewUrl);
 

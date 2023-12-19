@@ -1,16 +1,26 @@
 import * as elements from "typed-html";
-import { Schedule } from "../../../model/model";
-import { AddScheduleFree, GetAppointment } from "./functionSchedule";
+import { Schedule, AppointmentDetail } from "../../../model/model";
+import {
+  AddAppointment,
+  AddScheduleFree,
+  GetAppointment,
+} from "./functionSchedule";
 type ScheduleProps = {
   Free: Schedule[];
-  Registered: Schedule[];
+  Registered: AppointmentDetail[];
+  RegisteredFinished: AppointmentDetail[];
   idDentist: string;
 };
 
-const ScheduleComponent = ({ Free, Registered, idDentist }: ScheduleProps) => {
+const ScheduleComponent = ({
+  Free,
+  Registered,
+  RegisteredFinished,
+  idDentist,
+}: ScheduleProps) => {
   let idx = 1;
   return (
-    <div class="main-wrapper h-100">
+    <div class="main-wrapper h-100 ">
       <div class="page-wrapper">
         <div class="content">
           <div class="row">
@@ -41,10 +51,12 @@ const ScheduleComponent = ({ Free, Registered, idDentist }: ScheduleProps) => {
                   <table class="table table-striped custom-table">
                     <thead>
                       <tr>
-                        <th style="min-width:100px;">Image</th>
+                        <th style="min-width:100px;" class="ms-2">
+                          Image
+                        </th>
                         <th>Number</th>
-                        <th>ID</th>
-                        <th>Name</th>
+                        <th>ID Patient</th>
+                        <th>Name Of Patient</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th class="text-right">State</th>
@@ -59,14 +71,18 @@ const ScheduleComponent = ({ Free, Registered, idDentist }: ScheduleProps) => {
                               height="50"
                               src={`/img/Schedule-thumb-0${idx + 1}.jpg`}
                               onerror="this.onerror=null;this.src='/img/user.jpg';"
-                              class="rounded-circle"
+                              class="ms-2 rounded-circle"
                               alt=""
                             />{" "}
                             <h2></h2>
                           </td>
                           <td>{idx++}</td>
-                          <td>{data.MANS}</td>
-                          <td>{data.HOTEN}</td>
+                          <td>
+                            <em>Undefined</em>
+                          </td>
+                          <td>
+                            <em>Undefined</em>
+                          </td>
                           <td>{data.NGAYKHAM.toLocaleDateString()}</td>
                           <td>
                             {
@@ -76,20 +92,17 @@ const ScheduleComponent = ({ Free, Registered, idDentist }: ScheduleProps) => {
                             }
                           </td>
                           <td class="text-right">
-                            <button
-                              type="button"
-                              class="btn btn-success btn-sm"
-                              disabled=""
-                            >
-                              Free
-                            </button>
-                            <button class="btn btn-sm btn-warning">
-                              Add Schedule
-                            </button>
+                            <AddAppointment
+                              idDentist={data.MANS}
+                              nameOfDentist={data.HOTEN}
+                              date={data.NGAYKHAM}
+                              time={data.GIOKHAM}
+                              idx={idx}
+                            />
                           </td>
                         </tr>
                       ))}
-                      {Registered.map((data) => (
+                      {RegisteredFinished.map((data) => (
                         <tr>
                           <td>
                             <img
@@ -97,14 +110,14 @@ const ScheduleComponent = ({ Free, Registered, idDentist }: ScheduleProps) => {
                               height="50"
                               src={`/img/Schedule-thumb-0${idx + 1}.jpg`}
                               onerror="this.onerror=null;this.src='/img/user.jpg';"
-                              class="rounded-circle"
+                              class="ms-2 rounded-circle"
                               alt=""
                             />{" "}
                             <h2></h2>
                           </td>
                           <td>{idx++}</td>
-                          <td>{data.MANS}</td>
-                          <td>{data.HOTEN}</td>
+                          <td>{data.MABN}</td>
+                          <td>{data.HOTENBENHNHAN}</td>
                           <td>{data.NGAYKHAM.toLocaleDateString()}</td>
                           <td>
                             {
@@ -118,6 +131,41 @@ const ScheduleComponent = ({ Free, Registered, idDentist }: ScheduleProps) => {
                               idDentist={data.MANS}
                               date={data.NGAYKHAM}
                               idx={idx}
+                              isDone={true}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                      {Registered.map((data) => (
+                        <tr>
+                          <td>
+                            <img
+                              width="50"
+                              height="50"
+                              src={`/img/Schedule-thumb-0${idx + 1}.jpg`}
+                              onerror="this.onerror=null;this.src='/img/user.jpg';"
+                              class="ms-2 rounded-circle"
+                              alt=""
+                            />{" "}
+                            <h2></h2>
+                          </td>
+                          <td>{idx++}</td>
+                          <td>{data.MABN}</td>
+                          <td>{data.HOTENBENHNHAN}</td>
+                          <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+                          <td>
+                            {
+                              data.GIOKHAM.toISOString()
+                                .split("T")[1]
+                                .split(".")[0]
+                            }
+                          </td>
+                          <td class="text-right">
+                            <GetAppointment
+                              idDentist={data.MANS}
+                              date={data.NGAYKHAM}
+                              idx={idx}
+                              isDone={false}
                             />
                           </td>
                         </tr>

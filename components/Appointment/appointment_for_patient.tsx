@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { AppointmentDetailProps } from "../../model/model";
+import { AppointmentDetailProps, AppointmentDetail } from "../../model/model";
 import PreviewPage from "../../app/patient/Invoice/previewPage";
 
 const Appointment = ({
@@ -7,7 +7,7 @@ const Appointment = ({
   appointmentsFinished,
 }: {
   appointments: AppointmentDetailProps[];
-  appointmentsFinished: AppointmentDetailProps[];
+  appointmentsFinished: AppointmentDetail[];
 }) => {
   return (
     <div>
@@ -100,8 +100,8 @@ const Appointment = ({
                     {appointmentsFinished &&
                       appointmentsFinished.map((appointment, idx) => (
                         <tr>
-                          <td>{appointment.TENNS}</td>
-                          <td>{appointment.TENBN}</td>
+                          <td>{appointment.HOTENNHASI}</td>
+                          <td>{appointment.HOTENBENHNHAN}</td>
                           <td>
                             {appointment.NGAYKHAM.toISOString().split("T")[0]}
                           </td>

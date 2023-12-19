@@ -1,15 +1,17 @@
 import * as elements from "typed-html";
 import DentistPage from "../dentist";
 import ScheduleComponent from "../../../components/Dentist/Schedule/ScheduleComponent";
-import { Schedule } from "../../../model/model";
+import { Schedule, AppointmentDetail } from "../../../model/model";
 
 const SchedulePage = ({
   Free,
   Registered,
+  RegisteredFinished,
   idDentist,
 }: {
   Free: Schedule[];
-  Registered: Schedule[];
+  Registered: AppointmentDetail[];
+  RegisteredFinished: AppointmentDetail[];
   idDentist: string;
 }) => {
   // console.log(idDentist);
@@ -18,6 +20,7 @@ const SchedulePage = ({
       <ScheduleComponent
         Free={Free}
         Registered={Registered}
+        RegisteredFinished={RegisteredFinished}
         idDentist={idDentist}
       />
     </DentistPage>

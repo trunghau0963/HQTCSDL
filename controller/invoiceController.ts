@@ -7,16 +7,19 @@ export const addInvoice = async (req: Request, res: Response) => {
   try {
     const input = req.body;
     console.log("input", input);
+
+    const date = new Date(input.NGAYKHAM);
+    console.log("date", date);
     const user = await (await req.db())
       .input("MABN", input.MABN)
       .input("MANS", input.MANS)
       .input("TRIEUCHUNG", input.TRIEUCHUNG)
       .input("CHANDOAN", input.CHANDOAN)
-      .input("NGAYKHAM", input.NGAYKHAM)
+      .input("NGAYKHAM", date)
       .input("GIOKHAM", input.GIOKHAM)
       .execute("INSERT_INTO_CHITIETPHIENKHAM");
     res
-      .header("HX-Redirect", "/staff/invoice")
+      .header("HX-Redirect", "/dentist/schedule")
       .status(200)
       .json(user.recordset[0])
       .send("successful registe Appointment");
@@ -52,11 +55,75 @@ export const getIdInvoice = async (req: Request, res: Response) => {
     const data: Invoice[] = (
       await (await req.db()).execute("GET_CHITIETPHIENKHAM_DETAIL_ALL")
     ).recordset as Invoice[];
-    const idArray: string[] = data.map((invoice) => invoice.MACT.toString());
+    const idArray: string[] = data.map((Invoice) => Invoice.MACT.toString());
     return idArray;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getInvoiceByIdPatientParameter = async (
+  req: Request,
+  res: Response,
+  id: string,
+  date: Date,
+  time: Date
+) => {
+  try {
+    console.log("MABN", id);
+    console.log("NGAYKHAM", date);
+    console.log("GIOKHAM", time);
+
+    const data: Invoice = (
+      await (await req.db())
+        .input("MABN", id)
+        .input("NGAYKHAM", date)
+        .input("GIOKHAM", time)
+        .execute("GET_CHITIETPHIENKHAM_DETAIL")
+    ).recordset[0];
+
+    console.log("data", data);
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getIdInvoiceByIdPatientParameter = async (
+  req: Request,
+  res: Response,
+  id: string,
+  date: Date,
+  time: Date
+) => {
+  try {
+    // console.log("MABN", id);
+    // console.log("NGAYKHAM", date);
+    // console.log("GIOKHAM", time);
+
+    const data: Invoice = (
+      await (await req.db())
+        .input("MABN", id)
+        .input("NGAYKHAM", date)
+        .input("GIOKHAM", time)
+        .execute("GET_CHITIETPHIENKHAM_DETAIL")
+    ).recordset[0];
+
+    return data.MACT;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
     }
     console.error("Can't get Appointment information. Please try again later.");
     return undefined;
@@ -81,13 +148,13 @@ export const directNewUrl = async (req: Request, res: Response) => {
     // console.log("data", data);
     if (!data || data.MACT === undefined || data.MACT === null) {
       res
-        .header("HX-Redirect", "/staff/invoice/failed")
+        .header("HX-Redirect", "/staff/Invoice/failed")
         .status(404)
         .send("Not found Invoice");
     } else {
-      const invoiceURL = `/staff/invoice/${data.MACT}`;
+      const InvoiceURL = `/staff/Invoice/${data.MACT}`;
       res
-        .header("HX-Redirect", invoiceURL)
+        .header("HX-Redirect", InvoiceURL)
         .status(200)
         .send("successful found Invoice");
     }
@@ -105,7 +172,7 @@ export const getInvoiceDetailById = async (req: Request, res: Response) => {
   console.log("getInvoiceDetail");
   try {
     const { id } = req.params;
-    const invoice: Invoice = (
+    const Invoice: Invoice = (
       await (await req.db())
         .input("MACT", id)
         .execute("GET_CHITIETPHIENKHAM_BY_ID")
@@ -113,9 +180,9 @@ export const getInvoiceDetailById = async (req: Request, res: Response) => {
 
     const data: Invoice = (
       await (await req.db())
-        .input("MABN", invoice.MABN)
-        .input("NGAYKHAM", invoice.NGAYKHAM)
-        .input("GIOKHAM", invoice.GIOKHAM)
+        .input("MABN", Invoice.MABN)
+        .input("NGAYKHAM", Invoice.NGAYKHAM)
+        .input("GIOKHAM", Invoice.GIOKHAM)
         .execute("GET_CHITIETPHIENKHAM_DETAIL")
     ).recordset[0];
     // console.log("Invoice detail", data);
@@ -129,8 +196,10 @@ export const getInvoiceDetailById = async (req: Request, res: Response) => {
   }
 };
 
-export const getInvoiceDetailByIdWithHtmx = async (req: Request, res: Response) => {
- 
+export const getInvoiceDetailByIdWithHtmx = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { MANS, MABN, NGAYKHAM, GIOKHAM } = req.query;
 

@@ -2,7 +2,7 @@ import * as elements from "typed-html";
 import DentistPage from "../dentist";
 import Kham from "../../../components/kham/kham";
 
-const Patient = () => {
+const PatientPage = () => {
   return (
     <DentistPage>
       <Kham/>
@@ -10,4 +10,4 @@ const Patient = () => {
   );
 };
 
-export default Patient;
+export default PatientPage;

@@ -4,7 +4,7 @@ import HomeComponent from "../../../components/Home/Home";
 const Home = () => {
   return (
     <PatientPage>
-        <HomeComponent />
+        {/* <HomeComponent /> */}
     </PatientPage>
   );
 };

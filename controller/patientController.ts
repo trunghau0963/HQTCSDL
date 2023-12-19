@@ -138,6 +138,22 @@ export const getIdAllPatient = async (req: Request, res: Response) => {
   }
 };
 
+export const getNameAllPatient = async (req: Request, res: Response) => {
+  try {
+    const patients: Patient[] = (
+      await (await req.db()).execute("GET_INFO_BENHNHAN")
+    ).recordset as Patient[];
+    const NameArray: string[] = patients.map((patient) => patient.HOTEN);
+    return NameArray;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    console.error("Can't get Appointment information. Please try again later.");
+    return undefined;
+  }
+};
+
 export const deletePatient = async (req: Request, res: Response) => {
   try {
     const input = req.body;

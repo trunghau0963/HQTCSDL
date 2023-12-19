@@ -3,15 +3,20 @@ import { getRole } from "../routes/auth/router";
 import { Request, RequestHandler, response, Response } from "express";
 import { serviceIndicators } from "../model/model";
 
-export const addServiceIndicators = async (req: Request, res: Response) => {
+export const addServiceIndicators = async (
+  req: Request,
+  res: Response,
+  url: string
+) => {
   try {
     const input = req.body;
     const user = await (await req.db())
       .input("MACT", input.MACT)
       .input("TENDV", input.TENDV)
       .execute("INSERT_INTO_DICHVUCHIDINH");
+    const directNewUrl = `${url}`;
     res
-      .header("HX-Redirect", "/admin/serviceIndicators")
+      .header("HX-Redirect", directNewUrl)
       .status(200)
       .json(user.recordset[0])
       .send("successful add drug into ServiceIndicators");
@@ -26,15 +31,17 @@ export const addServiceIndicators = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteServiceIndicators = async (req: Request, res: Response) => {
+export const deleteServiceIndicators = async (req: Request, res: Response, url: string) => {
   try {
     const input = req.body;
+    console.log("input", input);
     const user = await (await req.db())
       .input("MACT", input.MACT)
       .input("MADV", input.MADV)
       .execute("DROP_DICHVUCHIDINH");
+    const directNewUrl = `${url}`;
     res
-      .header("HX-Redirect", "/admin/serviceIndicators")
+      .header("HX-Redirect", directNewUrl)
       .status(200)
       .json(user.recordset[0])
       .send("successful delete drug into ServiceIndicators");

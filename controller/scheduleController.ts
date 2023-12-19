@@ -6,20 +6,16 @@ import { number } from "joi";
 
 export const addSchedule = async (req: Request, res: Response, url: string) => {
   try {
-    const formatTime = (timeString: string): string => {
-      const date = new Date(`2000-01-01T${timeString}`);
-      return date.toISOString().slice(11, -1);
-    };
     const { NGAYKHAM, GIOKHAM, MANS } = req.body;
     console.log(req.body);
-    const formattedGIOKHAM = formatTime(GIOKHAM);
+    // const formattedGIOKHAM = GIOKHAM.toISOString().split("T")[1].split(".")[0];
 
-    console.log("format time", formattedGIOKHAM);
+    // console.log("format time", formattedGIOKHAM);
 
     await (await req.db())
       .input("MANS", MANS)
       .input("NGAYKHAM", NGAYKHAM)
-      .input("GIOKHAM", formattedGIOKHAM)
+      .input("GIOKHAM", GIOKHAM)
       .execute("INSERT_INTO_LICHLAMVIEC");
 
     console.log("da insert");
@@ -111,6 +107,7 @@ export const getScheduleIsFree = async (req: Request, res: Response) => {
     const { year, mon, day } = req.query;
     const date = `${year}-${mon}-${day}`;
 
+    console.log(date);
     const getDaysInMonth = (year: number, month: number) => {
       return new Date(year, month, 0).getDate();
     };

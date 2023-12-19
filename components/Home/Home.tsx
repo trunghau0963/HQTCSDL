@@ -1,6 +1,8 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-const HomeComponent = () => {
+import { Dentist } from "../../model/model";
+import { AddAppointmentByDentist } from "./functionHome";
+const HomeComponent = ({ listDentist }: { listDentist: Dentist[] }) => {
   return (
     <BaseHtml>
       <div>
@@ -10,7 +12,7 @@ const HomeComponent = () => {
             <h2>
               We are here to justify your medical needs and secure well being
             </h2>
-            <a href="#about" class="btn-get-started scrollto">
+            <a href="/login" class="btn-get-started scrollto">
               Get Started
             </a>
           </div>
@@ -86,7 +88,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-heartbeat"></i>
+                      <i class="bi fa-heartbeat"></i>
                     </div>
                     <h4>
                       <a
@@ -106,7 +108,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-chart-area"></i>
+                      <i class="bi bi-chart-area"></i>
                     </div>
                     <h4>
                       <a
@@ -125,7 +127,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-hospital-user"></i>
+                      <i class="bi bi-hospital-user"></i>
                     </div>
                     <h4>
                       <a href="https://www.who.int/" target="_blank">
@@ -142,7 +144,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-hospital"></i>
+                      <i class="bi bi-hospital"></i>
                     </div>
                     <h4>
                       <a
@@ -162,7 +164,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-syringe"></i>
+                      <i class="bi bi-syringe"></i>
                     </div>
                     <h4>
                       <a href="http://127.0.0.1:8000/" target="_blank">
@@ -179,7 +181,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-dna"></i>
+                      <i class="bi bi-dna"></i>
                     </div>
                     <h4>
                       <a
@@ -199,7 +201,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-egg"></i>
+                      <i class="bi bi-egg"></i>
                     </div>
                     <h4>
                       <a
@@ -219,7 +221,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-peace"></i>
+                      <i class="bi bi-peace"></i>
                     </div>
                     <h4>
                       <a href="https://yogasmart.netlify.app/" target="_blank">
@@ -236,7 +238,7 @@ const HomeComponent = () => {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                   <div class="icon-box">
                     <div class="icon">
-                      <i class="fas fa-pills"></i>
+                      <i class="bi bi-pills"></i>
                     </div>
                     <h4>
                       <a
@@ -256,7 +258,45 @@ const HomeComponent = () => {
             </div>
           </section>
 
-          <section id="doctors" class="doctors">
+          <section id="services" class="services">
+            <div class="container">
+              <div class="section-title">
+                <h2>Doctors</h2>
+              </div>
+
+              <div class="row">
+                {listDentist.map((dentist: Dentist, idx: number) => (
+                  <div class="col-lg-4 col-md-6 d-flex align-items-stretch my-2">
+                    <div class="icon-box">
+                      <div class="icon">
+                        <i class="bi bi-person-circle"></i>
+                      </div>
+                      <h4>
+                        <a
+                          href="https://healthifer-multimed.netlify.app/"
+                          target="_blank"
+                        >
+                          {dentist.HOTEN}
+                        </a>
+                      </h4>
+                      <div class="p-6">
+                        <p class="fw-bold">
+                          Contact Information
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400">{dentist.MANS}</p>
+                        <p class="text-gray-500 dark:text-gray-400">{dentist.DIENTHOAI}</p>
+                      </div>
+                      <AddAppointmentByDentist
+                        idDentist={dentist.MANS}
+                        nameOfDentist={dentist.HOTEN}
+                        idx={idx}
+                      />
+                      <div class="p-6"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
             <div class="container"></div>
           </section>
 
@@ -418,7 +458,9 @@ const HomeComponent = () => {
                     <div class="address">
                       <i class="bi bi-geo-alt"></i>
                       <h4>Location:</h4>
-                      <p>227 Nguyen Van Cu, Ward 4, District 5, Ho Chi Minh City </p>
+                      <p>
+                        227 Nguyen Van Cu, Ward 4, District 5, Ho Chi Minh City{" "}
+                      </p>
                     </div>
 
                     <div class="email">
@@ -480,7 +522,9 @@ const HomeComponent = () => {
                       ></textarea>
                     </div>
                     <div class="text-center">
-                      <button class="btn btn-primary submit-btn my-3">Send Message</button>
+                      <button class="btn btn-primary submit-btn my-3">
+                        Send Message
+                      </button>
                     </div>
                   </form>
                 </div>

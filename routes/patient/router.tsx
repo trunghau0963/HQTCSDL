@@ -11,6 +11,7 @@ import Security from "../../app/patient/Security/Security";
 import { patient } from "../auth/router";
 import {
   AppointmentDetailProps,
+  AppointmentDetail,
   Dentist as DentistProps,
   Invoice,
   Patient,
@@ -464,6 +465,7 @@ patientRouter.post(
     try {
       const input = req.body;
 
+      console.log(input);
       const user = (
         await (await req.db())
           .input("TEN", input.patient_name)
@@ -500,7 +502,7 @@ patientRouter.get("/appointment", patient, async (req, res) => {
   const appointments: AppointmentDetailProps[] =
     (await getAppointmentNotDone(req, res, MABN)) ?? [];
 
-  const appointmentsFinished: AppointmentDetailProps[] =
+  const appointmentsFinished: AppointmentDetail[] =
     (await getAppointmentIsDoneOfPatient(req, res, MABN)) ?? [];
 
   return res.send(

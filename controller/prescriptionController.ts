@@ -14,7 +14,7 @@ export const addDrugIntoPrescription = async (req: Request, res: Response) => {
       .input("LIEULUONG", input.LIEULUONG)
       .execute("INSERT_INTO_TOATHUOC");
     res
-      .header("HX-Redirect", "/staff/invoice")
+      .header("HX-Redirect", "/dentist/schedule")
       .status(200)
       .json(user.recordset[0])
       .send("successful add drug into Prescription");
@@ -34,6 +34,7 @@ export const deleteDrugIntoPrescription = async (
   res: Response
 ) => {
   try {
+    console.log("hello");
     const input = req.body;
     console.log("input", input);
     const user = await (await req.db())
@@ -42,7 +43,7 @@ export const deleteDrugIntoPrescription = async (
       .input("MALO", input.MALO)
       .execute("DROP_THUOC_IN_TOATHUOC");
     res
-      .header("HX-Redirect", "/admin/drug")
+      .header("HX-Redirect", "/dentist/schedule")
       .status(200)
       .json(user.recordset[0])
       .send("successful delete drug into Prescription");

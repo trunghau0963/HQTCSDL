@@ -4,7 +4,6 @@ import mssql from "mssql";
 import { Role, getDatabase } from "../../config/config";
 import * as elements from "typed-html";
 import Error from "../../components/Error/ErrorPage";
-import LandingPage from "../../app/landing/LandingPage";
 import Signup from "../../app/auth/Signup/Signup";
 import Login from "../../app/auth/Login/Login";
 import {
@@ -12,8 +11,11 @@ import {
   SigninController,
   LogoutController,
 } from "../../controller/authController";
-import { User } from "../../model/model";
+import { Dentist, User } from "../../model/model";
 import middlewareToken from "../../middleware/tokenMiddleware";
+import LandingPage from "../../app/landing/landing";
+import HomeComponent from "../../components/Home/Home";
+import { getAllDentist } from "../../controller/dentistController";
 
 declare global {
   namespace Express {
@@ -109,7 +111,14 @@ export const dentist = async (
 const authRouter = Router();
 
 authRouter.get("/", async (req, res) => {
-  return res.send(<LandingPage />);
+  let listDentist: Dentist[] = [];
+
+  listDentist = (await getAllDentist(req, res)) as Dentist[];
+  return res.send(
+    <LandingPage>
+      <HomeComponent listDentist={listDentist} />
+    </LandingPage>
+  );
 });
 
 authRouter.get("/signup", async (req, res) => {

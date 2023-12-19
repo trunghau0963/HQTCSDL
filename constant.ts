@@ -1,26 +1,38 @@
 import { ToolItemsProps } from "./model/model";
 
+export const Guset = (baseUrl: string): ToolItemsProps[] => [
+  {
+    title: "Home",
+    icon: "/icons/home.svg",
+    url: `${baseUrl}`,
+    color: "btn btn-outline-info",
+  },
+  {
+    title: "Dentist",
+    icon: "/icons/dentist.svg",
+    url: `${baseUrl}/dentist`,
+    color: "btn btn-outline-success",
+  },
+  {
+    title: "Security",
+    icon: "/icons/about.svg",
+    url: `${baseUrl}/about`,
+    color: "btn btn-outline-warning",
+  },
+];
+
 export const TOOLS = (baseUrl: string): ToolItemsProps[] => [
   {
     title: "Dashboard",
     icon: "/icons/dashboard.svg",
     url: `${baseUrl}/dashboard`,
     color: "btn btn-outline-warning",
-    slug: "dashboard",
-  },
-  {
-    title: "Home",
-    icon: "/icons/home.svg",
-    url: `${baseUrl}/home`,
-    color: "btn btn-outline-info",
-    slug: "home",
   },
   {
     title: "Schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,
     color: "btn btn-outline-primary",
-    slug: "schedule",
   },
 ];
 
