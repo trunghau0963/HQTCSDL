@@ -173,7 +173,7 @@ const HomeComponent = ({
             </div>
           </section>
 
-          <section id="gallery" class="gallery">
+          <section id="schedule">
             <div class="container">
               <div class="section-title">
                 <h2>Schedules</h2>

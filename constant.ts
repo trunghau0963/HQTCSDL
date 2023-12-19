@@ -5,19 +5,21 @@ export const Guset = (baseUrl: string): ToolItemsProps[] => [
     title: "Home",
     icon: "/icons/home.svg",
     url: `${baseUrl}`,
-    color: "btn btn-outline-info",
   },
   {
     title: "Dentist",
     icon: "/icons/dentist.svg",
     url: "#dentist",
-    color: "btn btn-outline-success",
   },
   {
-    title: "Security",
+    title: "Schedule",
+    icon: "/icons/schedule.svg",
+    url: "#schedule",
+  },
+  {
+    title: "Contact",
     icon: "/icons/about.svg",
-    url: `${baseUrl}/about`,
-    color: "btn btn-outline-warning",
+    url: "#contact",
   },
 ];
 

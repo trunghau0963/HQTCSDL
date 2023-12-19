@@ -10,10 +10,10 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
       ? true
       : false;
   return (
-    <nav class="navbar navbar-expand-lg navbar-light bg-secondary position-sticky top-0 z-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary position-fixed w-100 top-0 z-3">
       <div class="container-fluid">
         <a href="/" class="logo navbar-brand">
-          <img src="/img/logo.png" width="35" height="35" alt="" />{" "}
+          <img src="/img/logo.png" width="45" height="45" alt="" />{" "}
           <span>HTV Clinic</span>
         </a>
         <div

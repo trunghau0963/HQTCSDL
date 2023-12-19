@@ -5,7 +5,7 @@ const Footer = () => {
       <div
         class="text-center p-3 text-white"
       >
-        © 2020 Copyright {" "}
+        © 2023 Copyright {" "}
         <a class="text-dark" href="https://mdbootstrap.com/">
           HTVClinic
         </a>
