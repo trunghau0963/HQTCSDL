@@ -75,11 +75,19 @@ import EditProfile from "../../app/patient/Profile/EditProfile";
 const staffRouter = Router();
 
 staffRouter.get("/", staff, async (req, res) => {
-  return res.send(<StaffPage />);
+  try {
+    return res.send(<StaffPage />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/dashboard", staff, async (req, res) => {
-  return res.send(<Dashboard />);
+  try {
+    return res.send(<Dashboard />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/drug", [
@@ -95,95 +103,123 @@ staffRouter.get("/drug", [
   },
 ]);
 staffRouter.post("/drug", staff, async (req: any, res: any) => {
-  addDrug(req, res, "staff");
+  try {
+    addDrug(req, res, "staff");
+  } catch (error) {
+    console.log(error);
+  }
 });
 staffRouter.delete("/drug", staff, async (req: any, res: any) => {
-  deleteDrug(req, res, "staff");
+  try {
+    deleteDrug(req, res, "staff");
+  } catch (error) {
+    console.log(error);
+  }
 });
 staffRouter.put("/drug", staff, async (req: any, res: any) => {
-  updateInfoDrug(req, res, "staff");
+  try {
+    updateInfoDrug(req, res, "staff");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/schedule", staff, async (req, res) => {
-  return res.send(<Schedule role={"staff"} />);
+  try {
+    return res.send(<Schedule role={"staff"} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/schedule/date", staff, async (req, res) => {
-  const dentistSchedule: Schedule[] = (await getScheduleIsFree(req, res)) || [];
-  
+  try {
+    const dentistSchedule: Schedule[] =
+      (await getScheduleIsFree(req, res)) || [];
 
-  if (dentistSchedule.length === 0) {
-    return res.send(
-      `<h1 class="text-danger">Không tìm thấy lịch khám trong ngày</h1>`
-    );
-  }
+    if (dentistSchedule.length === 0) {
+      return res.send(
+        `<h1 class="text-danger">Không tìm thấy lịch khám trong ngày</h1>`
+      );
+    }
 
-  const htmlContent = dentistSchedule
-    .map((item) => {
-      return `
-    <div class="row w-auto py-3 m-3">
-      <img class="col-sm-3 col-md-3 p-0 rounded-2 w-auto" />
-      <div class="col-sm-9 col-md-9">
-        <div class="d-flex justify-content-between align-items-center">
-          <h1 class="text-4xl">${item.HOTEN}</h1>
-          <a 
-            href="/staff/schedule/date/${item.MANS}/${item.HOTEN}/${
-        item.NGAYKHAM
-      }/${item.GIOKHAM}" 
-            class="btn btn-primary">
-            <h1 class="text-lg text-success">Available</h1>
-          </a>
+    const htmlContent = dentistSchedule
+      .map((item) => {
+        return `
+      <div class="row w-auto py-3 m-3">
+        <img class="col-sm-3 col-md-3 p-0 rounded-2 w-auto" />
+        <div class="col-sm-9 col-md-9">
+          <div class="d-flex justify-content-between align-items-center">
+            <h1 class="text-4xl">${item.HOTEN}</h1>
+            <a 
+              href="/staff/schedule/date/${item.MANS}/${item.HOTEN}/${
+          item.NGAYKHAM
+        }/${item.GIOKHAM}" 
+              class="btn btn-primary">
+              <h1 class="text-lg text-success">Available</h1>
+            </a>
+          </div>
+          <h2 class="fw-lighter text-2xl">${
+            item.NGAYKHAM.toISOString().split("T")[0]
+          }</h2>
+          <h2 class="fw-lighter text-xl">${
+            item.GIOKHAM.toISOString().split("T")[1].split(".")[0]
+          }</h2>
         </div>
-        <h2 class="fw-lighter text-2xl">${
-          item.NGAYKHAM.toISOString().split("T")[0]
-        }</h2>
-        <h2 class="fw-lighter text-xl">${
-          item.GIOKHAM.toISOString().split("T")[1].split(".")[0]
-        }</h2>
-      </div>
-    </div>`;
-    })
-    .join("");
+      </div>`;
+      })
+      .join("");
 
-  return res.send(htmlContent);
+    return res.send(htmlContent);
+  } catch (error) {
+    console.log(error);
+  }
 });
 staffRouter.get("/schedule/date/add_appointment", staff, async (req, res) => {
-  const token = req.cookies.token as string;
-  const infoPatient =
-    (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+  try {
+    const token = req.cookies.token as string;
+    const infoPatient =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
 
-  let detailSchedule: Schedule = {
-    MANS: "",
-    HOTEN: "",
-    NGAYKHAM: new Date(),
-    GIOKHAM: new Date(),
-  };
-  if (Object.entries(req.query).length !== 0) {
-    detailSchedule.MANS = (req.query.MANS as string) || "";
-    detailSchedule.HOTEN = (req.query.HOTEN as string) || "";
-    detailSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
-    detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
+    let detailSchedule: Schedule = {
+      MANS: "",
+      HOTEN: "",
+      NGAYKHAM: new Date(),
+      GIOKHAM: new Date(),
+    };
+    if (Object.entries(req.query).length !== 0) {
+      detailSchedule.MANS = (req.query.MANS as string) || "";
+      detailSchedule.HOTEN = (req.query.HOTEN as string) || "";
+      detailSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
+      detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
+    }
+    return res.send(<AddAppointment detailSchedule={detailSchedule} />);
+  } catch (error) {
+    console.log(error);
   }
-  return res.send(<AddAppointment detailSchedule={detailSchedule} />);
 });
 
 staffRouter.get(
   "/schedule/date/:MANS/:HOTEN/:NGAYKHAM/:GIOKHAM",
   staff,
   async (req, res) => {
-    const { MANS, HOTEN, NGAYKHAM, GIOKHAM } = req.params;
+    try {
+      const { MANS, HOTEN, NGAYKHAM, GIOKHAM } = req.params;
 
-    return res
-      .header(
-        "HX-Redirect",
-        `/staff/schedule/date/add_appointment?MANS=${encodeURIComponent(
-          MANS
-        )}&HOTEN=${encodeURIComponent(HOTEN)}&NGAYKHAM=${encodeURIComponent(
-          NGAYKHAM
-        )}&GIOKHAM=${encodeURIComponent(GIOKHAM)}`
-      )
-      .json("Directed")
-      .status(200);
+      return res
+        .header(
+          "HX-Redirect",
+          `/staff/schedule/date/add_appointment?MANS=${encodeURIComponent(
+            MANS
+          )}&HOTEN=${encodeURIComponent(HOTEN)}&NGAYKHAM=${encodeURIComponent(
+            NGAYKHAM
+          )}&GIOKHAM=${encodeURIComponent(GIOKHAM)}`
+        )
+        .json("Directed")
+        .status(200);
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -221,9 +257,6 @@ staffRouter.post("/schedule/date/add_appointment", staff, async (req, res) => {
       console.error(error.message);
       return res.status(400).send(error.message);
     }
-    return res
-      .status(500)
-      .send("Something went wrong. Please try again later.");
   }
 });
 
@@ -259,9 +292,6 @@ staffRouter.get("/schedule/previewAppointment", staff, async (req, res) => {
       console.error(error.message);
       return res.status(400).send(error.message);
     }
-    return res
-      .status(500)
-      .send("Something went wrong. Please try again later.");
   }
 });
 
@@ -272,131 +302,160 @@ staffRouter.get("/service", staff, async (req, res) => {
   } catch {}
   return res.send(<ServicePage services={data} />);
 });
-staffRouter.post("/service", staff, (req: Request, res: Response) =>
-  addService(req, res, "staff")
-);
-staffRouter.put("/service", staff, (req: Request, res: Response) =>
-  updateService(req, res, "staff")
-);
-staffRouter.delete("/service", staff, (req: Request, res: Response) =>
-  deleteService(req, res, "staff")
-);
+staffRouter.post("/service", staff, async (req: Request, res: Response) => {
+  try {
+    addService(req, res, "staff");
+  } catch (error) {
+    console.log(error);
+  }
+});
+staffRouter.put("/service", staff, async (req: Request, res: Response) => {
+  try {
+    updateService(req, res, "staff");
+  } catch (error) {
+    console.log(error);
+  }
+});
+staffRouter.delete("/service", staff, async (req: Request, res: Response) => {
+  try {
+    deleteService(req, res, "staff");
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 staffRouter.get("/invoice", staff, async (req, res) => {
-  let invoices: Invoice[] = [];
   try {
+    let invoices: Invoice[] = [];
     invoices = (await getInvoice(req, res)) as Invoice[];
-  } catch {}
-
-  return res.send(<InvoicePage invoices={invoices} />);
+    return res.send(<InvoicePage invoices={invoices} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/invoice/serviceIndicator", staff, async (req, res) => {
-  const { MACT } = req.query;
+  try {
+    const { MACT } = req.query;
 
-  let services: serviceIndicators[] = [];
-  let prescriptions: Prescription[] = [];
+    let services: serviceIndicators[] = [];
+    let prescriptions: Prescription[] = [];
 
-  if (typeof MACT === "string") {
-    prescriptions = (await getPrescriptionById(
-      req,
-      res,
-      MACT
-    )) as Prescription[];
-    services = (await getServiceIndicatorsById(
-      req,
-      res,
-      MACT
-    )) as serviceIndicators[];
-  }
+    if (typeof MACT === "string") {
+      prescriptions = (await getPrescriptionById(
+        req,
+        res,
+        MACT
+      )) as Prescription[];
+      services = (await getServiceIndicatorsById(
+        req,
+        res,
+        MACT
+      )) as serviceIndicators[];
+    }
 
-  const htmxContent = `
-  <hr />
-                  <h2>Prescription</h2>
-                  <div class="row my-2 mx-1 justify-content-center">
-                    <table class="table table-striped table-borderless">
-                      <thead
-                        style="background-color:#84B0CA ;"
-                        class="text-white"
-                      >
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Batch code</th>
-                          <th scope="col">Id of drug</th>
-                          <th scope="col">Name of drug</th>
-                          <th scope="col">Amount Indicate</th>
-                          <th scope="col">Quantity</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        ${prescriptions.map((data: Prescription, idx) => (
-                          <tr>
-                            <td>{idx + 1}</td>
-                            <td>{data.MALO}</td>
-                            <td>{data.MATHUOC}</td>
-                            <td>{data.TENTHUOC}</td>
-                            <td>{data.LIEULUONG}</td>
-                            <td>{data.SOLUONG}</td>
-                            <td>{data.DONGIA}</td>
-                            <td>{data.THANHTIEN}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+    const htmxContent = `
     <hr />
-    <h2>Service</h2>
-    <div class="row my-2 mx-1 justify-content-center">
-    <table class="table table-striped table-borderless">
-      <thead
-        style="background-color:#84B0CA ;"
-        class="text-white"
-      >
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Id of Service</th>
-          <th scope="col">Name of drug</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${services.map((data: serviceIndicators, idx) => (
+                    <h2>Prescription</h2>
+                    <div class="row my-2 mx-1 justify-content-center">
+                      <table class="table table-striped table-borderless">
+                        <thead
+                          style="background-color:#84B0CA ;"
+                          class="text-white"
+                        >
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Batch code</th>
+                            <th scope="col">Id of drug</th>
+                            <th scope="col">Name of drug</th>
+                            <th scope="col">Amount Indicate</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${prescriptions.map((data: Prescription, idx) => (
+                            <tr>
+                              <td>{idx + 1}</td>
+                              <td>{data.MALO}</td>
+                              <td>{data.MATHUOC}</td>
+                              <td>{data.TENTHUOC}</td>
+                              <td>{data.LIEULUONG}</td>
+                              <td>{data.SOLUONG}</td>
+                              <td>{data.DONGIA}</td>
+                              <td>{data.THANHTIEN}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+      <hr />
+      <h2>Service</h2>
+      <div class="row my-2 mx-1 justify-content-center">
+      <table class="table table-striped table-borderless">
+        <thead
+          style="background-color:#84B0CA ;"
+          class="text-white"
+        >
           <tr>
-            <td>{idx + 1}</td>
-            <td>{data.MADV}</td>
-            <td>{data.TENDV}</td>
-            <td>{data.DONGIA}</td>
-            <td>{data.THANHTIEN}</td>
+            <th scope="col">#</th>
+            <th scope="col">Id of Service</th>
+            <th scope="col">Name of drug</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-    `;
-  return res.send(htmxContent);
+        </thead>
+        <tbody>
+          ${services.map((data: serviceIndicators, idx) => (
+            <tr>
+              <td>{idx + 1}</td>
+              <td>{data.MADV}</td>
+              <td>{data.TENDV}</td>
+              <td>{data.DONGIA}</td>
+              <td>{data.THANHTIEN}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+      `;
+    return res.send(htmxContent);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/invoice/failed", staff, async (req, res) => {
-  return res.send(<NullPage title="invoice" />);
+  try {
+    return res.send(<NullPage title="invoice" />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/invoice/add-prescription/:id", staff, async (req, res) => {
-  let idInvoices: string[] = (await getIdInvoice(req, res)) || [];
-  let nameDrugs: string[] = (await getNameOfDrug(req, res)) || [];
-  return res.send(
-    <AddPrescription listIdInvoice={idInvoices} listNameDrug={nameDrugs} />
-  );
+  try {
+    let idInvoices: string[] = (await getIdInvoice(req, res)) || [];
+    let nameDrugs: string[] = (await getNameOfDrug(req, res)) || [];
+    return res.send(
+      <AddPrescription listIdInvoice={idInvoices} listNameDrug={nameDrugs} />
+    );
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.get("/invoice/delete-prescription/:id", staff, async (req, res) => {
-  let idInvoices: string[] = (await getIdInvoice(req, res)) || [];
-  let Drugs: drugProps[] = (await getDrugInfo(req, res)) || [];
-  return res.send(
-    <DeletePrescription listIdInvoice={idInvoices} listDrug={Drugs} />
-  );
+  try {
+    let idInvoices: string[] = (await getIdInvoice(req, res)) || [];
+    let Drugs: drugProps[] = (await getDrugInfo(req, res)) || [];
+    return res.send(
+      <DeletePrescription listIdInvoice={idInvoices} listDrug={Drugs} />
+    );
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.post(
@@ -467,11 +526,15 @@ staffRouter.post("/invoice", staff, directNewUrl);
 // });
 
 staffRouter.get("/invoice/add/invoice", staff, async (req, res) => {
-  let idPatient: string[] = (await getIdAllPatient(req, res)) || [];
-  let idDentist: string[] = (await getIdAllDentist(req, res)) || [];
-  return res.send(
-    <AddInvoice listIdPatient={idPatient} listIdDentist={idDentist} />
-  );
+  try {
+    let idPatient: string[] = (await getIdAllPatient(req, res)) || [];
+    let idDentist: string[] = (await getIdAllDentist(req, res)) || [];
+    return res.send(
+      <AddInvoice listIdPatient={idPatient} listIdDentist={idDentist} />
+    );
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 staffRouter.post("/invoice/add/invoice", staff, addInvoice);
@@ -485,7 +548,9 @@ staffRouter.get("/information", staff, async (req, res) => {
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
 
     staff = (await getStaffById(req, res, data.user.MANV)) as Staff;
-  } catch {}
+  } catch (error) {
+    console.log(error);
+  }
   return res.send(<ProfilePage data={staff} />);
 });
 
@@ -496,28 +561,33 @@ staffRouter.get("/home/edit-profile", staff, async (req, res) => {
     const staff =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     data = (await getStaffById(req, res, staff.user.MANV)) as Staff;
-  } catch {}
+  } catch (error) {
+    console.log(error);
+  }
   return res.send(<EditProfile data={data} role={"staff"} />);
 });
 
 staffRouter.put("/home/edit-profile", staff, async (req, res) => {
-  const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+  try {
+    const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
 
-  const data: Staff = (
-    await (await req.db())
-      .input("MANV", MA)
-      .input("MATKHAU", MATKHAU)
-      .input("HOTEN", HOTEN)
-      .input("NGAYSINH", NGAYSINH)
-      .input("DIACHI", DIACHI)
-      .execute("UPDATE_INFO_NHANVIEN")
-  ).recordset[0];
-  
+    const data: Staff = (
+      await (await req.db())
+        .input("MANV", MA)
+        .input("MATKHAU", MATKHAU)
+        .input("HOTEN", HOTEN)
+        .input("NGAYSINH", NGAYSINH)
+        .input("DIACHI", DIACHI)
+        .execute("UPDATE_INFO_NHANVIEN")
+    ).recordset[0];
 
-  return res
-    .header("HX-Redirect", `/staff/information`)
-    .json("Directed")
-    .status(200);
+    return res
+      .header("HX-Redirect", `/staff/information`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 export default staffRouter;

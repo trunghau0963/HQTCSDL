@@ -10,7 +10,7 @@ export const AddDrug = ({ url }: { url: string }) => {
   return (
     <div>
       <a
-        class="text-center btn btn-tertiary btn-rounded float-right w-100 py-3 text-white"
+        class="text-center btn btn-warning btn-rounded float-right w-100 py-3 text-white"
         data-toggle="modal"
         data-target=".add-drug"
       >
@@ -40,11 +40,12 @@ export const AddDrug = ({ url }: { url: string }) => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
+                                <label class="font-weight-bold" for='name'>
                                   Name <span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
+                                  id="name"
                                   type="text"
                                   name="name"
                                 />
@@ -52,13 +53,14 @@ export const AddDrug = ({ url }: { url: string }) => {
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
+                                <label class="font-weight-bold" for="drugIndicate">
                                   Assign<span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
                                   type="text"
                                   name="drugIndicate"
+                                  id="drugIndicate"
                                 />
                               </div>
                             </div>
@@ -66,25 +68,27 @@ export const AddDrug = ({ url }: { url: string }) => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
+                                <label class="font-weight-bold" for="quantity">
                                   Quantity <span class="text-danger">*</span>
                                 </label>
                                 <input
                                   type="number"
                                   class="form-control "
                                   name="quantity"
+                                  id="quantity"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
+                                <label class="font-weight-bold" for="unit">
                                   Unit <span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
                                   type="text"
                                   name="unit"
+                                  id="unit"
                                 />
                               </div>
                             </div>
@@ -92,19 +96,20 @@ export const AddDrug = ({ url }: { url: string }) => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
+                                <label class="font-weight-bold" for="price">
                                   Price <span class="text-danger">*</span>
                                 </label>
                                 <input
                                   class="form-control"
                                   type="text"
                                   name="price"
+                                  id="price"
                                 />
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold">
+                                <label class="font-weight-bold" for="exp">
                                   Expire day <span class="text-danger">*</span>
                                 </label>
                                 <input
@@ -112,6 +117,7 @@ export const AddDrug = ({ url }: { url: string }) => {
                                   class="form-control form-control-lg"
                                   name="exp"
                                   required=""
+                                  id="exp"
                                   min={new Date().toISOString().split("T")[0]}
                                 />
                               </div>

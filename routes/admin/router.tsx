@@ -58,12 +58,15 @@ import {
 } from "../../controller/appoinmentController";
 
 import { getInvoice } from "../../controller/invoiceController";
-import ListAccounts from "../../app/admin/Account/ListAccount";
 import EditProfile from "../../app/patient/Profile/EditProfile";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
-  return res.send(<DashBoard />);
+  try {
+    return res.send(<DashBoard />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.get("/drug", [
@@ -81,66 +84,168 @@ adminRouter.get("/drug", [
 ]);
 
 adminRouter.post("/drug", admin, async (req: any, res: any) => {
-  addDrug(req, res, "admin");
+  try {
+    addDrug(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
 });
 adminRouter.delete("/drug", admin, async (req: any, res: any) => {
-  deleteDrug(req, res, "admin");
+  try {
+    deleteDrug(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
 });
 adminRouter.put("/drug", admin, async (req: any, res: any) => {
-  updateInfoDrug(req, res, "admin");
+  try {
+    updateInfoDrug(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.get("/dentist", admin, async (req, res) => {
-  let dentists: Dentist[] = [];
   try {
-    dentists = (await getAllDentist(req, res)) as Dentist[];
-  } catch {}
-  return res.send(<DentistPage Data={dentists} />);
+    const dentists: Dentist[] = (
+      await (await req.db()).execute("GET_INFO_NHASI")
+    ).recordset;
+    return res.send(<DentistPage dentists={dentists} />);
+  } catch(error) {console.log(error)}
+});
+
+adminRouter.put("/dentist", admin, async (req, res) => {
+  try {
+    const { id, name, pwd, dob, address } = req.body;
+    const dentist: Dentist[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .input("MATKHAU", pwd)
+        .input("HOTEN", name)
+        .input("NGAYSINH", dob)
+        .input("DIACHI", address)
+        .execute("UPDATE_INFO_NHASI")
+    ).recordset;
+
+    return res
+      .header("HX-Redirect", `/admin/dentist`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.post("/dentist", admin, createDentist);
 
 adminRouter.get("/staff", admin, async (req, res) => {
-  let staffs: Staff[] = [];
   try {
-    staffs = (await getAllStaff(req, res)) as Staff[];
-  } catch {}
-  return res.send(<StaffPage Data={staffs} />);
+    const staffs: Staff[] = (
+      await (await req.db()).execute("GET_INFO_NHANVIEN")
+    ).recordset;
+    return res.send(<StaffPage staffs={staffs} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.post("/staff", admin, createStaff);
 
-adminRouter.get("/patient", admin, async (req, res) => {
-  let patients: Patient[] = [];
+adminRouter.put("/staff", admin, async (req, res) => {
   try {
-    patients = (await getAllPatient(req, res)) as Patient[];
-  } catch {}
-  return res.send(<PatientPage Data={patients} />);
+    const { id, name, pwd, dob, address } = req.body;
+    const patient: Patient[] = (
+      await (await req.db())
+        .input("MANV", id)
+        .input("MATKHAU", pwd)
+        .input("HOTEN", name)
+        .input("NGAYSINH", dob)
+        .input("DIACHI", address)
+        .execute("UPDATE_INFO_NHANVIEN")
+    ).recordset;
+
+    return res
+      .header("HX-Redirect", `/admin/staff`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.get("/patient", admin, async (req, res) => {
+  try {
+    const patients: Patient[] = (
+      await (await req.db()).execute("GET_INFO_BENHNHAN")
+    ).recordset;
+    
+    return res.send(<PatientPage patients={patients} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.post("/patient", admin, createPatient);
 
-adminRouter.put("/patient", admin, updatePatient);
+adminRouter.put("/patient", admin, async (req, res) => {
+  try {
+    const { id, name, pwd, dob, address } = req.body;
+    const patient: Patient[] = (
+      await (await req.db())
+        .input("MABN", id)
+        .input("MATKHAU", pwd)
+        .input("HOTEN", name)
+        .input("NGAYSINH", dob)
+        .input("DIACHI", address)
+        .execute("UPDATE_INFO_BENHNHAN")
+    ).recordset;
+
+    return res
+      .header("HX-Redirect", `/admin/patient`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 adminRouter.get("/service", admin, async (req, res) => {
   let data: Service[] = [];
   try {
     data = (await getService(req, res)) as Service[];
-  } catch {}
-  return res.send(<ServicePage services={data} />);
+    return res.send(<ServicePage services={data} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-adminRouter.post("/service", admin, (req: Request, res: Response) =>
-  addService(req, res, "admin")
-);
-adminRouter.put("/service", admin, (req: Request, res: Response) =>
-  updateService(req, res, "admin")
-);
-adminRouter.delete("/service", admin, (req: Request, res: Response) =>
-  deleteService(req, res, "admin")
-);
+adminRouter.post("/service", admin, async (req: Request, res: Response) => {
+  try {
+    addService(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+adminRouter.put("/service", admin, async (req: Request, res: Response) => {
+  try {
+    updateService(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+adminRouter.delete("/service", admin, async (req: Request, res: Response) => {
+  try {
+    deleteService(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
 adminRouter.get("/profile", admin, async (req, res) => {
-  return res.send(<Profile />);
+  try {
+    return res.send(<Profile />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.get("/information", admin, async (req, res) => {
@@ -150,7 +255,9 @@ adminRouter.get("/information", admin, async (req, res) => {
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     admin = (await getAdminById(req, res, data.user.MAQT)) as Admin;
-  } catch {}
+  } catch (error) {
+    console.log(error);
+  }
   return res.send(<ProfilePage data={admin} />);
 });
 
@@ -161,65 +268,68 @@ adminRouter.get("/home/edit-profile", admin, async (req, res) => {
     const admin =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     data = (await getAdminById(req, res, admin.user.MAQT)) as Admin;
-  } catch {}
-  return res.send(<EditProfile data={data} role={'admin'}/>);
+    return res.send(<EditProfile data={data} role={"admin"} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.put("/home/edit-profile", admin, async (req, res) => {
-  const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+  try {
+    const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
 
-  const data: Patient = (
-    await (await req.db())
-      .input("MAQT", MA)
-      .input("MATKHAU", MATKHAU)
-      .input("HOTEN", HOTEN)
-      .input("NGAYSINH", NGAYSINH)
-      .input("DIACHI", DIACHI)
-      .execute("UPDATE_INFO_QUANTRI")
-  ).recordset[0];
-  console.log("aaa");
+    const data: Patient = (
+      await (await req.db())
+        .input("MAQT", MA)
+        .input("MATKHAU", MATKHAU)
+        .input("HOTEN", HOTEN)
+        .input("NGAYSINH", NGAYSINH)
+        .input("DIACHI", DIACHI)
+        .execute("UPDATE_INFO_QUANTRI")
+    ).recordset[0];
 
-  return res
-    .header("HX-Redirect", `/admin/information`)
-    .json("Directed")
-    .status(200);
-});
-
-adminRouter.get("/manageAccount", admin, async (req, res) => {
-  const patients: Patient[] = (
-    await (await req.db()).execute("GET_INFO_BENHNHAN")
-  ).recordset;
-  const staffs: Staff[] = (await (await req.db()).execute("GET_INFO_NHANVIEN"))
-    .recordset;
-  const dentists: Dentist[] = (await (await req.db()).execute("GET_INFO_NHASI"))
-    .recordset;
-  return res.send(
-    <ListAccounts patients={patients} dentists={dentists} staffs={staffs} />
-  );
+    return res
+      .header("HX-Redirect", `/admin/information`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.put("/manageAccount", admin, async (req, res) => {
-  const { id, role, isBlock } = req.body;
+  try {
+    let { id, role, isBlock } = req.body;
 
-  if (isBlock === "false") {
-    const result: Dentist[] = (
-      await (await req.db())
-        .input("MA", id)
-        .input("ROLE", role)
-        .execute("BLOCK_ACCOUNT")
-    ).recordset;
-  } else {
-    const result: Dentist[] = (
-      await (await req.db())
-        .input("MA", id)
-        .input("ROLE", role)
-        .execute("UNBLOCK_ACCOUNT")
-    ).recordset;
+    if (isBlock === "false") {
+      const result: Dentist[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", role)
+          .execute("BLOCK_ACCOUNT")
+      ).recordset;
+    } else {
+      const result: Dentist[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", role)
+          .execute("UNBLOCK_ACCOUNT")
+      ).recordset;
+    }
+    if (role === "BENHNHAN") {
+      role = "patient";
+    } else if (role === "NHASI") {
+      role = "dentist";
+    } else if (role === "NHANVIEN") {
+      role = "staff";
+    }
+    return res
+      .header("HX-Redirect", `/admin/${role}`)
+      .json("Directed")
+      .status(200);
+  } catch (err) {
+    console.error(err);
   }
-  return res
-    .header("HX-Redirect", `/admin/manageAccount`)
-    .json("Directed")
-    .status(200);
 });
 
 export default adminRouter;

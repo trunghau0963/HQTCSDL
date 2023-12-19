@@ -77,7 +77,7 @@ const AddAppointment = ({
                       class="form-control"
                       name="dob"
                       id="dob"
-                      value={detailSchedule.NGAYKHAM?.toISOString().split("T")[0]}
+                      value={infoPatient.NGAYSINH.toString().split("T")[0]}
                       readonly=""
                     />
                   </div>
