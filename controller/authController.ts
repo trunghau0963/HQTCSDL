@@ -52,17 +52,20 @@ export const SigninController = async (req: Request, res: Response) => {
       role,
     };
 
-    console.log("user login : ", user.id, user.DIENTHOAI, user.MATKHAU, user.role);
-    const token = await middlewareToken.generateToken(
-      user,
-      res
+    console.log(
+      "user login : ",
+      user.id,
+      user.DIENTHOAI,
+      user.MATKHAU,
+      user.role
     );
+    const token = await middlewareToken.generateToken(user, res);
     console.log(token);
+    const url = `/${configRole}/dashboard`;
     return res
-      .json(
-        "Login successfully" + `<a href='/${configRole}/dashboard'>Continue<a>`
-      )
-      .status(201);
+      .header("HX-Redirect", url)
+      .status(200)
+      .json("Login successfully");
   } catch (error: any) {
     console.log(error);
 

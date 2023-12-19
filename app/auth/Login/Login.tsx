@@ -63,41 +63,31 @@ const Login = () => {
                           Role
                         </label>
                       </div>
-
-                      <button
-                        type="submit"
-                        class="w-100 btn btn-success btn-block btn-lg gradient-custom-4 text-body"
-                      >
+                      <button class="w-100 btn btn-success btn-lg py-3 my-2">
                         Sign In
                       </button>
+                      <a
+                        class="w-100 btn btn-secondary btn-lg py-3 my-2"
+                        href="/"
+                      >
+                        Home
+                      </a>
 
                       <hr class="my-4"></hr>
                       <div class="text-center">
-                        <button
-                          type="button"
-                          class="btn btn-link btn-floating mx-1"
-                        >
+                        <button class="btn btn-link btn-floating mx-1">
                           <i class="bi bi-facebook"></i>
                         </button>
 
-                        <button
-                          type="button"
-                          class="btn btn-link btn-floating mx-1"
-                        >
+                        <button class="btn btn-link btn-floating mx-1">
                           <i class="bi bi-google"></i>
                         </button>
 
-                        <button
-                          type="button"
-                          class="btn btn-link btn-floating mx-1"
-                        >
+                        <button class="btn btn-link btn-floating mx-1">
                           <i class="bi bi-twitter"></i>
                         </button>
 
-                        <button
-                          type="button"
-                          class="btn btn-link btn-floating mx-1"
-                        >
+                        <button class="btn btn-link btn-floating mx-1">
                           <i class="bi bi-github"></i>
                         </button>
                       </div>
