@@ -23,7 +23,7 @@ import {
 import middlewareToken from "../../middleware/tokenMiddleware";
 import { getPatientById } from "../../controller/patientController";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import DentistAvailable from "../../components/Appointment/patientAppointment/dentistList";
+import DentistAvailable from "../../components/dentistList";
 import {
   getSchedule,
   getScheduleIsFree,

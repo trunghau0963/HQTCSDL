@@ -150,9 +150,7 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
   }
 
   if (!appointment.MABN) {
-    return res.send(
-      `<h1 class="text-danger">Không tìm thấy lịch khám trong ngày</h1>`
-    );
+    return res.send(`Không tìm thấy lịch khám trong ngày`);
   }
 
   return res.send(

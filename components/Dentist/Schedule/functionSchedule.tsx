@@ -847,124 +847,30 @@ export const GetSchedule = ({
   );
 };
 
-export const GetAddAppointment = ({      patientsName,
+export const GetAddAppointment = ({
+  patientsName,
   idDentist,
   dateOfAppointment,
   hourOfAppointment,
-  nameOfDentist}:
-  {
-    patientsName: string[],
-    idDentist: string,
-    dateOfAppointment: string,
-    hourOfAppointment: string,
-    nameOfDentist: string 
-  }) => {
+  nameOfDentist,
+}: {
+  patientsName: string[];
+  idDentist: string;
+  dateOfAppointment: string;
+  hourOfAppointment: string;
+  nameOfDentist: string;
+}) => {
   return (
     <div>
-    <form
-      id="add-appointment-form"
-      hx-post="/dentist/schedule/add-appointment"
-    >
-      <div class="row">
-        <div class="form-outline mb-4 col-6">
-          <label class="form-label" for="MANS">Id of Dentist</label>
-          <input
-            type="text"
-            id="MANS"
-            class="form-control form-control-lg"
-            name="MANS"
-            value={idDentist}
-            required=""
-            placeholder={idDentist}
-            readonly="true"
-          />
-        </div>
-
-        <div class="form-outline mb-4 col-6">
-          <label class="form-label" for="TEN">Name of Patient</label>
-          <select
-            class="form-control form-control-lg"
-            id="TEN"
-            name="TEN"
-          >
-            ${patientsName.map((name) => <option value={name}>{name}</option>)}
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 form-outline mb-4">
-          <label for="NGAYKHAM" class="form-label">
-            Date of appointment
-          </label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="NGAYKHAM"
-            name="NGAYKHAM"
-            value={dateOfAppointment}
-            required=""
-            placeholder={dateOfAppointment}
-            readonly="true"
-          />
-        </div>
-        <div class="col-sm-6 form-outline mb-4">
-          <label for="GIOKHAM" class="form-label">
-            Hour of appointment
-          </label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="GIOKHAM"
-            name="GIOKHAM"
-            value={hourOfAppointment}
-            required=""
-            placeholder={hourOfAppointment}
-            readonly="true"
-          />
-        </div>
-      </div>
-      <button
-        hx-target="#add-appointment-form"
-        hx-swap="outerHTML"
-        class="btn btn-dark btn-lg w-100 py-3 my-2"
+      <form
+        id="add-appointment-form"
+        hx-post="/dentist/schedule/add-appointment"
       >
-        Create Appointment
-      </button>
-    </form>
-    <p>
-      <a class="btn btn-success py-3 px-2 w-100" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-        Add New Patient 
-      </a>
-    </p>
-    <div class="collapse" id="collapseExample">
-      <div class="card card-body">
-        <form
-          id="add-new-appointment-form"
-          hx-post="/dentist/schedule/add-new-appointment"
-        >
-          <div class="row">
-            <div class="col-sm-6 form-outline mb-4">
-              <label for="patient_name" class="form-label">
-                Patient Name
-              </label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                name="patient_name"
-                id="patient_name"
-                placeholder=""
-              />
-            </div>
-            <div class="col-sm-6 form-outline mb-4">
-              <label class="form-label" for="phoneNum">
-                Patient Phone Number
-              </label>
-              <input type="text" class="form-control form-control-lg" id="phoneNum" name="phoneNum" />
-            </div>
-          </div>
-          <div class="row">
+        <div class="row">
           <div class="form-outline mb-4 col-6">
-            <label class="form-label" for="MANS">Id of Dentist</label>
+            <label class="form-label" for="MANS">
+              Id of Dentist
+            </label>
             <input
               type="text"
               id="MANS"
@@ -976,50 +882,20 @@ export const GetAddAppointment = ({      patientsName,
               readonly="true"
             />
           </div>
-  
-          <div class="col-sm-6 form-outline mb-4">
-              <label for="dentist_name" class="form-label">
-                Dentist Name
-              </label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                name="dentist_name"
-                id="dentist_name"
-                value={nameOfDentist}
-                required=""
-                placeholder={nameOfDentist}
-                readonly="true"
-              />
-            </div>
-        </div>
-          <div class="row">
-            <div class="col-sm-6 form-outline mb-4">
-              <label class="form-label" for="address">
-                Address
-              </label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="address"
-                required=""
-                name="address"
-              />
-            </div>
-            <div class="col-sm-6 form-outline mb-4">
-              <label for="dob" class="form-label">
-                Date of birth
-              </label>
-              <input
-                type="date"
-                class="form-control form-control-lg"
-                name="dob"
-                required=""
-                id="dob"
-              />
-            </div>
+
+          <div class="form-outline mb-4 col-6">
+            <label class="form-label" for="TEN">
+              Name of Patient
+            </label>
+            <select class="form-control form-control-lg" id="TEN" name="TEN">
+              $
+              {patientsName.map((name) => (
+                <option value={name}>{name}</option>
+              ))}
+            </select>
           </div>
-          <div class="row">
+        </div>
+        <div class="row">
           <div class="col-sm-6 form-outline mb-4">
             <label for="NGAYKHAM" class="form-label">
               Date of appointment
@@ -1028,7 +904,7 @@ export const GetAddAppointment = ({      patientsName,
               type="text"
               class="form-control form-control-lg"
               id="NGAYKHAM"
-              name="doa"
+              name="NGAYKHAM"
               value={dateOfAppointment}
               required=""
               placeholder={dateOfAppointment}
@@ -1043,25 +919,166 @@ export const GetAddAppointment = ({      patientsName,
               type="text"
               class="form-control form-control-lg"
               id="GIOKHAM"
-              name="hour"
+              name="GIOKHAM"
               value={hourOfAppointment}
               required=""
               placeholder={hourOfAppointment}
               readonly="true"
-              />
-            </div>
+            />
           </div>
-          <button
-            hx-target="#add-new-appointment-form"
-            hx-swap="outerHTML"
-            class="btn btn-danger btn-lg w-100 py-3"
+        </div>
+        <button
+          hx-target="#add-appointment-form"
+          hx-swap="outerHTML"
+          class="btn btn-dark btn-lg w-100 py-3 my-2"
+        >
+          Create Appointment
+        </button>
+      </form>
+      <p>
+        <a
+          class="btn btn-success py-3 px-2 w-100"
+          data-bs-toggle="collapse"
+          href="#collapseExample"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+        >
+          Add New Patient
+        </a>
+      </p>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          <form
+            id="add-new-appointment-form"
+            hx-post="/dentist/schedule/add-new-appointment"
           >
-            Create New Appointment
-          </button>
-        </form>
+            <div class="row">
+              <div class="col-sm-6 form-outline mb-4">
+                <label for="patient_name" class="form-label">
+                  Patient Name
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  name="patient_name"
+                  id="patient_name"
+                  placeholder=""
+                />
+              </div>
+              <div class="col-sm-6 form-outline mb-4">
+                <label class="form-label" for="phoneNum">
+                  Patient Phone Number
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  id="phoneNum"
+                  name="phoneNum"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-outline mb-4 col-6">
+                <label class="form-label" for="MANS">
+                  Id of Dentist
+                </label>
+                <input
+                  type="text"
+                  id="MANS"
+                  class="form-control form-control-lg"
+                  name="MANS"
+                  value={idDentist}
+                  required=""
+                  placeholder={idDentist}
+                  readonly="true"
+                />
+              </div>
+
+              <div class="col-sm-6 form-outline mb-4">
+                <label for="dentist_name" class="form-label">
+                  Dentist Name
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  name="dentist_name"
+                  id="dentist_name"
+                  value={nameOfDentist}
+                  required=""
+                  placeholder={nameOfDentist}
+                  readonly="true"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 form-outline mb-4">
+                <label class="form-label" for="address">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  id="address"
+                  required=""
+                  name="address"
+                />
+              </div>
+              <div class="col-sm-6 form-outline mb-4">
+                <label for="dob" class="form-label">
+                  Date of birth
+                </label>
+                <input
+                  type="date"
+                  class="form-control form-control-lg"
+                  name="dob"
+                  required=""
+                  id="dob"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 form-outline mb-4">
+                <label for="NGAYKHAM" class="form-label">
+                  Date of appointment
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  id="NGAYKHAM"
+                  name="doa"
+                  value={dateOfAppointment}
+                  required=""
+                  placeholder={dateOfAppointment}
+                  readonly="true"
+                />
+              </div>
+              <div class="col-sm-6 form-outline mb-4">
+                <label for="GIOKHAM" class="form-label">
+                  Hour of appointment
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  id="GIOKHAM"
+                  name="hour"
+                  value={hourOfAppointment}
+                  required=""
+                  placeholder={hourOfAppointment}
+                  readonly="true"
+                />
+              </div>
+            </div>
+            <button
+              hx-target="#add-new-appointment-form"
+              hx-swap="outerHTML"
+              class="btn btn-danger btn-lg w-100 py-3"
+            >
+              Create New Appointment
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-    </div>
-    
-  )
-}
+  );
+};

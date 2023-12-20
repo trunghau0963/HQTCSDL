@@ -2,8 +2,8 @@ import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
 import { Dentist, Service } from "../../model/model";
 import { AddAppointmentByDentist } from "./functionHome";
-import Calendar from "../Appointment/patientAppointment/calendar";
-import DentistAvailable from "../Appointment/patientAppointment/dentistList";
+import Calendar from "../calendar";
+import DentistAvailable from "../dentistList";
 const HomeComponent = ({
   listDentist,
   listService,

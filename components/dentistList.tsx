@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-import { Schedule } from "../../../model/model";
+import { Schedule } from "../model/model";
 const DentistAvailable = () => {
   return (
     <div
