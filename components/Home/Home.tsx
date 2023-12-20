@@ -42,7 +42,7 @@ const HomeComponent = ({
                       by you to provide you with all forms of medical justice.
                     </p>
                     <div class="text-center">
-                      <a href="#" class="more-btn">
+                      <a href="#service" class="more-btn">
                         Learn More <i class="bx bx-chevron-right"></i>
                       </a>
                     </div>
@@ -56,7 +56,7 @@ const HomeComponent = ({
                           <i class="bx bx-plus-medical"></i>
                           <h4>Best Services</h4>
                           <p>
-                            If you are at Healthifer, you must be the one values
+                            If you are at HMS Clinic, you must be the one values
                             quality. And you are at the right place for it.
                           </p>
                         </div>
@@ -66,7 +66,7 @@ const HomeComponent = ({
                           <i class="bx bx-heart"></i>
                           <h4>Trustworthy</h4>
                           <p>
-                            Trust is the pillars on which we stand. Healthifer
+                            Trust is the pillars on which we stand. HMS Clinic
                             ensures you get all the justice for what you pay.
                           </p>
                         </div>
@@ -178,7 +178,7 @@ const HomeComponent = ({
               <div class="section-title">
                 <h2>Schedules</h2>
               </div>
-              <main class="d-flex align-items-center justify-content-center min-vh-100 p-5">
+              <main class="d-flex align-items-center justify-content-center min-vh-100">
                 <Calendar role={role} />
                 <DentistAvailable />
               </main>

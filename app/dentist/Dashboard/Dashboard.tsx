@@ -6,22 +6,11 @@ const TOOLS = (baseUrl: string): any[] => [
     title: "Home",
     icon: "/icons/home.svg",
     url: `${baseUrl}/home`,
-    color: "btn btn-outline-info",
-    slug: "home",
   },
   {
     title: "Schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,
-    color: "btn btn-outline-primary",
-    slug: "schedule",
-  },
-  {
-    title: "Patient",
-    icon: "/icons/patient.svg",
-    url: `${baseUrl}/patient`,
-    color: "btn btn-outline-success",
-    slug: "patient",
   },
 ];
 const Dashboard = () => {
@@ -38,7 +27,7 @@ const Dashboard = () => {
         </div>
       </div>
       <main id="main">
-        <ToolNavigation NAVIGATIONS={TOOLS} url="/dentist" numberOfOption={4} />
+        <ToolNavigation NAVIGATIONS={TOOLS} url="/dentist" numberOfOption={6} />
       </main>
     </DentistPage>
   );

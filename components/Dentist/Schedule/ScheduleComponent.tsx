@@ -3,7 +3,7 @@ import { Schedule, AppointmentDetail } from "../../../model/model";
 import {
   AddAppointment,
   AddScheduleFree,
-  GetAppointment,
+  PostAppointment,
   DeleteAppointment,
 } from "./functionSchedule";
 type ScheduleProps = {
@@ -128,7 +128,7 @@ const ScheduleComponent = ({
                             }
                           </td>
                           <td class="text-right">
-                            <GetAppointment
+                            <PostAppointment
                               idDentist={data.MANS}
                               date={data.NGAYKHAM}
                               time={data.GIOKHAM}
@@ -163,7 +163,7 @@ const ScheduleComponent = ({
                             }
                           </td>
                           <td class="text-right">
-                            <GetAppointment
+                            <PostAppointment
                               idDentist={data.MANS}
                               date={data.NGAYKHAM}
                               time={data.GIOKHAM}

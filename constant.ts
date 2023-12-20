@@ -85,13 +85,6 @@ export const DENTISTNAVIGATIONS = (baseUrl: string) => [
     url: `${baseUrl}/schedule`,
     color: "btn btn-outline-primary",
   },
-  {
-    title: "Patient",
-    icon: "/icons/patient.svg",
-    url: `${baseUrl}/patient`,
-    color: "btn btn-outline-success",
-    slug: "patient",
-  },
 ];
 
 export const STAFFNAVIGATIONS = (baseUrl: string) => [
