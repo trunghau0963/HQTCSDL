@@ -12,8 +12,10 @@ import BaseHtml from "../../../../layouts/baseHtml";
 
 const PreviewAppointment = ({
   detailSchedule,
+  url,
 }: {
   detailSchedule: AppointmentDetail;
+  url: string;
 }) => {
   return (
     <BaseHtml>
@@ -181,7 +183,7 @@ const PreviewAppointment = ({
                           <a
                             class="btn btn-primary text-capitalize"
                             style="background-color:#60bdf3 ;"
-                            href="/staff/schedule"
+                            href={url}
                           >
                             Thank you !
                           </a>

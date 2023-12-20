@@ -5,7 +5,7 @@ import FormContact from "../../../components/Appointment/patientAppointment/addA
 import { Schedule, drugProps } from "../../../model/model";
 import StaffPage from "../staff";
 
-const Schedule = ({role}:{role:string}) => {
+const SchedulePage = ({role}:{role:string}) => {
   return (
     <StaffPage>
       <div
@@ -28,4 +28,4 @@ const Schedule = ({role}:{role:string}) => {
   );
 };
 
-export default Schedule;
+export default SchedulePage;

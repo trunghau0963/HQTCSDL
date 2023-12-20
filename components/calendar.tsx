@@ -1,8 +1,49 @@
 import * as elements from "typed-html";
 import BaseHtml from "../layouts/baseHtml";
-const Calendar = ({role}:{role:string}) => {
+const Calendar = ({ role }: { role: string }) => {
   return (
     <div>
+      <button
+        class="btn btn-tertiary btn-lg py-3 text-white"
+        data-bs-toggle="modal"
+        hx-get={`/free-schedule`}
+        data-bs-target="#getListFreeSchedule"
+        hx-target="#getListFreeScheduleBody"
+      >
+        Click here to show List Free Schedules
+      </button>
+
+      <div
+        class="modal fade"
+        id="getListFreeSchedule"
+        tabindex="-1"
+        aria-labelledby="getListFreeScheduleLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog  modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="getListFreeScheduleLabel">
+                Modal title
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div id="getListFreeScheduleBody" class="getListFreeScheduleBody"></div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="calendar bg-light rounded p-3 shadow-lg w-100">
         <div class="d-flex flex-row align-items-center justify-content-between">
           <label>
@@ -82,7 +123,7 @@ const Calendar = ({role}:{role:string}) => {
             SU
           </div>
         </div>
-        <div class="date" id='response'>
+        <div class="date" id="response">
           <div class="d-flex flex-row align-content-center justify-content-between">
             <button
               class="date__number d-flex align-items-center justify-content-center rounded-circle"
@@ -526,6 +567,5 @@ const Calendar = ({role}:{role:string}) => {
     </div>
   );
 };
-
 
 export default Calendar;

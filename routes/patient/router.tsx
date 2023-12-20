@@ -3,7 +3,7 @@ import * as elements from "typed-html";
 import Drug from "../../app/patient/Drug/Drug";
 import Dashboard from "../../app/patient/Dashboard/Dashboard";
 import Dentist from "../../app/patient/Dentist/Dentist";
-import ScheduleComponent from "../../app/patient/Schedule/Schedule";
+import SchedulePage from "../../app/patient/Schedule/Schedule";
 import ProfilePage from "../../app/patient/Profile/Profile";
 import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
 import Security from "../../app/patient/Security/Security";
@@ -25,8 +25,10 @@ import { getPatientById } from "../../controller/patientController";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import DentistAvailable from "../../components/dentistList";
 import {
+  getFreeSchedule,
   getSchedule,
   getScheduleIsFree,
+  getScheduleIsFreeByDate,
 } from "../../controller/scheduleController";
 import {
   deleteAppointment,
@@ -47,6 +49,11 @@ import { getAllDentist } from "../../controller/dentistController";
 import EditProfile from "../../app/patient/Profile/EditProfile";
 import PatientPage from "../../app/patient/patient";
 import HomeComponent from "../../components/Home/Home";
+import {
+  GetFreeSchedule,
+  GetYearFreeSchedule,
+  ListSchedule,
+} from "../../components/Home/functionHome";
 
 const patientRouter = Router();
 
@@ -327,6 +334,50 @@ patientRouter.get("/appointment/id", patient, async (req, res) => {
   }
 });
 
+patientRouter.get("/calendar-schedule", patient, async (req, res) => {
+  try {
+    const dentistSchedule: Schedule[] =
+      (await getScheduleIsFreeByDate(req, res)) || [];
+
+    if (dentistSchedule.length === 0) {
+      return res.send(
+        `<h1 class="text-danger">Không tìm thấy lịch khám trong ngày</h1>`
+      );
+    }
+
+    return res.send(<ListSchedule dentistSchedule={dentistSchedule} />);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+patientRouter.get("/free-schedule", patient, async (req, res) => {
+  let listFreeSchedule: Schedule[] =
+    ((await getFreeSchedule(req, res)) as Schedule[]) || [];
+
+  const uniqueYears = new Set();
+
+  listFreeSchedule.forEach((schedule) => {
+    const date = new Date(schedule.NGAYKHAM);
+    const year = date.getFullYear();
+
+    uniqueYears.add(year);
+  });
+
+  const uniqueDates = new Set();
+
+  listFreeSchedule.forEach((schedule) => {
+    const date = new Date(schedule.NGAYKHAM);
+    uniqueDates.add(date.toISOString().split("T")[0]);
+  });
+  const yearsArray = Array.from(uniqueYears) as string[];
+  const daysArray = Array.from(uniqueDates) as string[];
+
+  return res.send(
+    <GetYearFreeSchedule yearsArray={yearsArray} daysArray={daysArray} />
+  );
+});
+
 patientRouter.get("/drug", patient, async (req, res) => {
   try {
     const drugList: drugProps[] = (
@@ -353,10 +404,19 @@ patientRouter.get("/dentist", patient, async (req, res) => {
 
 patientRouter.get("/schedule", patient, async (req, res) => {
   try {
-    return res.send(<ScheduleComponent role={"patient"} />);
+    return res.send(<SchedulePage role={"patient"} />);
   } catch (err) {
     console.error(err);
   }
+});
+
+patientRouter.get("/free-schedule", patient, async (req, res) => {
+  let listFreeSchedule: Schedule[] =
+    ((await getFreeSchedule(req, res)) as Schedule[]) || [];
+
+  console.log("listFreeSchedule: ", listFreeSchedule);
+
+  return res.send(<GetFreeSchedule listFreeSchedule={listFreeSchedule} />);
 });
 
 patientRouter.get("/schedule/date", patient, async (req, res) => {

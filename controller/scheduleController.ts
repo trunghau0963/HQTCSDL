@@ -102,6 +102,8 @@ export const getSchedule = async (req: Request, res: Response) => {
   }
 };
 
+//for calendar
+
 export const getScheduleIsFree = async (req: Request, res: Response) => {
   try {
     const { year, mon, day } = req.query;
@@ -115,12 +117,51 @@ export const getScheduleIsFree = async (req: Request, res: Response) => {
     if (getDaysInMonth(Number(year), Number(mon)) < Number(day)) {
       return [];
     }
-
+    console.log("date", date);
     const data: Schedule[] = (
       await (await req.db())
         .input("NGAYKHAM", date)
         .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
     ).recordset as Schedule[];
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Schedule which is free. Please try again later.");
+    return undefined;
+  }
+};
+// for button
+
+export const getScheduleIsFreeByDate = async (req: Request, res: Response) => {
+  try {
+    const { date } = req.query;
+    console.log(date);
+    const data: Schedule[] = (
+      await (await req.db())
+        .input("NGAYKHAM", date)
+        .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE")
+    ).recordset as Schedule[];
+    // console.log(data);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Schedule which is free. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getFreeSchedule = async (req: Request, res: Response) => {
+  try {
+    const data: Schedule[] = (
+      await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL_FREE")
+    ).recordset;
 
     return data;
   } catch (error) {

@@ -563,7 +563,6 @@ export const GetSchedule = ({
                     </tr>
                   </thead>
                   <tbody>
-                    $
                     {prescriptions.map((data: Prescription, idx) => (
                       <tr>
                         <td>{idx + 1}</td>

@@ -5,7 +5,7 @@ import DentistAvailable from "../../../components/dentistList";
 import FormContact from "../../../components/Appointment/patientAppointment/addAppoinment";
 import { Schedule, drugProps } from "../../../model/model";
 
-const Schedule = ({role}:{role:string}) => {
+const SchedulePage = ({role}:{role:string}) => {
   // const dates = Array.from({ length: 31 }, (_, index) => index + 1);
   // const storage: any[][] = new Array(5).fill(null).map(() => new Array(7).from({ length: 31 }, (_, index) => index + 1).fill(null));
   return (
@@ -30,4 +30,4 @@ const Schedule = ({role}:{role:string}) => {
   );
 };
 
-export default Schedule;
+export default SchedulePage;

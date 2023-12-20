@@ -17,6 +17,7 @@ import {
   AppointmentDetailProps,
   serviceIndicators,
   Dentist,
+  Schedule,
 } from "../../model/model";
 import { getStaffById } from "../../controller/staffController";
 import ProfilePage from "../../app/staff/Profile/Profile";
@@ -70,12 +71,13 @@ import {
   getIdAllDentist,
 } from "../../controller/dentistController";
 import { getAppointmentIsDone } from "../../controller/appoinmentController";
-import Schedule from "../../app/staff/Schedule/Schedule";
-import { getScheduleIsFree } from "../../controller/scheduleController";
+import SchedulePage from "../../app/staff/Schedule/Schedule";
+import { getFreeSchedule, getScheduleIsFree } from "../../controller/scheduleController";
 import AddAppointment from "../../components/Appointment/add_appointment";
 import PreviewAppointment from "../../app/staff/Invoice/Preview/previewAppointmentCard";
 import EditProfile from "../../app/patient/Profile/EditProfile";
 import HomeComponent from "../../components/Home/Home";
+import { GetFreeSchedule } from "../../components/Home/functionHome";
 
 const staffRouter = Router();
 
@@ -140,10 +142,19 @@ staffRouter.put("/drug", staff, async (req: any, res: any) => {
 
 staffRouter.get("/schedule", staff, async (req, res) => {
   try {
-    return res.send(<Schedule role={"staff"} />);
+    return res.send(<SchedulePage role={"staff"} />);
   } catch (error) {
     console.log(error);
   }
+});
+
+staffRouter.get("/free-schedule", staff, async (req, res) => {
+  let listFreeSchedule: Schedule[] =
+    ((await getFreeSchedule(req, res)) as Schedule[]) || [];
+
+  console.log("listFreeSchedule: ", listFreeSchedule);
+
+  return res.send(<GetFreeSchedule listFreeSchedule={listFreeSchedule} />);
 });
 
 staffRouter.get("/schedule/date", staff, async (req, res) => {
@@ -300,7 +311,7 @@ staffRouter.get("/schedule/previewAppointment", staff, async (req, res) => {
         .execute("GET_LICHKHAM_DETAIL_BY_ID_DATE")
     ).recordset[0];
 
-    return res.send(<PreviewAppointment detailSchedule={detailSchedule} />);
+    return res.send(<PreviewAppointment detailSchedule={detailSchedule} url="/staff/schedule"/>);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

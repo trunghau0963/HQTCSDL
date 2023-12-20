@@ -178,7 +178,8 @@ const HomeComponent = ({
               <div class="section-title">
                 <h2>Schedules</h2>
               </div>
-              <main class="d-flex align-items-center justify-content-center min-vh-100">
+
+              <main class="d-flex align-items-center justify-content-center">
                 <Calendar role={role} />
                 <DentistAvailable />
               </main>
@@ -330,9 +331,6 @@ const HomeComponent = ({
                 width="600"
                 height="450"
                 style="border:0; width: 100%; height: 350px;"
-                // allowfullscreen=""
-                // loading="lazy"
-                // referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
 
