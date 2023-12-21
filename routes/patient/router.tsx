@@ -5,8 +5,9 @@ import Dashboard from "../../app/patient/Dashboard/Dashboard";
 import Dentist from "../../app/patient/Dentist/Dentist";
 import SchedulePage from "../../app/patient/Schedule/Schedule";
 import ProfilePage from "../../app/patient/Profile/Profile";
-import AddAppointment from "../../components/Appointment/patientAppointment/addAppoinment";
+import EditProfilePage from "../../app/patient/Profile/EditProfile";
 import Security from "../../app/patient/Security/Security";
+import { PatientAddAppointment } from "../../components/Appointment/functionAppointment";
 import { patient } from "../auth/router";
 import {
   AppointmentDetailProps,
@@ -20,15 +21,14 @@ import {
   serviceIndicators,
   Service,
 } from "../../model/model";
-import middlewareToken from "../../middleware/tokenMiddleware";
 import { getPatientById } from "../../controller/patientController";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import DentistAvailable from "../../components/dentistList";
 import {
   getFreeSchedule,
-  getSchedule,
   getScheduleIsFree,
   getScheduleIsFreeByDate,
+  getScheduleIsFreeOfDentist,
+  getScheduleIsRegisteredOfDentist,
 } from "../../controller/scheduleController";
 import {
   deleteAppointment,
@@ -46,13 +46,13 @@ import { getPrescriptionById } from "../../controller/prescriptionController";
 import { getService, getServiceById } from "../../controller/serviceController";
 import { getServiceIndicatorsById } from "../../controller/serviceIndicatorsController";
 import { getAllDentist } from "../../controller/dentistController";
-import EditProfile from "../../app/patient/Profile/EditProfile";
 import PatientPage from "../../app/patient/patient";
 import HomeComponent from "../../components/Home/Home";
 import {
-  GetFreeSchedule,
   GetYearFreeSchedule,
   ListSchedule,
+  getScheduleDentist,
+  getScheduleDentistForPatient,
 } from "../../components/Home/functionHome";
 
 const patientRouter = Router();
@@ -345,7 +345,9 @@ patientRouter.get("/calendar-schedule", patient, async (req, res) => {
       );
     }
 
-    return res.send(<ListSchedule dentistSchedule={dentistSchedule} />);
+    return res.send(
+      <ListSchedule dentistSchedule={dentistSchedule} role="patient" />
+    );
   } catch (error) {
     console.log(error);
   }
@@ -374,7 +376,45 @@ patientRouter.get("/free-schedule", patient, async (req, res) => {
   const daysArray = Array.from(uniqueDates) as string[];
 
   return res.send(
-    <GetYearFreeSchedule yearsArray={yearsArray} daysArray={daysArray} />
+    <GetYearFreeSchedule
+      yearsArray={yearsArray}
+      daysArray={daysArray}
+      role="patient"
+    />
+  );
+});
+patientRouter.get("/dentist-schedule", patient, async (req, res) => {
+  let patientInformation: Patient | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+      patientInformation = (await getPatientById(req, res, data.user.MABN)) as Patient;
+  } catch {}
+  const { MANS, HOTENNHASI } = req.query;
+  const idDentist = MANS as string;
+  const nameOfDentist = HOTENNHASI as string;
+
+  const schedules: Schedule[] =
+    ((await getScheduleIsFreeOfDentist(req, res, idDentist)) as Schedule[]) ||
+    [];
+
+  const scheduleRegistered: Schedule[] =
+    ((await getScheduleIsRegisteredOfDentist(
+      req,
+      res,
+      idDentist
+    )) as Schedule[]) || [];
+  if (schedules.length === 0 && scheduleRegistered.length === 0)
+    return res.send("No schedule is registered!");
+  return res.send(
+    getScheduleDentistForPatient({
+      patientInformation,
+      idDentist,
+      nameOfDentist,
+      schedules,
+      scheduleRegistered,
+    })
   );
 });
 
@@ -408,15 +448,6 @@ patientRouter.get("/schedule", patient, async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-});
-
-patientRouter.get("/free-schedule", patient, async (req, res) => {
-  let listFreeSchedule: Schedule[] =
-    ((await getFreeSchedule(req, res)) as Schedule[]) || [];
-
-  console.log("listFreeSchedule: ", listFreeSchedule);
-
-  return res.send(<GetFreeSchedule listFreeSchedule={listFreeSchedule} />);
 });
 
 patientRouter.get("/schedule/date", patient, async (req, res) => {
@@ -478,24 +509,25 @@ patientRouter.get("/information", patient, async (req, res) => {
   }
 });
 
-patientRouter.get("/home/edit-profile", patient, async (req, res) => {
+patientRouter.get("/edit-profile", patient, async (req, res) => {
   try {
-    let data: Patient | undefined;
+    let patient: Patient | undefined;
     try {
       const token = req.cookies.token as string;
-      const patient =
+      const data =
         (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-      data = (await getPatientById(req, res, patient.user.MABN)) as Patient;
+      patient = (await getPatientById(req, res, data.user.MABN)) as Patient;
     } catch {}
-    return res.send(<EditProfile data={data} role={"patient"} />);
+    return res.send(<EditProfilePage data={patient} />);
   } catch (err) {
     console.error(err);
   }
 });
 
-patientRouter.put("/home/edit-profile", patient, async (req, res) => {
+patientRouter.put("/edit-profile", patient, async (req, res) => {
   try {
     const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+    console.log(req.body);
     const data: Patient = (
       await (await req.db())
         .input("MABN", MA)
@@ -507,7 +539,8 @@ patientRouter.put("/home/edit-profile", patient, async (req, res) => {
     ).recordset[0];
 
     return res
-      .header("HX-Redirect", `/patient/information`)
+      .header("HX-Redirect", `/auth/login`)
+      .clearCookie("token")
       .json("Directed")
       .status(200);
   } catch (err) {
@@ -537,7 +570,7 @@ patientRouter.get(
         detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
       }
       return res.send(
-        <AddAppointment
+        <PatientAddAppointment
           detailSchedule={detailSchedule}
           infoPatient={infoPatient.user}
         />

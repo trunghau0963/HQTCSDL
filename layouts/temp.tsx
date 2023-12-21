@@ -10,7 +10,7 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
       ? true
       : false;
   return (
-    <nav class="navbar navbar-expand-lg navbar-light bg-secondary position-sticky w-100 top-0 z-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary position-fixed w-100 top-0 z-3">
       <div class="container-fluid">
         <a href="/" class="logo navbar-brand">
           <img src="/img/logo.png" width="45" height="45" alt="" />{" "}
@@ -37,22 +37,16 @@ const Navbar = ({ url, NAVIGATIONS }: NavbarProps) => {
           </div>
           <div class="btn-group" role="group">
             {role ? (
-              <a
-                class="btn btn-link btn-sm text-decoration-none"
-                href={`${url}/information`}
-              >
+              <button class="btn btn-link btn-sm text-decoration-none">
                 Profile
-              </a>
+              </button>
             ) : (
               ""
             )}
             {role ? (
-              <a
-                class="btn btn-link btn-sm text-decoration-none"
-                href={`${url}/edit-profile`}
-              >
+              <button class="btn btn-link btn-sm text-decoration-none">
                 Edit
-              </a>
+              </button>
             ) : (
               ""
             )}

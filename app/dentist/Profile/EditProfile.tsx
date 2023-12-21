@@ -1,22 +1,22 @@
 import * as elements from "typed-html";
-import PatientPage from "../patient";
+import DentistPage from "../dentist";
 import { EditProfile, Profile } from "../../../components/info/functionProfile";
-import { Patient } from "../../../model/model";
-type patientProps = {
-  data?: Patient | undefined;
+import { Dentist } from "../../../model/model";
+type DentistProps = {
+  data?: Dentist | undefined;
 };
-const EditProfilePage = ({ data }: patientProps) => {
+const EditProfilePage = ({ data }: DentistProps) => {
   return (
-    <PatientPage>
+    <DentistPage>
       <EditProfile
-        id={data?.MABN}
+        id={data?.MANS}
         name={data?.HOTEN}
         phone={data?.DIENTHOAI}
         dob={data?.NGAYSINH?.toDateString()}
         address={data?.DIACHI}
-        role={"patient"}
+        role={"Dentist"}
       />
-    </PatientPage>
+    </DentistPage>
   );
 };
 

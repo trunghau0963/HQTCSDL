@@ -13,37 +13,60 @@ import {
 } from "../../controller/scheduleController";
 import { registerAppointment } from "../../controller/appoinmentController";
 import { getService } from "../../controller/serviceController";
-import {
-  GuestAddAppointment,
-  getScheduleDentist,
-} from "../../components/Guest/function";
+import { GuestAddAppointment } from "../../components/Appointment/functionAppointment";
+import { getScheduleDentist } from "../../components/Home/functionHome";
 import {
   GetYearFreeSchedule,
-  GetFreeSchedule,
   ListSchedule,
 } from "../../components/Home/functionHome";
 import PreviewAppointment from "../../app/staff/Invoice/Preview/previewAppointmentCard";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { convertRoleViToEn } from "../../utils/convertRole";
 
 const guestRouter = Router();
 
 guestRouter.get("/", async (req, res) => {
-  let listDentist: Dentist[] = [];
-  let listService: Service[] = [];
-
+  let listDentist = [];
+  let listService = [];
   listDentist = (await getAllDentist(req, res)) as Dentist[];
   listService = (await getService(req, res)) as Service[];
-  return res.send(
-    <LandingPage>
-      <HomeComponent
-        listDentist={listDentist}
-        listService={listService}
-        role={"guest"}
-      />
-    </LandingPage>
-  );
+  const token = req.cookies.token as string;
+
+  if (token) {
+    try {
+      const data = jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload;
+      const configRole = convertRoleViToEn(data.user.role);
+      const url = `/${configRole}/dashboard`;
+
+      // Redirect with HX-Redirect header
+      return res.send(
+        `<html>
+          <body>
+            <script>
+              const redirectTo = "${url}";
+              window.location.href = redirectTo;
+            </script>
+          </body>
+        </html>`
+      );
+    } catch (error) {
+      console.error("Error verifying JWT:", error);
+      return res.status(401).json("Unauthorized");
+    }
+  } else {
+    return res.send(
+      <LandingPage>
+        <HomeComponent
+          listDentist={listDentist}
+          listService={listService}
+          role={"guest"}
+        />
+      </LandingPage>
+    );
+  }
 });
 
-guestRouter.get("/dentist-schedule", async (req, res) => {
+guestRouter.get("/guest/dentist-schedule", async (req, res) => {
   const { MANS, HOTENNHASI } = req.query;
   const idDentist = MANS as string;
   const nameOfDentist = HOTENNHASI as string;
@@ -70,7 +93,7 @@ guestRouter.get("/dentist-schedule", async (req, res) => {
   );
 });
 
-guestRouter.get("/calendar-schedule", async (req, res) => {
+guestRouter.get("/guest/calendar-schedule", async (req, res) => {
   try {
     const dentistSchedule: Schedule[] =
       (await getScheduleIsFreeByDate(req, res)) || [];
@@ -81,13 +104,15 @@ guestRouter.get("/calendar-schedule", async (req, res) => {
       );
     }
 
-    return res.send(<ListSchedule dentistSchedule={dentistSchedule} />);
+    return res.send(
+      <ListSchedule dentistSchedule={dentistSchedule} role="guest" />
+    );
   } catch (error) {
     console.log(error);
   }
 });
 
-guestRouter.get("/free-schedule", async (req, res) => {
+guestRouter.get("/guest/free-schedule", async (req, res) => {
   let listFreeSchedule: Schedule[] =
     ((await getFreeSchedule(req, res)) as Schedule[]) || [];
 
@@ -110,7 +135,11 @@ guestRouter.get("/free-schedule", async (req, res) => {
   const daysArray = Array.from(uniqueDates) as string[];
 
   return res.send(
-    <GetYearFreeSchedule yearsArray={yearsArray} daysArray={daysArray} />
+    <GetYearFreeSchedule
+      yearsArray={yearsArray}
+      daysArray={daysArray}
+      role="guest"
+    />
   );
 });
 

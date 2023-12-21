@@ -1,22 +1,20 @@
 import * as elements from "typed-html";
-import PatientPage from "../patient";
+import StaffPage from "../staff";
 import { EditProfile, Profile } from "../../../components/info/functionProfile";
-import { Patient } from "../../../model/model";
-type patientProps = {
-  data?: Patient | undefined;
-};
-const EditProfilePage = ({ data }: patientProps) => {
+import { Staff } from "../../../model/model";
+
+const EditProfilePage = ({ data }: { data?: Staff | undefined }) => {
   return (
-    <PatientPage>
+    <StaffPage>
       <EditProfile
-        id={data?.MABN}
+        id={data?.MANV}
         name={data?.HOTEN}
         phone={data?.DIENTHOAI}
         dob={data?.NGAYSINH?.toDateString()}
         address={data?.DIACHI}
-        role={"patient"}
+        role={"Staff"}
       />
-    </PatientPage>
+    </StaffPage>
   );
 };
 

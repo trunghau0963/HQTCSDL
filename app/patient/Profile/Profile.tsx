@@ -1,8 +1,6 @@
 import * as elements from "typed-html";
 import PatientPage from "../patient";
-import Info from "../../../components/info/info";
-import Profile from "../../../components/info/Profile";
-import { getPatientById } from "../../../controller/patientController";
+import { Profile } from "../../../components/info/functionProfile";
 import { Patient } from "../../../model/model";
 type patientProps = {
   data?: Patient | undefined;

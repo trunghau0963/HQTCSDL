@@ -2975,8 +2975,22 @@ CREATE OR ALTER PROC INSERT_INTO_DICHVU
 AS
 BEGIN TRAN
     BEGIN TRY
-        INSERT INTO DICHVU(TENDV, DONGIA)
-        VALUES (@TENDV, @DONGIA) 
+        IF @TENDV IS NULL OR @DONGIA IS NULL 
+        BEGIN
+            RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
+        END
+
+        IF EXISTS(SELECT * FROM DICHVU WHERE @TENDV = TENDV AND DAXOA = 1)
+        BEGIN 
+            UPDATE DICHVU
+            SET DAXOA = 0
+            WHERE TENDV = @TENDV
+        END
+        ELSE
+        BEGIN
+            INSERT INTO DICHVU(TENDV, DONGIA)
+            VALUES (@TENDV, @DONGIA)
+        END 
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000);

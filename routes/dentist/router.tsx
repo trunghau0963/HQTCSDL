@@ -58,6 +58,7 @@ import {
   GetAddAppointment,
   GetSchedule,
 } from "../../components/Dentist/Schedule/functionSchedule";
+import EditProfilePage from "../../app/dentist/Profile/EditProfile";
 
 const dentistRouter = Router();
 
@@ -284,6 +285,21 @@ dentistRouter.get("/information", dentist, async (req, res) => {
     console.log("dentist: ", dentist);
   } catch {}
   return res.send(<ProfilePage data={dentist} />);
+});
+
+dentistRouter.get("/edit-profile", dentist, async (req, res) => {
+  let dentist: Dentist | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    console.log("data: ", data.user.HOTEN);
+    dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
+    console.log("dentist: ", dentist);
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<EditProfilePage data={dentist} />);
 });
 
 export default dentistRouter;

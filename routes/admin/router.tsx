@@ -8,7 +8,6 @@ import DentistPage from "../../app/admin/Dashboard/Dentists/Dentist";
 import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
 import ServicePage from "../../app/admin/Service/Service";
-import Profile from "../../components/info/Profile";
 import {
   Admin,
   drugProps,
@@ -59,6 +58,7 @@ import {
 
 import { getInvoice } from "../../controller/invoiceController";
 import EditProfile from "../../app/patient/Profile/EditProfile";
+import EditProfilePage from "../../app/admin/Profile/EditProfile";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
@@ -111,7 +111,9 @@ adminRouter.get("/dentist", admin, async (req, res) => {
       await (await req.db()).execute("GET_INFO_NHASI")
     ).recordset;
     return res.send(<DentistPage dentists={dentists} />);
-  } catch(error) {console.log(error)}
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 adminRouter.put("/dentist", admin, async (req, res) => {
@@ -178,7 +180,7 @@ adminRouter.get("/patient", admin, async (req, res) => {
     const patients: Patient[] = (
       await (await req.db()).execute("GET_INFO_BENHNHAN")
     ).recordset;
-    
+
     return res.send(<PatientPage patients={patients} />);
   } catch (error) {
     console.log(error);
@@ -240,13 +242,6 @@ adminRouter.delete("/service", admin, async (req: Request, res: Response) => {
     console.log(error);
   }
 });
-adminRouter.get("/profile", admin, async (req, res) => {
-  try {
-    return res.send(<Profile />);
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 adminRouter.get("/information", admin, async (req, res) => {
   let admin: Admin | undefined;
@@ -268,7 +263,7 @@ adminRouter.get("/home/edit-profile", admin, async (req, res) => {
     const admin =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
     data = (await getAdminById(req, res, admin.user.MAQT)) as Admin;
-    return res.send(<EditProfile data={data} role={"admin"} />);
+    return res.send(<EditProfilePage data={data} />);
   } catch (error) {
     console.log(error);
   }

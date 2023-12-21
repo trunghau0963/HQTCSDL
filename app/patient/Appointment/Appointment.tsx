@@ -1,7 +1,10 @@
 import * as elements from "typed-html";
 import PatientPage from "../patient";
-import AppointmentList from "../../../components/Appointment/appointment_for_patient";
-import { AppointmentDetailProps, AppointmentDetail } from "../../../model/model";
+import { Appointment as AppointmentList } from "../../../components/Appointment/functionAppointment";
+import {
+  AppointmentDetailProps,
+  AppointmentDetail,
+} from "../../../model/model";
 
 const Appointment = ({
   appointments,

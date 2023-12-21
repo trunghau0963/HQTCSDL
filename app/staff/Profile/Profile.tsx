@@ -1,7 +1,7 @@
 import * as elements from "typed-html";
 import StaffPage from "../staff";
 import Info from "../../../components/info/info";
-import Profile from "../../../components/info/Profile";
+import { Profile } from "../../../components/info/functionProfile";
 import { Staff } from "../../../model/model";
 type dentisttProps = {
   data?: Staff | undefined;

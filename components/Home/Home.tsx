@@ -22,9 +22,15 @@ const HomeComponent = ({
             <h2>
               We are here to justify your medical needs and secure well being
             </h2>
-            <a href="/auth/login" class="btn-get-started scrollto">
-              Get Started
-            </a>
+            {role === "guest" ? (
+              <a href="/auth/login" class="btn-get-started scrollto">
+                Get Started
+              </a>
+            ) : (
+              <a href="#dentist" class="btn-get-started scrollto">
+                Book Appointment
+              </a>
+            )}
           </div>
         </section>
         <main id="main">
@@ -97,7 +103,7 @@ const HomeComponent = ({
               <div class="row">
                 {listService.map((service: Service, idx: number) => (
                   <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                    <div class="icon-box">
+                    <div class="icon-box w-100">
                       <div class="icon">
                         <i class="bi bi-database-fill-gear"></i>
                       </div>
@@ -139,7 +145,7 @@ const HomeComponent = ({
               <div class="row">
                 {listDentist.map((dentist: Dentist, idx: number) => (
                   <div class="col-lg-4 col-md-6 d-flex align-items-stretch my-2">
-                    <div class="icon-box">
+                    <div class="icon-box w-100">
                       <div class="icon">
                         <i class="bi bi-person-circle"></i>
                       </div>
@@ -164,6 +170,7 @@ const HomeComponent = ({
                         idDentist={dentist.MANS}
                         nameOfDentist={dentist.HOTEN}
                         idx={idx}
+                        role={role}
                       />
                       <div class="p-6"></div>
                     </div>

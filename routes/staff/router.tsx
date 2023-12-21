@@ -72,12 +72,23 @@ import {
 } from "../../controller/dentistController";
 import { getAppointmentIsDone } from "../../controller/appoinmentController";
 import SchedulePage from "../../app/staff/Schedule/Schedule";
-import { getFreeSchedule, getScheduleIsFree } from "../../controller/scheduleController";
-import AddAppointment from "../../components/Appointment/add_appointment";
+import {
+  getFreeSchedule,
+  getScheduleIsFree,
+  getScheduleIsFreeByDate,
+  getScheduleIsFreeOfDentist,
+  getScheduleIsRegisteredOfDentist,
+} from "../../controller/scheduleController";
+import { GuestAddAppointment } from "../../components/Appointment/functionAppointment";
 import PreviewAppointment from "../../app/staff/Invoice/Preview/previewAppointmentCard";
 import EditProfile from "../../app/patient/Profile/EditProfile";
 import HomeComponent from "../../components/Home/Home";
-import { GetFreeSchedule } from "../../components/Home/functionHome";
+import {
+  GetYearFreeSchedule,
+  ListSchedule,
+  getScheduleDentist,
+} from "../../components/Home/functionHome";
+import EditProfilePage from "../../app/staff/Profile/EditProfile";
 
 const staffRouter = Router();
 
@@ -148,15 +159,6 @@ staffRouter.get("/schedule", staff, async (req, res) => {
   }
 });
 
-staffRouter.get("/free-schedule", staff, async (req, res) => {
-  let listFreeSchedule: Schedule[] =
-    ((await getFreeSchedule(req, res)) as Schedule[]) || [];
-
-  console.log("listFreeSchedule: ", listFreeSchedule);
-
-  return res.send(<GetFreeSchedule listFreeSchedule={listFreeSchedule} />);
-});
-
 staffRouter.get("/schedule/date", staff, async (req, res) => {
   try {
     const dentistSchedule: Schedule[] =
@@ -200,6 +202,84 @@ staffRouter.get("/schedule/date", staff, async (req, res) => {
     console.log(error);
   }
 });
+
+staffRouter.get("/calendar-schedule", staff, async (req, res) => {
+  try {
+    const dentistSchedule: Schedule[] =
+      (await getScheduleIsFreeByDate(req, res)) || [];
+
+    if (dentistSchedule.length === 0) {
+      return res.send(
+        `<h1 class="text-danger">Không tìm thấy lịch khám trong ngày</h1>`
+      );
+    }
+
+    return res.send(
+      <ListSchedule dentistSchedule={dentistSchedule} role="staff" />
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+staffRouter.get("/free-schedule", staff, async (req, res) => {
+  let listFreeSchedule: Schedule[] =
+    ((await getFreeSchedule(req, res)) as Schedule[]) || [];
+
+  const uniqueYears = new Set();
+
+  listFreeSchedule.forEach((schedule) => {
+    const date = new Date(schedule.NGAYKHAM);
+    const year = date.getFullYear();
+
+    uniqueYears.add(year);
+  });
+
+  const uniqueDates = new Set();
+
+  listFreeSchedule.forEach((schedule) => {
+    const date = new Date(schedule.NGAYKHAM);
+    uniqueDates.add(date.toISOString().split("T")[0]);
+  });
+  const yearsArray = Array.from(uniqueYears) as string[];
+  const daysArray = Array.from(uniqueDates) as string[];
+
+  return res.send(
+    <GetYearFreeSchedule
+      yearsArray={yearsArray}
+      daysArray={daysArray}
+      role="staff"
+    />
+  );
+});
+
+staffRouter.get("/dentist-schedule", staff, async (req, res) => {
+  const { MANS, HOTENNHASI } = req.query;
+  const idDentist = MANS as string;
+  const nameOfDentist = HOTENNHASI as string;
+
+  const schedules: Schedule[] =
+    ((await getScheduleIsFreeOfDentist(req, res, idDentist)) as Schedule[]) ||
+    [];
+
+  const scheduleRegistered: Schedule[] =
+    ((await getScheduleIsRegisteredOfDentist(
+      req,
+      res,
+      idDentist
+    )) as Schedule[]) || [];
+  if (schedules.length === 0 && scheduleRegistered.length === 0)
+    return res.send("No schedule is registered!");
+  return res.send(
+    getScheduleDentist({
+      idDentist,
+      nameOfDentist,
+      schedules,
+      scheduleRegistered,
+    })
+  );
+});
+
 staffRouter.get("/schedule/date/add_appointment", staff, async (req, res) => {
   try {
     const token = req.cookies.token as string;
@@ -218,7 +298,7 @@ staffRouter.get("/schedule/date/add_appointment", staff, async (req, res) => {
       detailSchedule.NGAYKHAM = new Date(req.query.NGAYKHAM as string) || "";
       detailSchedule.GIOKHAM = new Date(req.query.GIOKHAM as string) || "";
     }
-    return res.send(<AddAppointment detailSchedule={detailSchedule} />);
+    return res.send(<GuestAddAppointment detailSchedule={detailSchedule} />);
   } catch (error) {
     console.log(error);
   }
@@ -311,7 +391,12 @@ staffRouter.get("/schedule/previewAppointment", staff, async (req, res) => {
         .execute("GET_LICHKHAM_DETAIL_BY_ID_DATE")
     ).recordset[0];
 
-    return res.send(<PreviewAppointment detailSchedule={detailSchedule} url="/staff/schedule"/>);
+    return res.send(
+      <PreviewAppointment
+        detailSchedule={detailSchedule}
+        url="/staff/schedule"
+      />
+    );
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -579,17 +664,18 @@ staffRouter.get("/information", staff, async (req, res) => {
   return res.send(<ProfilePage data={staff} />);
 });
 
-staffRouter.get("/home/edit-profile", staff, async (req, res) => {
-  let data: Staff | undefined;
+staffRouter.get("/edit-profile", staff, async (req, res) => {
+  let staff: Staff | undefined;
   try {
     const token = req.cookies.token as string;
-    const staff =
+    const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    data = (await getStaffById(req, res, staff.user.MANV)) as Staff;
+
+    staff = (await getStaffById(req, res, data.user.MANV)) as Staff;
   } catch (error) {
     console.log(error);
   }
-  return res.send(<EditProfile data={data} role={"staff"} />);
+  return res.send(<EditProfilePage data={staff} />);
 });
 
 staffRouter.put("/home/edit-profile", staff, async (req, res) => {

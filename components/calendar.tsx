@@ -1,16 +1,21 @@
 import * as elements from "typed-html";
 import BaseHtml from "../layouts/baseHtml";
 const Calendar = ({ role }: { role: string }) => {
+  let myArray = [];
+  for (let i = 0; i < 10; i++) {
+    myArray.push(i);
+  }
   return (
     <div>
       <button
         class="btn btn-tertiary btn-lg py-3 text-white"
         data-bs-toggle="modal"
-        hx-get={`/free-schedule`}
+        hx-get={`/${role}/free-schedule`}
         data-bs-target="#getListFreeSchedule"
         hx-target="#getListFreeScheduleBody"
       >
-        Click here to show List Free Schedules
+        <i class="bi bi-journal-album"></i>
+        <span class="fw-bold">Click here to show List Free Schedules</span>
       </button>
 
       <div
@@ -34,7 +39,10 @@ const Calendar = ({ role }: { role: string }) => {
               ></button>
             </div>
             <div class="modal-body">
-              <div id="getListFreeScheduleBody" class="getListFreeScheduleBody"></div>
+              <div
+                id="getListFreeScheduleBody"
+                class="getListFreeScheduleBody"
+              ></div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" data-bs-dismiss="modal">
@@ -96,7 +104,9 @@ const Calendar = ({ role }: { role: string }) => {
               name="years"
               size="1"
             >
-              <option class="yer">{new Date().getFullYear()}</option>
+              {myArray.map((item) => (
+                <option class="yer">{new Date().getFullYear() + item}</option>
+              ))}
             </select>
           </label>
         </div>
