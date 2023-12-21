@@ -1,6 +1,5 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import Info from "../../../components/info/info";
 import { Profile } from "../../../components/info/functionProfile";
 import { Admin } from "../../../model/model";
 type dentisttProps = {

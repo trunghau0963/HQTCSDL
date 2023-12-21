@@ -12,7 +12,7 @@ const EditProfilePage = ({ data }: { data?: Admin | undefined }) => {
         phone={data?.DIENTHOAI}
         dob={data?.NGAYSINH?.toDateString()}
         address={data?.DIACHI}
-        role={"Dentist"}
+        role={"admin"}
       />
     </AdminPage>
   );

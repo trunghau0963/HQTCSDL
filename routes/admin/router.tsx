@@ -256,7 +256,7 @@ adminRouter.get("/information", admin, async (req, res) => {
   return res.send(<ProfilePage data={admin} />);
 });
 
-adminRouter.get("/home/edit-profile", admin, async (req, res) => {
+adminRouter.get("/edit-profile", admin, async (req, res) => {
   let data: Admin | undefined;
   try {
     const token = req.cookies.token as string;
@@ -269,7 +269,7 @@ adminRouter.get("/home/edit-profile", admin, async (req, res) => {
   }
 });
 
-adminRouter.put("/home/edit-profile", admin, async (req, res) => {
+adminRouter.put("/edit-profile", admin, async (req, res) => {
   try {
     const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
 

@@ -302,4 +302,28 @@ dentistRouter.get("/edit-profile", dentist, async (req, res) => {
   return res.send(<EditProfilePage data={dentist} />);
 });
 
+dentistRouter.put("/edit-profile", dentist, async (req, res) => {
+  try {
+    const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+    console.log(req.body);
+    const data: Dentist = (
+      await (await req.db())
+        .input("MABN", MA)
+        .input("MATKHAU", MATKHAU)
+        .input("HOTEN", HOTEN)
+        .input("NGAYSINH", NGAYSINH)
+        .input("DIACHI", DIACHI)
+        .execute("UPDATE_INFO_NHASI")
+    ).recordset[0];
+
+    return res
+      .header("HX-Redirect", `/auth/login`)
+      .clearCookie("token")
+      .json("Directed")
+      .status(200);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 export default dentistRouter;

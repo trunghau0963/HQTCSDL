@@ -1,6 +1,5 @@
 import * as elements from "typed-html";
 import DentistPage from "../dentist";
-import Info from "../../../components/info/info";
 import { Profile } from "../../../components/info/functionProfile";
 import { Dentist } from "../../../model/model";
 type dentisttProps = {

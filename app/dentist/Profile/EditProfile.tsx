@@ -14,7 +14,7 @@ const EditProfilePage = ({ data }: DentistProps) => {
         phone={data?.DIENTHOAI}
         dob={data?.NGAYSINH?.toDateString()}
         address={data?.DIACHI}
-        role={"Dentist"}
+        role={"dentist"}
       />
     </DentistPage>
   );

@@ -1,6 +1,5 @@
 import * as elements from "typed-html";
 import StaffPage from "../staff";
-import Info from "../../../components/info/info";
 import { Profile } from "../../../components/info/functionProfile";
 import { Staff } from "../../../model/model";
 type dentisttProps = {
@@ -15,7 +14,7 @@ const ProfilePage = ({ data }: dentisttProps) => {
         phone={data?.DIENTHOAI}
         dob={data?.NGAYSINH?.toDateString()}
         address={data?.DIACHI}
-        role={"Staff"}
+        role={"staff"}
       />
     </StaffPage>
   );
