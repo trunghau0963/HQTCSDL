@@ -155,7 +155,8 @@ export const EditDentist = ({ data }: { data: User }) => {
   const id: string | undefined =
     (data.hasOwnProperty("MANS") && "MANS" in data && data.MANS) ||
     (data.hasOwnProperty("MABN") && "MABN" in data && data.MABN) ||
-    (data.hasOwnProperty("MANV") && "MANV" in data && data.MANV) || undefined;
+    (data.hasOwnProperty("MANV") && "MANV" in data && data.MANV) ||
+    undefined;
 
   return (
     <div>
@@ -192,10 +193,7 @@ export const EditDentist = ({ data }: { data: User }) => {
               <div class="p-5">
                 <div class="row">
                   <div class="col-lg-8 offset-lg-2">
-                    <form
-                      id="update-dentist-form"
-                      hx-put="/admin/dentist"
-                    >
+                    <form id="update-dentist-form" hx-put="/admin/dentist">
                       <div class="row">
                         <div class="row">
                           <div class="form-group">

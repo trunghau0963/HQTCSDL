@@ -75,7 +75,33 @@ export const getPatientByName = async (
       }
       return res
         .status(500)
-        .send("Can't get patient by id. Please try again later.");
+        .send("Can't get patient by name. Please try again later.");
+    }
+  }
+};
+
+export const getPatientByNameChar = async (
+  req: Request,
+  res: Response,
+  name: string
+) => {
+  // const { name } = req.body;
+  try {
+    const user: Patient[] = (
+      await (await req.db())
+        .input("HOTEN", name)
+        .execute("GET_INFO_BENHNHAN_BY_NAME_CHARACTER")
+    ).recordset;
+    return user;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        return res.status(400).send(error.message);
+      }
+      return res
+        .status(500)
+        .send("Can't get patient by name char. Please try again later.");
     }
   }
 };

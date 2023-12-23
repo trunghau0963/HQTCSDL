@@ -1,15 +1,10 @@
 import * as elements from "typed-html";
 import AdminPage from "../../admin";
 import { Dentist } from "../../../../model/model";
-import { AddDentist, EditDentist } from "../../../../components/Admin/Dentist/functionDentist";
-import AccountPage from "../../Account/Account";
+import { AddDentist } from "../../../../components/Admin/Dentist/functionDentist";
+import { SearchFunction } from "../../../../components/Admin/functionAdmin";
 
-type DentistProps = {
-  dentists: Dentist[];
-};
-
-const DentistPage = ({ dentists }: DentistProps) => {
-  // console.log('dentist page: ', Data);
+const DentistPage = () => {
   return (
     <AdminPage>
       <div class="main-wrapper h-100">
@@ -21,7 +16,7 @@ const DentistPage = ({ dentists }: DentistProps) => {
               </div>
             </div>
             <AddDentist />
-            <AccountPage users={dentists} role={"NHASI"} />
+            <SearchFunction role={"dentist"} />
           </div>
         </div>
       </div>

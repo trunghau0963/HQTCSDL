@@ -1,15 +1,15 @@
 import * as elements from "typed-html";
 import AdminPage from "../../admin";
 import { AddDentist } from "../../../../components/Admin/Dentist/functionDentist";
-import AccountPage from "../../Account/Account";
+import { AccountPage } from "../../../../components/Admin/functionAdmin";
 import { Patient } from "../../../../model/model";
-import { AddPatient } from "../../../../components/Admin/Patient/functionPatient";
+import { SearchFunction } from "../../../../components/Admin/functionAdmin";
 
 type PatientProps = {
   patients: Patient[];
 };
 
-const DentistPage = ({ patients }: PatientProps) => {
+const PatientPage = () => {
   return (
     <AdminPage>
       <div class="main-wrapper h-100">
@@ -20,8 +20,8 @@ const DentistPage = ({ patients }: PatientProps) => {
                 <h4 class="page-title">Patient List</h4>
               </div>
             </div>
-            <AddPatient />
-            <AccountPage users={patients} role={"BENHNHAN"} />
+            <AddDentist />
+            <SearchFunction role={"patient"} />
           </div>
         </div>
       </div>
@@ -29,4 +29,4 @@ const DentistPage = ({ patients }: PatientProps) => {
   );
 };
 
-export default DentistPage;
+export default PatientPage;

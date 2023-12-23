@@ -102,6 +102,7 @@ export const getSchedule = async (req: Request, res: Response) => {
   }
 };
 
+
 //for calendar
 
 export const getScheduleIsFree = async (req: Request, res: Response) => {

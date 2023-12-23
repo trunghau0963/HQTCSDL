@@ -18,19 +18,24 @@ import {
   Service,
   Invoice,
   AppointmentDetailProps,
+  Schedule,
+  AppointmentDetail,
+  User,
 } from "../../model/model";
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAdminById } from "../../controller/adminController";
-import { getAllStaff, createStaff } from "../../controller/staffController";
+import { getAllStaff, createStaff, getStaffByNameCharacter } from "../../controller/staffController";
 import {
   createPatient,
   getAllPatient,
+  getPatientByNameChar,
   updatePatient,
 } from "../../controller/patientController";
 import {
   getAllDentist,
   createDentist,
+  getDentistByNameChar,
 } from "../../controller/dentistController";
 import ProfilePage from "../../app/admin/Profile/Profile";
 import {
@@ -54,11 +59,20 @@ import {
   deleteAppointment,
   updateAppointment,
   getAppointment,
+  getAppointmentIsDoneOfDentist,
+  getAppointmentIsDone,
+  getAppointmentUnfinished,
 } from "../../controller/appoinmentController";
 
 import { getInvoice } from "../../controller/invoiceController";
 import EditProfile from "../../app/patient/Profile/EditProfile";
 import EditProfilePage from "../../app/admin/Profile/EditProfile";
+import { getFreeSchedule } from "../../controller/scheduleController";
+import SchedulePage from "../../app/admin/Schedule/Schedule";
+import {
+  AccountPage,
+  SearchResult,
+} from "../../components/Admin/functionAdmin";
 
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
@@ -107,13 +121,83 @@ adminRouter.put("/drug", admin, async (req: any, res: any) => {
 
 adminRouter.get("/dentist", admin, async (req, res) => {
   try {
+    const input = req.query;
+    const searchValue = input.search as string;
+
+    console.log("Search value in get:", searchValue);
     const dentists: Dentist[] = (
       await (await req.db()).execute("GET_INFO_NHASI")
     ).recordset;
-    return res.send(<DentistPage dentists={dentists} />);
+    return res.send(<DentistPage />);
   } catch (error) {
     console.log(error);
   }
+});
+
+adminRouter.post("/dentist/search/adadasdasd", admin, async (req, res) => {
+  try {
+    const input = req.query;
+    const searchValue = input.search as string;
+
+    const { name } = req.body;
+    console.log("name");
+
+    console.log("Search value in search:", searchValue);
+    if (!searchValue) {
+      const dentists: Dentist[] = (
+        await (await req.db()).execute("GET_INFO_NHASI")
+      ).recordset;
+      return res.send(<AccountPage users={dentists} role="NHASI" />);
+    }
+    const dentist: Dentist[] = (await getDentistByNameChar(
+      req,
+      res,
+      searchValue
+    )) as Dentist[];
+    console.log("dentist: ", dentist);
+    return res.send(<AccountPage users={dentist} role="NHASI" />);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.post("/dentist/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let dentist: Dentist[] = [];
+  console.log("name", name);
+  try {
+    dentist = (await getDentistByNameChar(req, res, name)) as Dentist[];
+    console.log("dentist: ", dentist);
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchResult users={dentist} role="dentist" />);
+});
+
+adminRouter.post("/patient/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Patient: Patient[] = [];
+  console.log("name", name);
+  try {
+    Patient = (await getPatientByNameChar(req, res, name)) as Patient[];
+    console.log("Patient: ", Patient);
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchResult users={Patient} role="patient" />);
+});
+
+adminRouter.post("/staff/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Staff: Staff[] = [];
+  console.log("name", name);
+  try {
+    Staff = (await getStaffByNameCharacter(req, res, name)) as Staff[];
+    console.log("Staff: ", Staff);
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchResult users={Staff} role="staff" />);
 });
 
 adminRouter.put("/dentist", admin, async (req, res) => {
@@ -142,6 +226,8 @@ adminRouter.post("/dentist", admin, createDentist);
 
 adminRouter.get("/staff", admin, async (req, res) => {
   try {
+    const input = req.body;
+    console.log(input);
     const staffs: Staff[] = (
       await (await req.db()).execute("GET_INFO_NHANVIEN")
     ).recordset;
@@ -177,6 +263,8 @@ adminRouter.put("/staff", admin, async (req, res) => {
 
 adminRouter.get("/patient", admin, async (req, res) => {
   try {
+    const input = req.body;
+    console.log(input);
     const patients: Patient[] = (
       await (await req.db()).execute("GET_INFO_BENHNHAN")
     ).recordset;
@@ -296,6 +384,43 @@ adminRouter.put("/manageAccount", admin, async (req, res) => {
   try {
     let { id, role, isBlock } = req.body;
 
+    let viRole;
+    if (role === "patient") {
+      viRole = "BENHNHAN";
+    } else if (role === "dentist") {
+      viRole = "NHASI";
+    } else if (role === "staff") {
+      viRole = "NHANVIEN";
+    }
+
+    if (isBlock === "false") {
+      const result: User[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", viRole)
+          .execute("BLOCK_ACCOUNT")
+      ).recordset;
+    } else {
+      const result: User[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", viRole)
+          .execute("UNBLOCK_ACCOUNT")
+      ).recordset;
+    }
+    return res
+      .header("HX-Redirect", `/admin/${role}`)
+      .json("Directed")
+      .status(200);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+adminRouter.put("/manageAccount", admin, async (req, res) => {
+  try {
+    let { id, role, isBlock } = req.body;
+
     if (isBlock === "false") {
       const result: Dentist[] = (
         await (await req.db())
@@ -325,6 +450,23 @@ adminRouter.put("/manageAccount", admin, async (req, res) => {
   } catch (err) {
     console.error(err);
   }
+});
+
+adminRouter.get("/schedule", admin, async (req, res) => {
+  let scheduleFree: Schedule[] = [];
+  let scheduleRegistered: AppointmentDetail[] = [];
+  let scheduleRegistereFinished: AppointmentDetailProps[] = [];
+  scheduleFree = (await getFreeSchedule(req, res)) || [];
+  scheduleRegistered = (await getAppointmentUnfinished(req, res)) as [];
+  scheduleRegistereFinished = (await getAppointmentIsDone(req, res)) as [];
+
+  return res.send(
+    <SchedulePage
+      Free={scheduleFree}
+      Registered={scheduleRegistered}
+      RegisteredFinished={scheduleRegistereFinished}
+    />
+  );
 });
 
 export default adminRouter;

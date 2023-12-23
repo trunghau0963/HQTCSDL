@@ -31,14 +31,12 @@ export const createStaff = async (req: Request, res: Response) => {
 };
 
 export const getStaffById = async (req: Request, res: Response, id: string) => {
-
   try {
     const user: Staff = (
       await (await req.db())
         .input("MANV", id)
         .execute("GET_INFO_NHANVIEN_BY_ID")
     ).recordset[0];
-
 
     return user;
   } catch (error) {
@@ -72,7 +70,32 @@ export const getStaffByName = async (req: Request, res: Response) => {
       }
       return res
         .status(500)
-        .send("Can't get staff by id. Please try again later.");
+        .send("Can't get staff by name. Please try again later.");
+    }
+  }
+};
+
+export const getStaffByNameCharacter = async (
+  req: Request,
+  res: Response,
+  character: string
+) => {
+  try {
+    const staff: Staff[] = (
+      await (await req.db())
+        .input("HOTEN", character)
+        .execute("GET_INFO_NHANVIEN_BY_NAME_CHARACTER")
+    ).recordset;
+    return staff;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        return res.status(400).send(error.message);
+      }
+      return res
+        .status(500)
+        .send("Can't get staff by name char. Please try again later.");
     }
   }
 };

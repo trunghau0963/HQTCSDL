@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import DentistPage from "../dentist";
-import ScheduleComponent from "../../../components/Dentist/Schedule/ScheduleComponent";
+import { ScheduleComponent } from "../../../components/Dentist/Schedule/ScheduleComponent";
 import { Schedule, AppointmentDetail } from "../../../model/model";
 
 const SchedulePage = ({

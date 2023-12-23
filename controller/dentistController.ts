@@ -74,7 +74,32 @@ export const getDentistByName = async (req: Request, res: Response) => {
       }
       return res
         .status(500)
-        .send("Can't get dentist by id. Please try again later.");
+        .send("Can't get dentist by name. Please try again later.");
+    }
+  }
+};
+
+export const getDentistByNameChar = async (
+  req: Request,
+  res: Response,
+  character: string
+) => {
+  try {
+    const dentist: Dentist[] = (
+      await (await req.db())
+        .input("HOTEN", character)
+        .execute("GET_INFO_NHASI_BY_NAME_CHARACTER")
+    ).recordset;
+    return dentist;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        return res.status(400).send(error.message);
+      }
+      return res
+        .status(500)
+        .send("Can't get dentist by name char. Please try again later.");
     }
   }
 };
@@ -107,9 +132,8 @@ export const getAllDentist = async (req: Request, res: Response) => {
     const dentists: Dentist[] = (
       await (await req.db()).execute("GET_INFO_NHASI")
     ).recordset as Dentist[];
-    
-    return dentists;
 
+    return dentists;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

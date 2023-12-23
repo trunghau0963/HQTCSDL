@@ -201,6 +201,24 @@ export const getAppointmentIsDone = async (req: Request, res: Response) => {
     return undefined;
   }
 };
+
+export const getAppointmentUnfinished = async (req: Request, res: Response) => {
+  try {
+    const data: AppointmentDetail[] = (
+      await (await req.db()).execute("GET_LICHKHAM_DETAIL_UNFINISHED")
+    ).recordset as AppointmentDetail[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is Unfinished. Please try again later."
+    );
+    return undefined;
+  }
+};
 export const getAppointmentIsDoneOfPatient = async (
   req: Request,
   res: Response,
