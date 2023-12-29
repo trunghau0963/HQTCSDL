@@ -1,16 +1,11 @@
 import * as elements from "typed-html";
 import AdminPage from "../../admin";
-import { AccountPage } from "../../../../components/Admin/functionAdmin";
 import { Staff } from "../../../../model/model";
 import { AddStaff } from "../../../../components/Admin/Staff/functionStaff";
-import { SearchFunction } from "../../../../components/Admin/functionAdmin";
+import { SearchFunction } from "../../../../components/Search";
+import { TableOfPerson } from "../../../../components/Table/functionTable";
 
-type StaffProps = {
-  staffs: Staff[];
-};
-
-const StaffPage = ({ staffs }: StaffProps) => {
-  // console.log('dentist page: ', Data);
+const StaffPage = () => {
   return (
     <AdminPage>
       <div class="main-wrapper h-100">
@@ -22,7 +17,7 @@ const StaffPage = ({ staffs }: StaffProps) => {
               </div>
             </div>
             <AddStaff />
-            <SearchFunction role={"staff"} />
+            <SearchFunction roleUrl="admin" role={"staff"} Table={TableOfPerson}/>
           </div>
         </div>
       </div>

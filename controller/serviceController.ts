@@ -158,3 +158,25 @@ export const getServiceByName = async (
     return undefined;
   }
 };
+
+export const getServiceByNameChar = async (
+  req: Request,
+  res: Response,
+  name: string
+) => {
+  try {
+    const data: Service[] = (
+      await (await req.db())
+        .input("TENDV", name)
+        .execute("GET_INFO_DICHVU_BY_NAME_CHARACTER")
+    ).recordset;
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Service information. Please try again later.");
+    return undefined;
+  }
+};

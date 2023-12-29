@@ -1,8 +1,8 @@
 import * as elements from "typed-html";
 import AdminPage from "../../admin";
-import { Dentist } from "../../../../model/model";
 import { AddDentist } from "../../../../components/Admin/Dentist/functionDentist";
-import { SearchFunction } from "../../../../components/Admin/functionAdmin";
+import { SearchFunction } from "../../../../components/Search";
+import { TableOfPerson } from "../../../../components/Table/functionTable";
 
 const DentistPage = () => {
   return (
@@ -16,7 +16,7 @@ const DentistPage = () => {
               </div>
             </div>
             <AddDentist />
-            <SearchFunction role={"dentist"} />
+            <SearchFunction roleUrl="admin" role={"dentist"} Table={TableOfPerson}/>
           </div>
         </div>
       </div>

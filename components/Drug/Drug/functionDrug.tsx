@@ -1,5 +1,7 @@
 import * as elements from "typed-html";
 import { drugProps } from "../../../model/model";
+import { SearchFunction } from "../../Search";
+import { TableOfDrug } from "../../Table/functionTable";
 
 interface DrugProps {
   Data: drugProps;
@@ -40,7 +42,7 @@ export const AddDrug = ({ url }: { url: string }) => {
                           <div class="row my-3">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold" for='name'>
+                                <label class="font-weight-bold" for="name">
                                   Name <span class="text-danger">*</span>
                                 </label>
                                 <input
@@ -53,7 +55,10 @@ export const AddDrug = ({ url }: { url: string }) => {
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label class="font-weight-bold" for="drugIndicate">
+                                <label
+                                  class="font-weight-bold"
+                                  for="drugIndicate"
+                                >
                                   Assign<span class="text-danger">*</span>
                                 </label>
                                 <input
@@ -441,6 +446,26 @@ export const EditDrug = ({ Data, url }: DrugProps) => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const DrugComponent = ({
+  url,
+}: {
+  drugs: drugProps[];
+  url: string;
+}) => {
+  return (
+    <div class="main-wrapper h-100">
+      <div class="page-wrapper">
+        <div class="content">
+          <div class="row">
+            <AddDrug url={url} />
+            <SearchFunction roleUrl="admin" role="drug" Table={TableOfDrug} />
           </div>
         </div>
       </div>

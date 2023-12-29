@@ -1,13 +1,9 @@
 import * as elements from "typed-html";
 import AdminPage from "../../admin";
 import { AddDentist } from "../../../../components/Admin/Dentist/functionDentist";
-import { AccountPage } from "../../../../components/Admin/functionAdmin";
 import { Patient } from "../../../../model/model";
-import { SearchFunction } from "../../../../components/Admin/functionAdmin";
-
-type PatientProps = {
-  patients: Patient[];
-};
+import { SearchFunction } from "../../../../components/Search";
+import { TableOfPerson } from "../../../../components/Table/functionTable";
 
 const PatientPage = () => {
   return (
@@ -21,7 +17,7 @@ const PatientPage = () => {
               </div>
             </div>
             <AddDentist />
-            <SearchFunction role={"patient"} />
+            <SearchFunction roleUrl="admin" role={"patient"} Table={TableOfPerson} />
           </div>
         </div>
       </div>

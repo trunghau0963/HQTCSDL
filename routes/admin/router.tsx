@@ -25,7 +25,11 @@ import {
 import { admin } from "../auth/router";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getAdminById } from "../../controller/adminController";
-import { getAllStaff, createStaff, getStaffByNameCharacter } from "../../controller/staffController";
+import {
+  getAllStaff,
+  createStaff,
+  getStaffByNameCharacter,
+} from "../../controller/staffController";
 import {
   createPatient,
   getAllPatient,
@@ -42,6 +46,7 @@ import {
   addDrug,
   deleteDrug,
   getDrugByName,
+  getDrugByNameChar,
   getDrugInfo,
   updateInfoDrug,
 } from "../../controller/drugController";
@@ -52,6 +57,7 @@ import {
   deleteService,
   updateService,
   addService,
+  getServiceByNameChar,
 } from "../../controller/serviceController";
 
 import {
@@ -70,10 +76,10 @@ import EditProfilePage from "../../app/admin/Profile/EditProfile";
 import { getFreeSchedule } from "../../controller/scheduleController";
 import SchedulePage from "../../app/admin/Schedule/Schedule";
 import {
-  AccountPage,
+  SearchDrugResult,
   SearchResult,
-} from "../../components/Admin/functionAdmin";
-
+  SearchServiceResult,
+} from "../../components/Table/functionSearchResult";
 const adminRouter = Router();
 adminRouter.get("/dashboard", admin, async (req, res) => {
   try {
@@ -134,40 +140,12 @@ adminRouter.get("/dentist", admin, async (req, res) => {
   }
 });
 
-adminRouter.post("/dentist/search/adadasdasd", admin, async (req, res) => {
-  try {
-    const input = req.query;
-    const searchValue = input.search as string;
-
-    const { name } = req.body;
-    console.log("name");
-
-    console.log("Search value in search:", searchValue);
-    if (!searchValue) {
-      const dentists: Dentist[] = (
-        await (await req.db()).execute("GET_INFO_NHASI")
-      ).recordset;
-      return res.send(<AccountPage users={dentists} role="NHASI" />);
-    }
-    const dentist: Dentist[] = (await getDentistByNameChar(
-      req,
-      res,
-      searchValue
-    )) as Dentist[];
-    console.log("dentist: ", dentist);
-    return res.send(<AccountPage users={dentist} role="NHASI" />);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 adminRouter.post("/dentist/search", admin, async (req, res) => {
   const { name } = req.body;
   let dentist: Dentist[] = [];
   console.log("name", name);
   try {
     dentist = (await getDentistByNameChar(req, res, name)) as Dentist[];
-    console.log("dentist: ", dentist);
   } catch (error) {
     console.log(error);
   }
@@ -180,7 +158,6 @@ adminRouter.post("/patient/search", admin, async (req, res) => {
   console.log("name", name);
   try {
     Patient = (await getPatientByNameChar(req, res, name)) as Patient[];
-    console.log("Patient: ", Patient);
   } catch (error) {
     console.log(error);
   }
@@ -193,12 +170,36 @@ adminRouter.post("/staff/search", admin, async (req, res) => {
   console.log("name", name);
   try {
     Staff = (await getStaffByNameCharacter(req, res, name)) as Staff[];
-    console.log("Staff: ", Staff);
   } catch (error) {
     console.log(error);
   }
   return res.send(<SearchResult users={Staff} role="staff" />);
 });
+
+adminRouter.post("/drug/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Drug: drugProps[] = [];
+  console.log("name", name);
+  try {
+    Drug = (await getDrugByNameChar(req, res, name)) as drugProps[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchDrugResult drugs={Drug} role="drug" url="admin" />);
+});
+
+adminRouter.post("/service/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Service: Service[] = [];
+  console.log("name", name);
+  try {
+    Service = (await getServiceByNameChar(req, res, name)) as Service[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchServiceResult services={Service} role="service" url="admin" />);
+});
+
 
 adminRouter.put("/dentist", admin, async (req, res) => {
   try {

@@ -32,7 +32,6 @@ export const createAdmin = async (req: Request, res: Response) => {
 };
 
 export const getAdminById = async (req: Request, res: Response, id : string) => {
-  // const { id } = req.body;
   try {
     const user: Admin = (
       await (await req.db())

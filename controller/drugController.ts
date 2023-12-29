@@ -103,6 +103,37 @@ export const getDrugByName = async (req: Request, res: Response) => {
   }
 };
 
+export const getDrugByNameChar = async (
+  req: Request,
+  res: Response,
+  name: string
+) => {
+  try {
+    let drugs: drugProps[] = [];
+    if (name !== "") {
+      drugs = (
+        await (await req.db())
+          .input("TENTHUOC", name)
+          .execute("GET_INFO_THUOC_BY_NAME_CHARACTER")
+      ).recordset;
+    } else {
+      drugs = (await (await req.db()).execute("GET_INFO_THUOC")).recordset;
+    }
+    console.log(drugs);
+    return drugs;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        return res.status(400).send(error.message);
+      }
+      return res
+        .status(500)
+        .send("Can't get info of patients. Please try again later.");
+    }
+  }
+};
+
 export const deleteDrug = async (req: Request, res: Response, url: string) => {
   const { IDC, IDD } = req.body;
   const directUrl = `/${url}/drug`;

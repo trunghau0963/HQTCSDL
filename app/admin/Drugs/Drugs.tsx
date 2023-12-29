@@ -1,7 +1,7 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import Drug from "../../../components/Drug/Drug/drug";
-import InvoiceComponent from "../../../components/Drug/Invoice/invoice";
+import { DrugComponent } from "../../../components/Drug/Drug/functionDrug";
+import { InvoiceComponent } from "../../../components/Drug/Invoice/functionInvoice";
 import { drugProps, Invoice } from "../../../model/model";
 
 type drugPageProps = {
@@ -10,11 +10,9 @@ type drugPageProps = {
 };
 
 const DrugPage = ({ drugs, invoices }: drugPageProps) => {
-  console.log(drugs);
-  console.log(invoices);
   return (
     <AdminPage>
-      <Drug drugs={drugs} url="admin" />
+      <DrugComponent drugs={drugs} url="admin" />
       <InvoiceComponent Data={invoices} />
     </AdminPage>
   );

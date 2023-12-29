@@ -45,8 +45,9 @@ import {
   getDrugInfo,
   deleteDrug,
   updateInfoDrug,
+  getDrugByNameChar,
 } from "../../controller/drugController";
-import { getNameOfService } from "../../controller/serviceController";
+import { getNameOfService, getServiceByNameChar } from "../../controller/serviceController";
 import AddServiceIndicators from "../../app/staff/Invoice/ServiceIndicators/addServiceIndicator";
 import DeleteServiceIndicators from "../../app/staff/Invoice/ServiceIndicators/deleteServiceIndicator";
 import {
@@ -89,6 +90,7 @@ import {
   getScheduleDentist,
 } from "../../components/Home/functionHome";
 import EditProfilePage from "../../app/staff/Profile/EditProfile";
+import { SearchDrugResult, SearchServiceResult } from "../../components/Table/functionSearchResult";
 
 const staffRouter = Router();
 
@@ -676,6 +678,30 @@ staffRouter.get("/edit-profile", staff, async (req, res) => {
     console.log(error);
   }
   return res.send(<EditProfilePage data={staff} />);
+});
+
+staffRouter.post("/drug/search", staff, async (req, res) => {
+  const { name } = req.body;
+  let Drug: drugProps[] = [];
+  console.log("name", name);
+  try {
+    Drug = (await getDrugByNameChar(req, res, name)) as drugProps[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchDrugResult drugs={Drug} role="drug" url="staff" />);
+});
+
+staffRouter.post("/service/search", staff, async (req, res) => {
+  const { name } = req.body;
+  let Service: Service[] = [];
+  console.log("name", name);
+  try {
+    Service = (await getServiceByNameChar(req, res, name)) as Service[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchServiceResult services={Service} role="service" url="staff" />);
 });
 
 staffRouter.put("/home/edit-profile", staff, async (req, res) => {
