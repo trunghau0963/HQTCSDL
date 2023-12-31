@@ -380,7 +380,7 @@ export const EditDrug = ({ Data, url }: DrugProps) => {
                                 type="number"
                                 class="form-control "
                                 name="quantity"
-                                placeholder={Data.SOLUONG}
+                                placeholder={Data.SOLUONG.toString()}
                               />
                             </div>
                           </div>

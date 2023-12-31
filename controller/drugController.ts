@@ -62,9 +62,14 @@ export const getNameOfDrug = async (req: Request, res: Response) => {
     const drugs: drugProps[] = (
       await (await req.db()).execute("GET_INFO_THUOC")
     ).recordset as drugProps[];
-
-    const nameArray: string[] = drugs.map((drug) => drug.TENTHUOC.toString());
-    return nameArray;
+    const drugInfoArray: { name: string; quantity: number }[] = drugs.map(
+      (drug) => ({
+        name: drug.TENTHUOC.toString(),
+        quantity: drug.SOLUONG || 0, // Use 0 if SOLUONG is undefined
+      })
+    );
+    // const nameArray: string[] = drugs.map((drug) => drug.TENTHUOC.toString());
+    return drugInfoArray;
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

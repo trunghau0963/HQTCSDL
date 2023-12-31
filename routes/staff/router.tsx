@@ -549,7 +549,7 @@ staffRouter.get("/invoice/failed", staff, async (req, res) => {
 staffRouter.get("/invoice/add-prescription/:id", staff, async (req, res) => {
   try {
     let idInvoices: string[] = (await getIdInvoice(req, res)) || [];
-    let nameDrugs: string[] = (await getNameOfDrug(req, res)) || [];
+    let nameDrugs: any[] = (await getNameOfDrug(req, res)) || [];
     return res.send(
       <AddPrescription listIdInvoice={idInvoices} listNameDrug={nameDrugs} />
     );

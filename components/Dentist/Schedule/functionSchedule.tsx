@@ -398,10 +398,11 @@ export const GetSchedule = ({
   appointment: AppointmentDetail;
   IdInvoice: string;
   prescriptions: Prescription[];
-  nameDrugs: string[];
+  nameDrugs: any[];
   services: serviceIndicators[];
   nameServices: string[];
 }) => {
+  console.log("drug", nameDrugs);
   return (
     <div>
       <form>
@@ -617,9 +618,19 @@ export const GetSchedule = ({
                         class="form-control"
                         id="TENTHUOC"
                         name="TENTHUOC"
+                        onclick={`
+                        const nameDrugs = ${JSON.stringify(nameDrugs)};
+                        let drugName = document.querySelector('#TENTHUOC').value; 
+                        let selectedDrug = nameDrugs.find((drug) => drug.name === drugName);
+                        if (selectedDrug) {
+                          console.log(selectedDrug.quantity);
+                          document.getElementById('SOLUONG').placeholder = selectedDrug.quantity;
+                          document.getElementById('SOLUONG').max = Math.min(selectedDrug.quantity, 100);
+                        }
+                        `}
                       >
-                        {nameDrugs.map((name) => (
-                          <option value={name}>{name}</option>
+                        {nameDrugs.map((drug) => (
+                          <option value={drug.name}>{drug.name}</option>
                         ))}
                       </select>
                     </div>
@@ -633,6 +644,7 @@ export const GetSchedule = ({
                         class="form-control"
                         name="SOLUONG"
                         required=""
+                        min="0"
                       />
                     </div>
 
@@ -641,7 +653,7 @@ export const GetSchedule = ({
                         LIEULUONG
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         id="LIEULUONG"
                         class="form-control"
                         name="LIEULUONG"

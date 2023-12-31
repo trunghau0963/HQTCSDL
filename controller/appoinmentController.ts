@@ -202,6 +202,27 @@ export const getAppointmentIsDone = async (req: Request, res: Response) => {
   }
 };
 
+export const getAppointmentIsDoneByName = async (req: Request, res: Response, name: string) => {
+  try {
+    const data: AppointmentDetail[] = (
+      await (await req.db())
+      .input("name", name)
+      .execute("GET_LICHKHAM_DETAIL_DONE_BY_NAME")
+    ).recordset as AppointmentDetail[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is done. Please try again later."
+    );
+    return undefined;
+  }
+};
+
+
 export const getAppointmentUnfinished = async (req: Request, res: Response) => {
   try {
     const data: AppointmentDetail[] = (
@@ -219,6 +240,31 @@ export const getAppointmentUnfinished = async (req: Request, res: Response) => {
     return undefined;
   }
 };
+
+export const getAppointmentUnfinishedByName = async (
+  req: Request,
+  res: Response,
+  name: string
+) => {
+  try {
+    const data: AppointmentDetail[] = (
+      await (await req.db())
+        .input("name", name)
+        .execute("GET_LICHKHAM_DETAIL_UNFINISHED_BY_NAME")
+    ).recordset as AppointmentDetail[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is Unfinished. Please try again later."
+    );
+    return undefined;
+  }
+};
+
 export const getAppointmentIsDoneOfPatient = async (
   req: Request,
   res: Response,
@@ -254,6 +300,34 @@ export const getAppointmentIsDoneOfDentist = async (
         .input("MANS", id)
         .execute("GET_LICHKHAM_DETAIL_DONE_OF_NHASI")
     ).recordset as AppointmentDetail[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment of dentist which is done. Please try again later."
+    );
+    return undefined;
+  }
+};
+
+export const getAppointmentIsDoneOfDentistByName = async (
+  req: Request,
+  res: Response,
+  id: string,
+  name: string
+) => {
+  try {
+    const data: AppointmentDetail[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .input("NAME", name)
+        .input("SEARCH", name)
+        .execute("GET_LICHKHAM_DETAIL_DONE_OF_NHASI_BY_NAME_AND_DATETIME")
+    ).recordset as AppointmentDetail[];
+    // console.log("getAppointmentIsDoneOfDentistByName : ", data); 
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -314,6 +388,34 @@ export const getAppointmentNotDoneOfDentist = async (
     return undefined;
   }
 };
+
+export const getAppointmentNotDoneOfDentistByName = async (
+  req: Request,
+  res: Response,
+  id: string,
+  search: string
+) => {
+  try {
+    const data: AppointmentDetail[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .input("NAME", search)
+        .input("SEARCH", search)
+        .execute("GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI_BY_NAME_AND_DATETIME")
+    ).recordset as AppointmentDetail[];
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Appointment which is unfinished. Please try again later."
+    );
+    return undefined;
+  }
+};
+
 
 export const directNewUrl = async (req: Request, res: Response) => {
   try {

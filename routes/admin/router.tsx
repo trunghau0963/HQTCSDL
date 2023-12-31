@@ -68,16 +68,22 @@ import {
   getAppointmentIsDoneOfDentist,
   getAppointmentIsDone,
   getAppointmentUnfinished,
+  getAppointmentUnfinishedByName,
+  getAppointmentIsDoneByName,
 } from "../../controller/appoinmentController";
 
 import { getInvoice } from "../../controller/invoiceController";
 import EditProfile from "../../app/patient/Profile/EditProfile";
 import EditProfilePage from "../../app/admin/Profile/EditProfile";
-import { getFreeSchedule } from "../../controller/scheduleController";
+import {
+  getFreeSchedule,
+  getFreeScheduleByName,
+} from "../../controller/scheduleController";
 import SchedulePage from "../../app/admin/Schedule/Schedule";
 import {
   SearchDrugResult,
   SearchResult,
+  SearchScheduleResult,
   SearchServiceResult,
 } from "../../components/Table/functionSearchResult";
 const adminRouter = Router();
@@ -197,9 +203,33 @@ adminRouter.post("/service/search", admin, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  return res.send(<SearchServiceResult services={Service} role="service" url="admin" />);
+  return res.send(
+    <SearchServiceResult services={Service} role="service" url="admin" />
+  );
 });
 
+adminRouter.post("/schedule/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let scheduleFree: Schedule[] = [];
+  let scheduleRegistered: AppointmentDetail[] = [];
+  let scheduleRegistereFinished: AppointmentDetail[] = [];
+  console.log("name", name);
+  try {
+    scheduleFree = (await getFreeScheduleByName(req, res, name)) || [];
+    scheduleRegistered = (await getAppointmentUnfinishedByName(req, res, name)) as [];
+    scheduleRegistereFinished = (await getAppointmentIsDoneByName(req, res, name)) as [];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(
+    <SearchScheduleResult
+      Free={scheduleFree}
+      Registered={scheduleRegistered}
+      RegisteredFinished={scheduleRegistereFinished}
+      role="schedule"
+    />
+  );
+});
 
 adminRouter.put("/dentist", admin, async (req, res) => {
   try {

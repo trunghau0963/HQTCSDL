@@ -120,7 +120,7 @@ export type Prescription = {
   TENTHUOC: string;
   MATHUOC: string;
   SOLUONG: number;
-  LIEULUONG: number;
+  LIEULUONG: string;
   DONGIA: number;
   THANHTIEN: number;
 };
@@ -137,7 +137,7 @@ export type drugProps = {
   MATHUOC: string;
   TENTHUOC: string;
   CHIDINH: string;
-  SOLUONG: string;
+  SOLUONG: number;
   DONVI: string;
   NGAYHETHAN: Date;
   DONGIA: number;

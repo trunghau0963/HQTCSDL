@@ -12,9 +12,13 @@ import {
   serviceIndicators,
   Prescription,
   Patient,
+  Service,
 } from "../../model/model";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { getDentistById } from "../../controller/dentistController";
+import {
+  getAllDentist,
+  getDentistById,
+} from "../../controller/dentistController";
 import ProfilePage from "../../app/dentist/Profile/Profile";
 import NullPage from "../../components/Error/NullPage";
 import {
@@ -22,12 +26,15 @@ import {
   getScheduleIsFreeOfDentist,
   getScheduleIsRegisteredOfDentist,
   addSchedule,
+  getScheduleIsFreeOfDentistByDateAndTime,
 } from "../../controller/scheduleController";
 import {
   deleteAppointmentHtmx,
   directNewUrl,
   getAppointmentIsDoneOfDentist,
+  getAppointmentIsDoneOfDentistByName,
   getAppointmentNotDoneOfDentist,
+  getAppointmentNotDoneOfDentistByName,
   getAppointmentOfDentist,
   getAppointmentOfDentistByDate,
   getAppointmentPatientByDate,
@@ -49,7 +56,10 @@ import {
   getIdInvoiceByIdPatientParameter,
 } from "../../controller/invoiceController";
 import { getNameOfDrug } from "../../controller/drugController";
-import { getNameOfService } from "../../controller/serviceController";
+import {
+  getNameOfService,
+  getService,
+} from "../../controller/serviceController";
 import {
   getNameAllPatient,
   getPatientByName,
@@ -59,11 +69,30 @@ import {
   GetSchedule,
 } from "../../components/Dentist/Schedule/functionSchedule";
 import EditProfilePage from "../../app/dentist/Profile/EditProfile";
+import { SearchScheduleResultOfNhasi } from "../../components/Table/functionSearchResult";
+import HomeComponent from "../../components/Home/Home";
 
 const dentistRouter = Router();
 
 dentistRouter.get("/dashboard", dentist, async (req, res) => {
   return res.send(<Dashboard />);
+});
+
+dentistRouter.get("/home", dentist, async (req, res) => {
+  let listDentist: Dentist[] = [];
+  let listService: Service[] = [];
+
+  listDentist = (await getAllDentist(req, res)) as Dentist[];
+  listService = (await getService(req, res)) as Service[];
+  return res.send(
+    <DentistPage>
+      <HomeComponent
+        listDentist={listDentist}
+        listService={listService}
+        role={"dentist"}
+      />
+    </DentistPage>
+  );
 });
 
 dentistRouter.get("/schedule", dentist, async (req, res) => {
@@ -88,7 +117,7 @@ dentistRouter.get("/schedule", dentist, async (req, res) => {
       res,
       data.user.MANS
     )) as [];
-    console.log("scheduleRegistereFinished: ", scheduleRegistereFinished);
+    // console.log("scheduleRegistereFinished: ", scheduleRegistereFinished);
   } catch {}
   return res.send(
     <SchedulePage
@@ -96,6 +125,50 @@ dentistRouter.get("/schedule", dentist, async (req, res) => {
       Registered={scheduleRegistered}
       RegisteredFinished={scheduleRegistereFinished}
       idDentist={idDentist}
+    />
+  );
+});
+
+dentistRouter.post("/schedule/search", dentist, async (req, res) => {
+  const { name } = req.body;
+  let scheduleFree: Schedule[] = [];
+  let scheduleRegistered: AppointmentDetail[] = [];
+  let scheduleRegistereFinished: AppointmentDetail[] = [];
+  let idDentist;
+  console.log("name", name);
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    idDentist = data.user.MANS;
+    scheduleFree =
+      (await getScheduleIsFreeOfDentistByDateAndTime(
+        req,
+        res,
+        idDentist,
+        name
+      )) || [];
+    scheduleRegistered = (await getAppointmentNotDoneOfDentistByName(
+      req,
+      res,
+      idDentist,
+      name
+    )) as [];
+    scheduleRegistereFinished = (await getAppointmentIsDoneOfDentistByName(
+      req,
+      res,
+      idDentist,
+      name
+    )) as [];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(
+    <SearchScheduleResultOfNhasi
+      Free={scheduleFree}
+      Registered={scheduleRegistered}
+      RegisteredFinished={scheduleRegistereFinished}
+      role="schedule"
     />
   );
 });
@@ -112,7 +185,7 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
   let services: serviceIndicators[] = [];
   let prescriptions: Prescription[] = [];
   let nameServices: string[] = (await getNameOfService(req, res)) || [];
-  let nameDrugs: string[] = (await getNameOfDrug(req, res)) || [];
+  let nameDrugs: any[] = (await getNameOfDrug(req, res)) || [];
   const appointment: AppointmentDetail = (await getAppointmentOfDentistByDate(
     req,
     res
@@ -142,7 +215,9 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
     )) as serviceIndicators[];
     nameDrugs = nameDrugs.filter(
       (drug) =>
-        !prescriptions.some((prescription) => prescription.TENTHUOC === drug)
+        !prescriptions.some(
+          (prescription) => prescription.TENTHUOC === drug.name
+        )
     );
     nameServices = nameServices.filter(
       (service) =>

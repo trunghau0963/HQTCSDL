@@ -6,17 +6,19 @@ import { Prescription } from "../model/model";
 export const addDrugIntoPrescription = async (req: Request, res: Response) => {
   try {
     const input = req.body;
-    console.log("input", input);
-    const user = await (await req.db())
-      .input("MACT", input.MACT)
-      .input("TENTHUOC", input.TENTHUOC)
-      .input("SOLUONG", input.SOLUONG)
-      .input("LIEULUONG", input.LIEULUONG)
-      .execute("INSERT_INTO_TOATHUOC");
+    const user = (
+      await (await req.db())
+        .input("MACT", input.MACT)
+        .input("TENTHUOC", input.TENTHUOC)
+        .input("SOLUONG", input.SOLUONG)
+        .input("LIEULUONG", input.LIEULUONG)
+        .execute("INSERT_INTO_TOATHUOC")
+    ).recordset;
+
+    console.log("user", user);
     res
       .header("HX-Redirect", "/dentist/schedule")
       .status(200)
-      .json(user.recordset[0])
       .send("successful add drug into Prescription");
   } catch (error) {
     if (error instanceof Error) {
@@ -98,4 +100,3 @@ export const getPrescriptionById = async (
     return undefined;
   }
 };
-

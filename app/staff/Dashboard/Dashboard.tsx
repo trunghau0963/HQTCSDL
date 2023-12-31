@@ -3,13 +3,13 @@ import StaffPage from "../staff";
 import ToolNavigation from "../../../components/Dashboard/tools-navigation";
 
 const TOOLS = (baseUrl: string): any[] => [
-  // {
-  //   title: "Home",
-  //   icon: "/icons/home.svg",
-  //   url: `${baseUrl}/home`,
-  //   color: "btn btn-outline-info",
-  //   slug: "home",
-  // },
+  {
+    title: "Home",
+    icon: "/icons/home.svg",
+    url: `${baseUrl}/home`,
+    color: "btn btn-outline-info",
+    slug: "home",
+  },
   {
     title: "Schedule",
     icon: "/icons/schedule.svg",
@@ -54,7 +54,7 @@ const Dashboard = () => {
         </div>
       </div>
       <main id="main">
-        <ToolNavigation NAVIGATIONS={TOOLS} url="/staff" numberOfOption={3} />
+        <ToolNavigation NAVIGATIONS={TOOLS} url="/staff" numberOfOption={4} />
       </main>
     </StaffPage>
   );

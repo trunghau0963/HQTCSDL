@@ -80,6 +80,12 @@ export const DENTISTNAVIGATIONS = (baseUrl: string) => [
     color: "btn btn-outline-warning",
   },
   {
+    title: "Home",
+    icon: "/icons/home.svg",
+    url: `${baseUrl}/home`,
+    color: "btn btn-outline-info",
+  },
+  {
     title: "Schedule",
     icon: "/icons/schedule.svg",
     url: `${baseUrl}/schedule`,

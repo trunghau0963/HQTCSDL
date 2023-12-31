@@ -1,8 +1,21 @@
 import * as elements from "typed-html";
-import { Staff, Patient, Dentist, drugProps, Service } from "../../model/model";
+import {
+  Staff,
+  Patient,
+  Dentist,
+  drugProps,
+  Service,
+  Schedule,
+  AppointmentDetail,
+  AppointmentDetailProps,
+} from "../../model/model";
 import { EditDrug, DeleteDrug } from "../Drug/Drug/functionDrug";
 import { Account } from "../Admin/functionAdmin";
 import { DeleteService, EditService } from "../Service/functionService";
+import {
+  AddAppointment,
+  PostAppointment,
+} from "../Dentist/Schedule/functionSchedule";
 type User = Patient | Dentist | Staff;
 
 export const SearchResult = ({
@@ -88,6 +101,262 @@ export const SearchServiceResult = ({
           </tr>
         ))
       )}
+    </tbody>
+  );
+};
+
+export const SearchScheduleResult = ({
+  Free,
+  Registered,
+  RegisteredFinished,
+  role,
+}: {
+  Free: Schedule[];
+  Registered: AppointmentDetail[];
+  RegisteredFinished: AppointmentDetail[];
+  role: string;
+}) => {
+  let idx = 1;
+  console.log("Free: ", Free);
+  console.log("registered: ", Registered);
+  console.log("registeredFinished", RegisteredFinished);
+  return (
+    <tbody id={`search-${role}-result`}>
+      {!Free || Free.length === 0 ? (
+        <tr>
+          <td>Not found Done Schedule Free Schedule</td>
+        </tr>
+      ) : (
+        Free.map((data) => (
+          <tr>
+            <td>
+              <img
+                width="50"
+                height="50"
+                src={`/img/user.jpg`}
+                onerror="this.onerror=null;this.src='/img/user.jpg';"
+                class="ms-2 rounded-circle"
+                alt=""
+              />{" "}
+              <h2></h2>
+            </td>
+            <td>{idx++}</td>
+            <td>{data.MANS}</td>
+            <td>{data.HOTEN}</td>
+            <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+            <td>{data.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+            <td class="text-right">
+              <button
+                class="btn btn-sm btn-tertiary text-light px-2"
+                id={`registered-appointment-${idx}-button`}
+              >
+                <i class="bi bi-calendar"></i>
+                Free Schedule
+              </button>
+            </td>
+          </tr>
+        ))
+      )}
+      {!RegisteredFinished || RegisteredFinished.length === 0 ? (
+        <tr>
+          <td>Not found Registered Schedule Schedule which Is Done</td>
+        </tr>
+      ) : (
+        RegisteredFinished.map((data) => (
+          <tr id="schedule">
+            <td>
+              <img
+                width="50"
+                height="50"
+                src={`/img/user.jpg`}
+                onerror="this.onerror=null;this.src='/img/user.jpg';"
+                class="ms-2 rounded-circle"
+                alt=""
+              />{" "}
+              <h2></h2>
+            </td>
+            <td>{idx++}</td>
+            <td>{data.MANS}</td>
+            <td>{data.HOTENNHASI}</td>
+            <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+            <td>{data.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+            <td class="text-right">
+              <button
+                class={`btn btn-sm btn-success`}
+                id={`get-registered-${idx}-button`}
+              >
+                <span>
+                  <i class="bi bi-calendar-check-fill"></i>Success Schedule
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))
+      )}
+      {!Registered || Registered.length === 0 ? (
+        <tr>
+          <td>Not found Registered Schedule</td>
+        </tr>
+      ) : (
+        Registered.map((data) => (
+          <tr>
+            <td>
+              <img
+                width="50"
+                height="50"
+                src={`/img/user.jpg`}
+                onerror="this.onerror=null;this.src='/img/user.jpg';"
+                class="ms-2 rounded-circle"
+                alt=""
+              />{" "}
+              <h2></h2>
+            </td>
+            <td>{idx++}</td>
+            <td>{data.MANS}</td>
+            <td>{data.HOTENNHASI}</td>
+            <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+            <td>{data.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+            <td class="text-right">
+              <button
+                class={`btn btn-sm btn-warning`}
+                id={`get-registered-${idx}-button`}
+              >
+                <span>
+                  <i class="bi bi-calendar2-plus-fill"></i>
+                  Unfinished Schedule
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))
+      )}
+    </tbody>
+  );
+};
+
+export const SearchScheduleResultOfNhasi = ({
+  Free,
+  Registered,
+  RegisteredFinished,
+  role,
+}: {
+  Free: Schedule[];
+  Registered: AppointmentDetail[];
+  RegisteredFinished: AppointmentDetail[];
+  role: string;
+}) => {
+  let idx = 1;
+  // console.log("Free: ", Free);
+  // console.log("registered: ", Registered);
+  // console.log("registeredFinished", RegisteredFinished);
+  return (
+    <tbody id={`search-${role}-result`}>
+      {(!Free && !Registered && !RegisteredFinished) ||
+      (Free.length === 0 &&
+        Registered.length === 0 &&
+        RegisteredFinished.length === 0) ? (
+        <tr>
+          <td>Not found</td>
+        </tr>
+      ) : !Free || Free.length === 0 ? (
+        ""
+      ) : (
+        Free.map((data) => (
+          <tr>
+            <td>
+              <img
+                width="50"
+                height="50"
+                src={`/img/user.jpg`}
+                onerror="this.onerror=null;this.src='/img/user.jpg';"
+                class="ms-2 rounded-circle"
+                alt=""
+              />{" "}
+              <h2></h2>
+            </td>
+            <td>{idx++}</td>
+            <td>
+              <em>Undefined</em>
+            </td>
+            <td>
+              <em>Undefined</em>
+            </td>
+            <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+            <td>{data.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+            <td class="text-right">
+              <AddAppointment
+                idDentist={data.MANS}
+                nameOfDentist={data.HOTEN}
+                date={data.NGAYKHAM}
+                time={data.GIOKHAM}
+                idx={idx}
+              />
+            </td>
+          </tr>
+        ))
+      )}
+      {!RegisteredFinished || RegisteredFinished.length === 0
+        ? ""
+        : RegisteredFinished.map((data) => (
+            <tr>
+              <td>
+                <img
+                  width="50"
+                  height="50"
+                  src={`/img/user.jpg`}
+                  onerror="this.onerror=null;this.src='/img/user.jpg';"
+                  class="ms-2 rounded-circle"
+                  alt=""
+                />{" "}
+                <h2></h2>
+              </td>
+              <td>{idx++}</td>
+              <td>{data.MABN}</td>
+              <td>{data.HOTENBENHNHAN}</td>
+              <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+              <td>{data.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+              <td class="text-right">
+                <PostAppointment
+                  idDentist={data.MANS}
+                  date={data.NGAYKHAM}
+                  time={data.GIOKHAM}
+                  idx={idx}
+                  isDone={true}
+                />
+              </td>
+            </tr>
+          ))}
+      {!Registered || Registered.length === 0
+        ? ""
+        : Registered.map((data) => (
+            <tr>
+              <td>
+                <img
+                  width="50"
+                  height="50"
+                  src={`/img/user.jpg`}
+                  onerror="this.onerror=null;this.src='/img/user.jpg';"
+                  class="ms-2 rounded-circle"
+                  alt=""
+                />{" "}
+                <h2></h2>
+              </td>
+              <td>{idx++}</td>
+              <td>{data.MABN}</td>
+              <td>{data.HOTENBENHNHAN}</td>
+              <td>{data.NGAYKHAM.toLocaleDateString()}</td>
+              <td>{data.GIOKHAM.toISOString().split("T")[1].split(".")[0]}</td>
+              <td class="text-right">
+                <PostAppointment
+                  idDentist={data.MANS}
+                  date={data.NGAYKHAM}
+                  time={data.GIOKHAM}
+                  idx={idx}
+                  isDone={false}
+                />
+              </td>
+            </tr>
+          ))}
     </tbody>
   );
 };

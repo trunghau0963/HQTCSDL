@@ -102,7 +102,6 @@ export const getSchedule = async (req: Request, res: Response) => {
   }
 };
 
-
 //for calendar
 
 export const getScheduleIsFree = async (req: Request, res: Response) => {
@@ -162,6 +161,29 @@ export const getFreeSchedule = async (req: Request, res: Response) => {
   try {
     const data: Schedule[] = (
       await (await req.db()).execute("GET_LICHLAMVIEC_DETAIL_FREE")
+    ).recordset;
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error("Can't get Schedule which is free. Please try again later.");
+    return undefined;
+  }
+};
+
+export const getFreeScheduleByName = async (
+  req: Request,
+  res: Response,
+  name: string
+) => {
+  try {
+    const data: Schedule[] = (
+      await (await req.db())
+        .input("NAME", name)
+        .execute("GET_LICHLAMVIEC_DETAIL_FREE_BY_NAME")
     ).recordset;
 
     return data;
@@ -240,6 +262,34 @@ export const getScheduleIsFreeOfDentist = async (
     return undefined;
   }
 };
+
+export const getScheduleIsFreeOfDentistByDateAndTime = async (
+  req: Request,
+  res: Response,
+  id: string,
+  search: string,
+) => {
+  try {
+    const data: Schedule[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .input("NGAYKHAM", search)
+        .input("GIOKHAM", search)
+        .execute("GET_LICHLAMVIEC_DETAIL_FREE_OF_NHASI_BY_DATE_AND_TIME")
+    ).recordset;
+    // console.log("data", data);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error(error.message);
+    }
+    console.error(
+      "Can't get Schedule of dentist which is free. Please try again later."
+    );
+    return undefined;
+  }
+}
 
 export const getScheduleIsRegisteredOfDentist = async (
   req: Request,
