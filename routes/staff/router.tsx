@@ -92,6 +92,7 @@ import {
 } from "../../components/Home/functionHome";
 import EditProfilePage from "../../app/staff/Profile/EditProfile";
 import { SearchDrugResult, SearchServiceResult } from "../../components/Table/functionSearchResult";
+import RegistryError from "../../components/Error/RegistryError";
 
 const staffRouter = Router();
 
@@ -361,10 +362,20 @@ staffRouter.post("/schedule/date/add_appointment", staff, async (req, res) => {
       .json({ message: "Success" })
       .status(200);
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      return res.status(400).send(error.message);
-    }
+    return res
+        .header("HX-Redirect", "/staff/schedule/date/add_appointment/err")
+        .json({ message: "Fail" })
+        .status(200);
+  }
+});
+
+staffRouter.get("/schedule/date/add_appointment/err", staff, async (req, res) => {
+  try {
+    return res.send(
+      <RegistryError route='staff'/>
+    );
+  } catch (err) {
+    console.error(err);
   }
 });
 

@@ -54,6 +54,7 @@ import {
   getScheduleDentist,
   getScheduleDentistForPatient,
 } from "../../components/Home/functionHome";
+import RegistryError from "../../components/Error/RegistryError";
 
 const patientRouter = Router();
 
@@ -389,7 +390,11 @@ patientRouter.get("/dentist-schedule", patient, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-      patientInformation = (await getPatientById(req, res, data.user.MABN)) as Patient;
+    patientInformation = (await getPatientById(
+      req,
+      res,
+      data.user.MABN
+    )) as Patient;
   } catch {}
   const { MANS, HOTENNHASI } = req.query;
   const idDentist = MANS as string;
@@ -629,9 +634,24 @@ patientRouter.post(
         .header("HX-Redirect", "/patient/schedule")
         .json({ message: "Success" })
         .status(200);
-    } catch (error) {}
+    } catch (error) {
+      return res
+        .header("HX-Redirect", "/patient/schedule/date/add_appointment/err")
+        .json({ message: "Fail" })
+        .status(200);
+    }
   }
 );
+
+patientRouter.get("/schedule/date/add_appointment/err", patient, async (req, res) => {
+  try {
+    return res.send(
+      <RegistryError route='patient'/>
+    );
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 patientRouter.get("/appointment", patient, async (req, res) => {
   try {
