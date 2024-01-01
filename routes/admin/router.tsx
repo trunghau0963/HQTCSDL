@@ -560,33 +560,6 @@ adminRouter.post("/edit-drug-quantity", admin, async (req, res) => {
   editDrugQuantity(req, res, "admin");
 });
 
-adminRouter.get("/save-edit-drug-quantity", admin, async (req, res) => {
-  const input = req.query;
-  console.log("save", input);
-  const quantity = input.SOLUONG as any;
-  console.log(quantity);
-  return res.send(
-    <button
-      class="btn btn-link text-decoration-none"
-      hx-get="/admin/edit-drug-quantity"
-      hx-vars={`{'MALO': '${input.MALO}', 'MATHUOC': '${input.MATHUOC}', 'SOLUONG': '${input.SOLUONG}'} `}
-      hx-target={`#button-change-quantity-${input.MATHUOC}`}
-    >
-      <div class="d-flex">
-        <p>{input.SOLUONG}</p>
-        <img
-          src="/icons/warning.svg"
-          class="mx-2"
-          style="width: 15px; height: 15px;"
-          data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          title="Click to edit quantity"
-        />
-      </div>
-    </button>
-  );
-});
-
 adminRouter.get("/schedule", admin, async (req, res) => {
   let scheduleFree: Schedule[] = [];
   let scheduleRegistered: AppointmentDetail[] = [];

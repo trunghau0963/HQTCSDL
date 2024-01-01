@@ -46,6 +46,7 @@ import {
   deleteDrug,
   updateInfoDrug,
   getDrugByNameChar,
+  editDrugQuantity,
 } from "../../controller/drugController";
 import { getNameOfService, getServiceByNameChar } from "../../controller/serviceController";
 import AddServiceIndicators from "../../app/staff/Invoice/ServiceIndicators/addServiceIndicator";
@@ -690,6 +691,74 @@ staffRouter.post("/drug/search", staff, async (req, res) => {
     console.log(error);
   }
   return res.send(<SearchDrugResult drugs={Drug} role="drug" url="staff" />);
+});
+
+staffRouter.get("/edit-drug-quantity", staff, async (req, res) => {
+  const input = req.query;
+  console.log(input);
+  const quantity = (input.SOLUONG as any).trim();
+  const id = `SOLUONG${input.idx}` || "SOLUONG";
+  console.log(id);
+  return res.send(
+    <div class="d-flex w-50">
+      <span class="input-group-btn">
+        <button
+          onclick={`
+          if(document.getElementById('${id}').value == 0 || document.getElementById('${id}').value == null){
+            document.getElementById('${id}').value = ${quantity};  
+          }
+          var quantityInput = document.getElementById('${id}');
+          console.log(quantityInput.value);
+          var currentQuantity = parseInt(quantityInput.value, 10);
+          quantityInput.value = currentQuantity - 1;    
+          `}
+          class="quantity-left-minus btn btn-danger btn-number"
+        >
+          <i class="bi bi-arrow-down-short"></i>
+        </button>
+      </span>
+      <input
+        type="text"
+        id={`${id}`}
+        class="form-control"
+        name="SOLUONG"
+        value={quantity}
+        placeholder={`${quantity}`}
+        required=""
+        min="0"
+      />
+      <span class="input-group-btn">
+        <button
+          onclick={`
+          if(document.getElementById('${id}').value == 0 || document.getElementById('${id}').value == null){
+            document.getElementById('${id}').value = ${quantity};  
+          }  
+          var quantityInput = document.getElementById('${id}');
+          console.log(quantityInput.value);
+          var currentQuantity = parseInt(quantityInput.value, 10);
+          quantityInput.value = currentQuantity + 1;
+          `}
+          class="quantity-right-plus btn btn-tertiary btn-number text-white"
+        >
+          <i class="bi bi-arrow-up-short"></i>
+        </button>
+      </span>
+      <button
+        class="btn btn-success mx-2"
+        hx-post="/staff/edit-drug-quantity"
+        hx-vars={`{'MALO': '${input.MALO}', 'MATHUOC': '${input.MATHUOC}', 
+        'SOLUONG': '${quantity}',
+        'SOLUONGPROPS': document.getElementById('${id}').value }`}
+        hx-target={`#button-change-quantity-${input.MATHUOC}`}
+      >
+        Save
+      </button>
+    </div>
+  );
+});
+
+staffRouter.post("/edit-drug-quantity", staff, async (req, res) => {
+  editDrugQuantity(req, res, "staff");
 });
 
 staffRouter.post("/service/search", staff, async (req, res) => {

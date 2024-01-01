@@ -67,7 +67,7 @@ export const SearchDrugResult = ({
                 {/* <div id={`button-change-quantity-${data.MATHUOC}`}></div> */}
                 <button
                   class="btn btn-link text-decoration-none text-dark px-0"
-                  hx-get="/admin/edit-drug-quantity"
+                  hx-get={`/${url}/edit-drug-quantity`}
                   hx-vars={`{'MALO': '${data.MALO}', 'MATHUOC': '${data.MATHUOC}', 'SOLUONG': '${data.SOLUONG}', 'idx': ${idx}} `}
                   hx-target={`#button-change-quantity-${data.MATHUOC}`}
                 >
