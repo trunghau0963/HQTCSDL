@@ -37,6 +37,44 @@ export const addDrug = async (req: Request, res: Response, url: string) => {
   }
 };
 
+export const editDrugQuantity = async (
+  req: Request,
+  res: Response,
+  url: string
+) => {
+  try {
+    const directUrl = `/${url}/drug`;
+    const { MALO, MATHUOC, SOLUONG, SOLUONGPROPS } = req.body;
+    console.log("input in route", MALO, MATHUOC, SOLUONG, SOLUONGPROPS);
+
+    const differece =
+      Math.max(SOLUONG, SOLUONGPROPS) - Math.min(SOLUONG, SOLUONGPROPS);
+    const operator = SOLUONG > SOLUONGPROPS ? "-" : "+";
+
+    console.log("operator", operator);
+    console.log("differece", differece);
+    await (await req.db())
+      .input("MALO", MALO)
+      .input("MATHUOC", MATHUOC)
+      .input("SOLUONG", differece)
+      .input("ACTION", operator)
+      .execute("CHANGE_QUANTITY_THUOC");
+
+    return res
+      .header("HX-Redirect", directUrl)
+      .json({ message: "Success" })
+      .status(200);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return res.status(400).send(error.message);
+    }
+    return res
+      .status(500)
+      .send("Something went wrong. Please try again later.");
+  }
+};
+
 export const getDrugInfo = async (
   req: Request,
   res: Response
@@ -124,7 +162,6 @@ export const getDrugByNameChar = async (
     } else {
       drugs = (await (await req.db()).execute("GET_INFO_THUOC")).recordset;
     }
-    console.log(drugs);
     return drugs;
   } catch (error) {
     if (error instanceof Error) {

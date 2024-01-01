@@ -52,13 +52,39 @@ export const SearchDrugResult = ({
           <td>Not found</td>
         </tr>
       ) : (
-        drugs.map((data: any) => (
+        drugs.map((data: any, idx: number) => (
           <tr>
             <td>{data.MALO}</td>
             <td>{data.MATHUOC}</td>
             <td>{data.TENTHUOC}</td>
             <td>{data.CHIDINH}</td>
-            <td>{data.SOLUONG}</td>
+            {/* <td>{data.SOLUONG}</td> */}
+            <td>
+              <div
+                id={`button-change-quantity-${data.MATHUOC}`}
+                class="d-flex align-items-center"
+              >
+                {/* <div id={`button-change-quantity-${data.MATHUOC}`}></div> */}
+                <button
+                  class="btn btn-link text-decoration-none text-dark px-0"
+                  hx-get="/admin/edit-drug-quantity"
+                  hx-vars={`{'MALO': '${data.MALO}', 'MATHUOC': '${data.MATHUOC}', 'SOLUONG': '${data.SOLUONG}', 'idx': ${idx}} `}
+                  hx-target={`#button-change-quantity-${data.MATHUOC}`}
+                >
+                  <div class="d-flex">
+                    <p>{data.SOLUONG}</p>
+                    <img
+                      src="/icons/warning.svg"
+                      class="mx-2"
+                      style="width: 15px; height: 15px;"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Click to edit quantity"
+                    />
+                  </div>
+                </button>
+              </div>
+            </td>
             <td>{data.DONVI}</td>
             <td>{data.NGAYHETHAN.toISOString().split("T")[0]}</td>
             <td>{data.DONGIA}</td>
@@ -246,9 +272,6 @@ export const SearchScheduleResultOfNhasi = ({
   role: string;
 }) => {
   let idx = 1;
-  // console.log("Free: ", Free);
-  // console.log("registered: ", Registered);
-  // console.log("registeredFinished", RegisteredFinished);
   return (
     <tbody id={`search-${role}-result`}>
       {(!Free && !Registered && !RegisteredFinished) ||

@@ -44,6 +44,7 @@ import {
 import ProfilePage from "../../app/admin/Profile/Profile";
 import {
   addDrug,
+  editDrugQuantity,
   deleteDrug,
   getDrugByName,
   getDrugByNameChar,
@@ -216,8 +217,16 @@ adminRouter.post("/schedule/search", admin, async (req, res) => {
   console.log("name", name);
   try {
     scheduleFree = (await getFreeScheduleByName(req, res, name)) || [];
-    scheduleRegistered = (await getAppointmentUnfinishedByName(req, res, name)) as [];
-    scheduleRegistereFinished = (await getAppointmentIsDoneByName(req, res, name)) as [];
+    scheduleRegistered = (await getAppointmentUnfinishedByName(
+      req,
+      res,
+      name
+    )) as [];
+    scheduleRegistereFinished = (await getAppointmentIsDoneByName(
+      req,
+      res,
+      name
+    )) as [];
   } catch (error) {
     console.log(error);
   }
@@ -481,6 +490,101 @@ adminRouter.put("/manageAccount", admin, async (req, res) => {
   } catch (err) {
     console.error(err);
   }
+});
+
+adminRouter.get("/edit-drug-quantity", admin, async (req, res) => {
+  const input = req.query;
+  console.log(input);
+  const quantity = (input.SOLUONG as any).trim();
+  const id = `SOLUONG${input.idx}` || "SOLUONG";
+  console.log(id);
+  return res.send(
+    <div class="d-flex w-50">
+      <span class="input-group-btn">
+        <button
+          onclick={`
+          if(document.getElementById('${id}').value == 0 || document.getElementById('${id}').value == null){
+            document.getElementById('${id}').value = ${quantity};  
+          }
+          var quantityInput = document.getElementById('${id}');
+          console.log(quantityInput.value);
+          var currentQuantity = parseInt(quantityInput.value, 10);
+          quantityInput.value = currentQuantity - 1;    
+          `}
+          class="quantity-left-minus btn btn-danger btn-number"
+        >
+          <i class="bi bi-arrow-down-short"></i>
+        </button>
+      </span>
+      <input
+        type="text"
+        id={`${id}`}
+        class="form-control"
+        name="SOLUONG"
+        value={quantity}
+        placeholder={`${quantity}`}
+        required=""
+        min="0"
+      />
+      <span class="input-group-btn">
+        <button
+          onclick={`
+          if(document.getElementById('${id}').value == 0 || document.getElementById('${id}').value == null){
+            document.getElementById('${id}').value = ${quantity};  
+          }  
+          var quantityInput = document.getElementById('${id}');
+          console.log(quantityInput.value);
+          var currentQuantity = parseInt(quantityInput.value, 10);
+          quantityInput.value = currentQuantity + 1;
+          `}
+          class="quantity-right-plus btn btn-tertiary btn-number text-white"
+        >
+          <i class="bi bi-arrow-up-short"></i>
+        </button>
+      </span>
+      <button
+        class="btn btn-success mx-2"
+        hx-post="/admin/edit-drug-quantity"
+        hx-vars={`{'MALO': '${input.MALO}', 'MATHUOC': '${input.MATHUOC}', 
+        'SOLUONG': '${quantity}',
+        'SOLUONGPROPS': document.getElementById('${id}').value }`}
+        hx-target={`#button-change-quantity-${input.MATHUOC}`}
+      >
+        Save
+      </button>
+    </div>
+  );
+});
+
+adminRouter.post("/edit-drug-quantity", admin, async (req, res) => {
+  editDrugQuantity(req, res, "admin");
+});
+
+adminRouter.get("/save-edit-drug-quantity", admin, async (req, res) => {
+  const input = req.query;
+  console.log("save", input);
+  const quantity = input.SOLUONG as any;
+  console.log(quantity);
+  return res.send(
+    <button
+      class="btn btn-link text-decoration-none"
+      hx-get="/admin/edit-drug-quantity"
+      hx-vars={`{'MALO': '${input.MALO}', 'MATHUOC': '${input.MATHUOC}', 'SOLUONG': '${input.SOLUONG}'} `}
+      hx-target={`#button-change-quantity-${input.MATHUOC}`}
+    >
+      <div class="d-flex">
+        <p>{input.SOLUONG}</p>
+        <img
+          src="/icons/warning.svg"
+          class="mx-2"
+          style="width: 15px; height: 15px;"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Click to edit quantity"
+        />
+      </div>
+    </button>
+  );
 });
 
 adminRouter.get("/schedule", admin, async (req, res) => {

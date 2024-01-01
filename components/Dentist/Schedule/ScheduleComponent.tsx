@@ -362,9 +362,6 @@ export const ScheduleComponentOld = ({
 };
 
 export const ScheduleComponent = ({
-  Free,
-  Registered,
-  RegisteredFinished,
   idDentist,
 }: ScheduleProps) => {
   let idx = 1;

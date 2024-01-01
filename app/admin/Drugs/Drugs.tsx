@@ -19,3 +19,5 @@ const DrugPage = ({ drugs, invoices }: drugPageProps) => {
 };
 
 export default DrugPage;
+
+
