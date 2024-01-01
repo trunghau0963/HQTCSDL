@@ -293,14 +293,11 @@ dentistRouter.post(
 dentistRouter.post("/schedule/add-appointment", dentist, async (req, res) => {
   try {
     const { MANS, TEN, NGAYKHAM, GIOKHAM } = req.body;
-    console.log("MANS: ", MANS);
-    console.log("TEN: ", TEN);
-    console.log("NGAYKHAM: ", NGAYKHAM);
+
     const patient: Patient = (await getPatientByName(req, res, TEN)) as Patient;
     const dob = patient.NGAYSINH.toISOString().split("T")[0];
     const convertTime = `${GIOKHAM}:00`;
-    console.log("GIOKHAM: ", convertTime);
-    console.log("dob: ", dob);
+
     const user = (
       await (await req.db())
         .input("TEN", patient.HOTEN)

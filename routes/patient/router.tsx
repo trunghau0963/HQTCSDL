@@ -663,9 +663,9 @@ patientRouter.get("/appointment", patient, async (req, res) => {
     const appointments: AppointmentDetailProps[] =
       (await getAppointmentNotDone(req, res, MABN)) ?? [];
 
-    const appointmentsFinished: AppointmentDetail[] =
+    const appointmentsFinished: AppointmentDetailProps[] =
       (await getAppointmentIsDoneOfPatient(req, res, MABN)) ?? [];
-
+    
     return res.send(
       <Appointment
         appointments={appointments}

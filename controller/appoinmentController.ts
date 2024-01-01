@@ -271,11 +271,11 @@ export const getAppointmentIsDoneOfPatient = async (
   id: string
 ) => {
   try {
-    const data: AppointmentDetail[] = (
+    const data: AppointmentDetailProps[] = (
       await (await req.db())
         .input("MABN", id)
         .execute("GET_LICHKHAM_DETAIL_DONE_OF_BENHNHAN")
-    ).recordset as AppointmentDetail[];
+    ).recordset as AppointmentDetailProps[];
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -347,11 +347,13 @@ export const getAppointmentNotDone = async (
   id: Number
 ) => {
   try {
+
     const data: AppointmentDetailProps[] = (
       await (await req.db())
         .input("MABN", id)
         .execute("GET_LICHKHAM_DETAIL_UNFINISHED_OF_BENHNHAN")
     ).recordset as AppointmentDetailProps[];
+
     return data;
   } catch (error) {
     if (error instanceof Error) {

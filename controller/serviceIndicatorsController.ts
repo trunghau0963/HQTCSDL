@@ -15,11 +15,12 @@ export const addServiceIndicators = async (
       .input("TENDV", input.TENDV)
       .execute("INSERT_INTO_DICHVUCHIDINH");
     const directNewUrl = `${url}`;
+
     res
       .header("HX-Redirect", directNewUrl)
       .status(200)
       .json(user.recordset[0])
-      .send("successful add drug into ServiceIndicators");
+    
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -44,7 +45,6 @@ export const deleteServiceIndicators = async (req: Request, res: Response, url: 
       .header("HX-Redirect", directNewUrl)
       .status(200)
       .json(user.recordset[0])
-      .send("successful delete drug into ServiceIndicators");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -68,7 +68,6 @@ export const updateServiceIndicators = async (req: Request, res: Response) => {
       .header("HX-Redirect", "/admin/serviceIndicators")
       .status(200)
       .json(user.recordset[0])
-      .send("successful delete drug into ServiceIndicators");
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

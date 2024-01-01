@@ -720,8 +720,9 @@ export const Appointment = ({
   appointmentsFinished,
 }: {
   appointments: AppointmentDetailProps[];
-  appointmentsFinished: AppointmentDetail[];
+  appointmentsFinished: AppointmentDetailProps[];
 }) => {
+
   return (
     <div>
       <div class="page-wrapper">
@@ -813,8 +814,8 @@ export const Appointment = ({
                     {appointmentsFinished &&
                       appointmentsFinished.map((appointment, idx) => (
                         <tr>
-                          <td>{appointment.HOTENNHASI}</td>
-                          <td>{appointment.HOTENBENHNHAN}</td>
+                          <td>{appointment.TENNS}</td>
+                          <td>{appointment.TENBN}</td>
                           <td>
                             {appointment.NGAYKHAM.toISOString().split("T")[0]}
                           </td>

@@ -11,7 +11,7 @@ const Appointment = ({
   appointmentsFinished,
 }: {
   appointments: AppointmentDetailProps[];
-  appointmentsFinished: AppointmentDetail[];
+  appointmentsFinished: AppointmentDetailProps[];
 }) => {
   return (
     <PatientPage>
