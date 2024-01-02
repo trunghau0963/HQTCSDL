@@ -41,7 +41,7 @@ export const editDrugQuantity = async (
   req: Request,
   res: Response,
   url: string
-) => {
+): Promise<drugProps|undefined> => {
   try {
     const directUrl = `/${url}/drug`;
     const { MALO, MATHUOC, SOLUONG, SOLUONGPROPS } = req.body;
@@ -51,27 +51,20 @@ export const editDrugQuantity = async (
       Math.max(SOLUONG, SOLUONGPROPS) - Math.min(SOLUONG, SOLUONGPROPS);
     const operator = SOLUONG > SOLUONGPROPS ? "-" : "+";
 
-    console.log("operator", operator);
-    console.log("differece", differece);
-    await (await req.db())
+    const data : drugProps = (await (await req.db())
       .input("MALO", MALO)
       .input("MATHUOC", MATHUOC)
       .input("SOLUONG", differece)
       .input("ACTION", operator)
-      .execute("CHANGE_QUANTITY_THUOC");
+      .execute("CHANGE_QUANTITY_THUOC")).recordset[0] as drugProps;
 
-    return res
-      .header("HX-Redirect", directUrl)
-      .json({ message: "Success" })
-      .status(200);
+    return data
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
-      return res.status(400).send(error.message);
     }
-    return res
-      .status(500)
-      .send("Something went wrong. Please try again later.");
+    console.error("Can't get drug information. Please try again later.");
+    return undefined;
   }
 };
 

@@ -494,12 +494,12 @@ adminRouter.put("/manageAccount", admin, async (req, res) => {
 
 adminRouter.get("/edit-drug-quantity", admin, async (req, res) => {
   const input = req.query;
-  console.log(input);
+
   const quantity = (input.SOLUONG as any).trim();
   const id = `SOLUONG${input.idx}` || "SOLUONG";
-  console.log(id);
+
   return res.send(
-    <div class="d-flex w-50">
+    <div class={`d-flex w-50 ${id}`}>
       <span class="input-group-btn">
         <button
           onclick={`
@@ -545,7 +545,7 @@ adminRouter.get("/edit-drug-quantity", admin, async (req, res) => {
       <button
         class="btn btn-success mx-2"
         hx-post="/admin/edit-drug-quantity"
-        hx-vars={`{'MALO': '${input.MALO}', 'MATHUOC': '${input.MATHUOC}', 
+        hx-vars={`{'MALO': '${input.MALO}', 'id': '${input.idx}', 'MATHUOC': '${input.MATHUOC}', 
         'SOLUONG': '${quantity}',
         'SOLUONGPROPS': document.getElementById('${id}').value }`}
         hx-target={`#button-change-quantity-${input.MATHUOC}`}
@@ -557,7 +557,47 @@ adminRouter.get("/edit-drug-quantity", admin, async (req, res) => {
 });
 
 adminRouter.post("/edit-drug-quantity", admin, async (req, res) => {
-  editDrugQuantity(req, res, "admin");
+  const data: drugProps | undefined = await editDrugQuantity(req, res, "admin");
+
+  if (data === undefined) {
+    // Handle the case where data is undefined
+    return res.status(404).send("Drug information not found.");
+  }
+
+  const input = req.body;
+
+  const quantity = input.SOLUONG as any;
+  const id = input.id;
+
+  console.log(input);
+  console.log(id);
+
+  return res.send(
+    <div
+      id={`button-change-quantity-${data.MATHUOC}`}
+      class="d-flex align-items-center"
+    >
+      {/* <div id={`button-change-quantity-${data.MATHUOC}`}></div> */}
+      <button
+        class="btn btn-link text-decoration-none text-dark px-0"
+        hx-get={`/admin/edit-drug-quantity`}
+        hx-vars={`{'MALO': '${data.MALO}', 'MATHUOC': '${data.MATHUOC}', 'SOLUONG': '${data.SOLUONG}', 'idx': ${id}} `}
+        hx-target={`#button-change-quantity-${data.MATHUOC}`}
+      >
+        <div class="d-flex">
+          <p>{data.SOLUONG}</p>
+          <img
+            src="/icons/warning.svg"
+            class="mx-2"
+            style="width: 15px; height: 15px;"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Click to edit quantity"
+          />
+        </div>
+      </button>
+    </div>
+  );
 });
 
 adminRouter.get("/schedule", admin, async (req, res) => {
