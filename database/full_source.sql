@@ -2288,7 +2288,6 @@ BEGIN TRAN
         )
         BEGIN
             SET @MSG = N'KHÔNG TÌM THẤY LỊCH LÀM VIỆC TRỐNG NÀO'
-            RAISERROR(@MSG, 16, 1);
         END
 
         SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM
@@ -2429,7 +2428,6 @@ BEGIN TRAN
         )
         BEGIN
             SET @MSG = N'KHÔNG TÌM THẤY LỊCH LÀM VIỆC TRỐNG NÀO'
-            RAISERROR(@MSG, 16, 1);
         END
 
         SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM

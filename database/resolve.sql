@@ -18,30 +18,38 @@ BEGIN TRAN
             AND NOT EXISTS(SELECT * FROM CHITIETPHIENKHAM CT WHERE CT.MANS = LLV.MANS AND CT.GIOKHAM = LLV.GIOKHAM AND CT.NGAYKHAM = LLV.NGAYKHAM) 
             )
         
-        BEGIN
-            SET @MSG = N'KHÔNG TÌM THẤY LỊCH LÀM VIỆC TRONG NGÀY'
-            RAISERROR(@MSG, 16, 1);
-        END
-
-        WAITFOR DELAY '00:00:05'
-
-        SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM
-        FROM LICHLAMVIEC LLV
-        JOIN NHASI NS ON NS.MANS = LLV.MANS
-        WHERE LLV.NGAYKHAM = @NGAYKHAM 
-            AND NOT EXISTS(
-                SELECT * 
-                FROM LICHKHAM LK
-                WITH (HOLDLOCK)
-                WHERE LK.MANS = LLV.MANS AND LK.GIOKHAM = LLV.GIOKHAM
-                        AND LK.NGAYKHAM = LLV.NGAYKHAM)
-            AND NOT EXISTS(
+            BEGIN
+                SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM
+                FROM LICHLAMVIEC LLV
+                JOIN NHASI NS ON NS.MANS = LLV.MANS
+                WHERE LLV.NGAYKHAM = @NGAYKHAM AND NOT EXISTS(
                     SELECT * 
-                    FROM CHITIETPHIENKHAM CT 
-                    WHERE CT.MANS = LLV.MANS AND CT.GIOKHAM = LLV.GIOKHAM 
-                        AND CT.NGAYKHAM = LLV.NGAYKHAM)
-        ORDER BY NS.HOTEN
+                    FROM LICHKHAM LK
+                    WHERE LK.MANS = LLV.MANS AND LK.GIOKHAM = LLV.GIOKHAM
+                            AND LK.NGAYKHAM = LLV.NGAYKHAM)
+                ORDER BY NS.HOTEN
+            END
 
+        ELSE
+            WAITFOR DELAY '00:00:05'
+            BEGIN
+                SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM
+                FROM LICHLAMVIEC LLV
+                JOIN NHASI NS ON NS.MANS = LLV.MANS
+                WHERE LLV.NGAYKHAM = @NGAYKHAM 
+                    AND NOT EXISTS(
+                        SELECT * 
+                        FROM LICHKHAM LK
+                        WITH (HOLDLOCK)
+                        WHERE LK.MANS = LLV.MANS AND LK.GIOKHAM = LLV.GIOKHAM
+                                AND LK.NGAYKHAM = LLV.NGAYKHAM)
+                    AND NOT EXISTS(
+                            SELECT * 
+                            FROM CHITIETPHIENKHAM CT 
+                            WHERE CT.MANS = LLV.MANS AND CT.GIOKHAM = LLV.GIOKHAM 
+                                AND CT.NGAYKHAM = LLV.NGAYKHAM)
+                ORDER BY NS.HOTEN
+            END
     END TRY
     BEGIN CATCH
         DECLARE @ErrorSeverity INT;
@@ -215,34 +223,48 @@ COMMIT TRAN
 --phantom 03
 --err 01
 go 
-CREATE OR ALTER PROC GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI @MANS CHAR(16)
+CREATE OR ALTER PROC GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI_BY_NAME_AND_DATETIME @MANS CHAR(16), @NAME NVARCHAR(64), @SEARCH nvarchar(20)
 AS
 BEGIN TRAN
-    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED
     DECLARE @MSG NVARCHAR(64)
     BEGIN TRY
-        IF NOT EXISTS(SELECT * FROM LICHKHAM LK with(HOLDLOCK) WHERE LK.MANS = @MANS AND NOT EXISTS(
+        IF NOT EXISTS(SELECT * FROM LICHKHAM LK WITH (XLOCK) JOIN BENHNHAN BN ON BN.MABN = LK.MABN WHERE (BN.HOTEN COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @NAME + '%'
+		OR (CONVERT(VARCHAR, LK.NGAYKHAM, 120) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @SEARCH + '%' 
+			OR CONVERT(VARCHAR, LK.GIOKHAM, 108) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @SEARCH + '%')) AND NOT EXISTS(
             SELECT * FROM CHITIETPHIENKHAM HD 
             WHERE HD.MANS = LK.MANS AND LK.MANS = @MANS AND HD.NGAYKHAM = LK.NGAYKHAM AND LK.GIOKHAM = HD.GIOKHAM
             )
         )
-        BEGIN
-            SET @MSG = N'KHÔNG TÌM THẤY LỊCH KHÁM NÀO'
-            RAISERROR(@MSG, 16, 1);
-        END
-
-        WAITFOR DELAY '00:00:05'
-        
-        SELECT LK.MANS, NS.HOTEN as HOTENNHASI, BN.DIENTHOAI, BN.HOTEN as HOTENBENHNHAN, BN.MABN, LK.NGAYKHAM, LK.GIOKHAM
-        FROM LICHKHAM LK 
-        JOIN NHASI NS ON NS.MANS = LK.MANS
-        JOIN BENHNHAN BN ON BN.MABN = LK.MABN
-        WHERE LK.MANS = @MANS AND NOT EXISTS(
-            SELECT * FROM CHITIETPHIENKHAM HD 
-            WHERE HD.MANS = LK.MANS AND HD.NGAYKHAM = LK.NGAYKHAM AND LK.GIOKHAM = HD.GIOKHAM
-                    )
-        ORDER BY NS.MANS
-                
+            BEGIN
+                SELECT LK.MANS, NS.HOTEN as HOTENNHASI, BN.DIENTHOAI, BN.HOTEN as HOTENBENHNHAN, BN.MABN, LK.NGAYKHAM, LK.GIOKHAM
+                FROM LICHKHAM LK
+                JOIN NHASI NS ON NS.MANS = LK.MANS
+                JOIN BENHNHAN BN ON BN.MABN = LK.MABN
+                WHERE  ((BN.HOTEN COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @NAME + '%')
+                    OR (CONVERT(VARCHAR, LK.NGAYKHAM, 120) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @SEARCH + '%' 
+                    OR CONVERT(VARCHAR, LK.GIOKHAM, 108) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @SEARCH + '%'))  AND LK.MANS = @MANS AND NOT EXISTS(
+                    SELECT * FROM CHITIETPHIENKHAM HD 
+                    WHERE HD.MANS = LK.MANS AND HD.NGAYKHAM = LK.NGAYKHAM AND LK.GIOKHAM = HD.GIOKHAM
+                            )
+                ORDER BY NS.MANS
+            END
+        ELSE
+            BEGIN
+                WAITFOR DELAY '00:00:05'
+            
+                SELECT LK.MANS, NS.HOTEN as HOTENNHASI, BN.DIENTHOAI, BN.HOTEN as HOTENBENHNHAN, BN.MABN, LK.NGAYKHAM, LK.GIOKHAM
+                FROM LICHKHAM LK
+                JOIN NHASI NS ON NS.MANS = LK.MANS
+                JOIN BENHNHAN BN ON BN.MABN = LK.MABN
+                WHERE  ((BN.HOTEN COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @NAME + '%')
+                    OR (CONVERT(VARCHAR, LK.NGAYKHAM, 120) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @SEARCH + '%' 
+                    OR CONVERT(VARCHAR, LK.GIOKHAM, 108) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + @SEARCH + '%'))  AND LK.MANS = @MANS AND NOT EXISTS(
+                    SELECT * FROM CHITIETPHIENKHAM HD 
+                    WHERE HD.MANS = LK.MANS AND HD.NGAYKHAM = LK.NGAYKHAM AND LK.GIOKHAM = HD.GIOKHAM
+                            )
+                ORDER BY NS.MANS
+            END  
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000);
@@ -261,6 +283,7 @@ BEGIN TRAN
     END CATCH
 COMMIT TRAN
 
+--ERR02
 GO
 CREATE OR ALTER PROC DROP_LICHKHAM
     @MANS CHAR(16), @NGAYKHAM DATE, @GIOKHAM TIME 
@@ -296,16 +319,7 @@ BEGIN TRAN
     END CATCH
 COMMIT TRAN
 
-EXEC GET_INFO_NHASI_BY_ID '225C49F9-6F02-4D'
-EXEC GET_LICHKHAM_DETAIL_UNFINISHED
-EXEC GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI '70AC080F-12BA-4E'
-
-EXEC GET_LICHLAMVIEC_DETAIL_FREE
-EXEC GET_INFO_BENHNHAN
-
-EXEC REGISTER_LICHKHAM N'Huỳnh Minh Quốc', '0369871234', '1998-07-20', 'Đà Nẵng', '70AC080F-12BA-4E', '2023-11-09', '07:00:00'
-EXEC REGISTER_LICHKHAM N'Huỳnh Minh Quốc', '0369871234', '1998-07-20', 'Đà Nẵng', '70AC080F-12BA-4E', '2023-11-09', '15:00:00'
-
+exec GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI_BY_NAME_AND_DATETIME 'E2A64F06-7205-4B', N'Yến', N'Yến'
 
 --Phantom 04
 --TRAN01
@@ -1030,3 +1044,214 @@ BEGIN TRAN
                 @ErrorState);
     END CATCH
 COMMIT TRAN
+
+--Lost update 02
+--tran01
+GO
+CREATE OR ALTER PROC DROP_THUOC_IN_TOATHUOC
+    @MACT CHAR(13),
+    @MATHUOC NVARCHAR(32),
+    @MALO CHAR(12)
+AS
+BEGIN TRAN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+    DECLARE @MSG NVARCHAR(128)
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * FROM CHITIETPHIENKHAM WHERE MACT = @MACT)
+        BEGIN
+            ROLLBACK
+            SET @MSG = 'KHÔNG TÌM THẤY HÓA ĐƠN CÓ MÃ ' + CONVERT(NVARCHAR, @MACT, 64)
+            RAISERROR(@MSG, 16, 1)
+        END
+
+        DELETE TOATHUOC
+        WHERE @MACT = MACT AND MATHUOC = @MATHUOC AND MALO = @MALO
+
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+--tran02
+go
+CREATE OR ALTER PROC CHANGE_QUANTITY_THUOC
+    @MALO CHAR(12),
+    @MATHUOC CHAR(10),
+    @SOLUONG INT,
+    @ACTION CHAR(3)
+AS
+BEGIN TRAN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+    BEGIN TRY
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @MANS CHAR(16)
+        
+        IF  @MALO IS NULL OR @MATHUOC IS NULL 
+        BEGIN
+            RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
+        END
+
+        IF NOT EXISTS(SELECT * FROM THUOC WITH (XLOCK) WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0)
+        BEGIN
+            RAISERROR (N'KHÔNG TÌM THẤY THUỐC', 16, 1);
+        END
+
+        WAITFOR DELAY '00:00:05'
+
+        IF @ACTION = '+'
+            BEGIN
+                UPDATE THUOC
+                SET SOLUONG = CASE WHEN @SOLUONG IS NULL THEN SOLUONG ELSE SOLUONG + @SOLUONG END
+                WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0
+            END
+        ELSE
+            BEGIN
+                UPDATE THUOC
+                SET SOLUONG = CASE WHEN @SOLUONG IS NULL THEN SOLUONG ELSE SOLUONG - @SOLUONG END
+                WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0
+            END
+
+        EXEC GET_INFO_THUOC_BY_ID_AND_BATCH @MALO, @MATHUOC
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+--Phantom 03
+--tran01
+go
+CREATE OR ALTER PROC CHANGE_QUANTITY_THUOC
+    @MALO CHAR(12),
+    @MATHUOC CHAR(10),
+    @SOLUONG INT,
+    @ACTION CHAR(3)
+AS
+BEGIN TRAN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+    BEGIN TRY
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @MANS CHAR(16)
+        
+        IF  @MALO IS NULL OR @MATHUOC IS NULL 
+        BEGIN
+            RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
+        END
+
+        IF NOT EXISTS(SELECT * FROM THUOC WITH (XLOCK) WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0)
+        BEGIN
+            RAISERROR (N'KHÔNG TÌM THẤY THUỐC', 16, 1);
+        END
+
+        WAITFOR DELAY '00:00:05'
+
+        IF @ACTION = '+'
+            BEGIN
+                UPDATE THUOC
+                SET SOLUONG = CASE WHEN @SOLUONG IS NULL THEN SOLUONG ELSE SOLUONG + @SOLUONG END
+                WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0
+            END
+        ELSE
+            BEGIN
+                UPDATE THUOC
+                SET SOLUONG = CASE WHEN @SOLUONG IS NULL THEN SOLUONG ELSE SOLUONG - @SOLUONG END
+                WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0
+            END
+
+        EXEC GET_INFO_THUOC_BY_ID_AND_BATCH @MALO, @MATHUOC
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+--tran02
+go
+CREATE OR ALTER PROC CHANGE_QUANTITY_THUOC_2
+    @MALO CHAR(12),
+    @MATHUOC CHAR(10),
+    @SOLUONG INT,
+    @ACTION CHAR(3)
+AS
+BEGIN TRAN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+    BEGIN TRY
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @MANS CHAR(16)
+        
+        IF  @MALO IS NULL OR @MATHUOC IS NULL 
+        BEGIN
+            RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
+        END
+
+        IF NOT EXISTS(SELECT * FROM THUOC WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0)
+        BEGIN
+            RAISERROR (N'KHÔNG TÌM THẤY THUỐC', 16, 1);
+        END
+
+        IF @ACTION = '+'
+            BEGIN
+                UPDATE THUOC
+                SET SOLUONG = CASE WHEN @SOLUONG IS NULL THEN SOLUONG ELSE SOLUONG + @SOLUONG END
+                WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0
+            END
+        ELSE
+            BEGIN
+                UPDATE THUOC
+                SET SOLUONG = CASE WHEN @SOLUONG IS NULL THEN SOLUONG ELSE SOLUONG - @SOLUONG END
+                WHERE @MALO = MALO AND MATHUOC = @MATHUOC AND DAXOA = 0
+            END
+
+        EXEC GET_INFO_THUOC_BY_ID_AND_BATCH @MALO, @MATHUOC
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
