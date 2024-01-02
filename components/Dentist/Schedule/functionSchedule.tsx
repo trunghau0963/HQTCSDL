@@ -67,7 +67,9 @@ export const PostAppointment = ({
         data-bs-target={`#get-registered-${idx}`}
         aria-controls={`get-registered-${idx}`}
         hx-get="/dentist/schedule/appointment"
-        hx-vars={`{'MANS': '${idDentist}', 'NGAYKHAM': '${date.toLocaleDateString()}', 'GIOKHAM': '${time.toISOString().split("T")[1].split(".")[0]}'}`}
+        hx-vars={`{'MANS': '${idDentist}', 'NGAYKHAM': '${date.toLocaleDateString()}', 'GIOKHAM': '${
+          time.toISOString().split("T")[1].split(".")[0]
+        }'}`}
         hx-target={`.appointment-${idx}`}
       >
         {isDone ? (
@@ -134,7 +136,7 @@ export const AddScheduleFree = ({
   return (
     <div>
       <a
-        class="text-center btn btn-danger btn-rounded float-right w-100 py-3 text-white"
+        class="text-center btn btn-tertiary btn-rounded float-right w-100 py-3 text-white"
         data-toggle="modal"
         data-target=".add-drug"
       >
@@ -248,24 +250,52 @@ export const AddAppointment = ({
 }) => {
   return (
     <div>
-      <button type="button" class="btn btn-white btn-sm" disabled="">
-        Free
-      </button>
-      <button
-        class="btn btn-sm btn-info text-light px-2"
-        id={`registered-appointment-${idx}-button`}
-        data-bs-toggle="modal"
-        data-bs-target={`#registered-appointment-${idx}`}
-        aria-controls={`registered-appointment-${idx}`}
-        hx-get="/dentist/schedule/add-appointment"
-        hx-vars={`{"MANS": "${idDentist}", "HOTENNHASI": "${nameOfDentist}" ,"NGAYKHAM": "${date.toLocaleDateString()}", "GIOKHAM": "${
-          time.toISOString().split("T")[1].split(".")[0]
-        }"}`}
-        hx-target={`.add-appointment-${idx}`}
-      >
-        <i class="bi bi-calendar2-plus-fill"></i>
-        Add Appointment
-      </button>
+      <div class="d-flex">
+        <button type="button" class="btn btn-white btn-sm" disabled="">
+          Free
+        </button>
+        <button
+          class="btn btn-sm btn-tertiary text-light px-2 mx-1"
+          id={`registered-appointment-${idx}-button`}
+          data-bs-toggle="modal"
+          data-bs-target={`#registered-appointment-${idx}`}
+          aria-controls={`registered-appointment-${idx}`}
+          hx-get="/dentist/schedule/add-appointment"
+          hx-vars={`{"MANS": "${idDentist}", "HOTENNHASI": "${nameOfDentist}" ,"NGAYKHAM": "${date.toLocaleDateString()}", "GIOKHAM": "${
+            time.toISOString().split("T")[1].split(".")[0]
+          }"}`}
+          hx-target={`.add-appointment-${idx}`}
+        >
+          <i class="bi bi-calendar2-plus-fill"></i>
+          Add Appointment
+        </button>
+        <form
+          id="delete-schedule-form"
+          hx-post="/dentist/schedule/delete-schedule"
+        >
+          <input type="hidden" name="MANS" value={idDentist} />
+          <input
+            type="hidden"
+            name="NGAYKHAM"
+            value={date.toLocaleDateString()}
+          />
+          <input
+            type="hidden"
+            name="GIOKHAM"
+            value={time.toISOString().split("T")[1].split(".")[0]}
+          />
+
+          <button
+            class="btn btn-light btn-sm border border-3"
+            id={`drop-schedule-${idx}-button`}
+            hx-swap="outerHTML"
+            hx-target="#delete-schedule-form"
+          >
+            <i class="bi bi-calendar2-x"></i>
+            Delete
+          </button>
+        </form>
+      </div>
 
       <div
         class="modal fade"
@@ -402,7 +432,6 @@ export const GetSchedule = ({
   services: serviceIndicators[];
   nameServices: string[];
 }) => {
-
   return (
     <div>
       <form>
@@ -611,21 +640,21 @@ export const GetSchedule = ({
                     </div>
 
                     <div class="col">
-                      <label class="form-label" for="TENTHUOC">
+                      <label class="form-label" for={`TENTHUOC${IdInvoice}`}>
                         TENTHUOC
                       </label>
                       <select
                         class="form-control"
-                        id="TENTHUOC"
+                        id={`TENTHUOC${IdInvoice}`}
                         name="TENTHUOC"
                         onclick={`
                         const nameDrugs = ${JSON.stringify(nameDrugs)};
-                        let drugName = document.querySelector('#TENTHUOC').value; 
+                        let drugName = document.querySelector('#TENTHUOC${IdInvoice}').value; 
                         let selectedDrug = nameDrugs.find((drug) => drug.name === drugName);
                         if (selectedDrug) {
                           console.log(selectedDrug.quantity);
-                          document.getElementById('SOLUONG').placeholder = selectedDrug.quantity;
-                          document.getElementById('SOLUONG').max = Math.min(selectedDrug.quantity, 100);
+                          document.getElementById('SOLUONG${IdInvoice}').placeholder = selectedDrug.quantity;
+                          document.getElementById('SOLUONG${IdInvoice}').max = Math.max(selectedDrug.quantity, 1);
                         }
                         `}
                       >
@@ -635,12 +664,22 @@ export const GetSchedule = ({
                       </select>
                     </div>
                     <div class="col">
-                      <label class="form-label" for="SOLUONG">
+                      <label class="form-label" for={`SOLUONG${IdInvoice}`}>
                         SOLUONG
                       </label>
                       <input
+                        onclick={`
+                       const nameDrugs = ${JSON.stringify(nameDrugs)};
+                       let drugName = document.querySelector('#TENTHUOC${IdInvoice}').value; 
+                       let selectedDrug = nameDrugs.find((drug) => drug.name === drugName);
+                       if (selectedDrug) {
+                         console.log(selectedDrug.quantity);
+                         this.placeholder = selectedDrug.quantity;
+                         this.max = Math.max(selectedDrug.quantity, 1);
+                       }
+                       `}
                         type="number"
-                        id="SOLUONG"
+                        id={`SOLUONG${IdInvoice}`}
                         class="form-control"
                         name="SOLUONG"
                         required=""
@@ -899,7 +938,6 @@ export const GetAddAppointment = ({
               Name of Patient
             </label>
             <select class="form-control form-control-lg" id="TEN" name="TEN">
-              $
               {patientsName.map((name) => (
                 <option value={name}>{name}</option>
               ))}
