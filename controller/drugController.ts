@@ -204,7 +204,7 @@ export const updateInfoDrug = async (
   const info = req.body;
   const directUrl = `/${url}/drug`;
   try {
-    console.log(req.body);
+    if(info.quantity === ''){info.quantity = null}
     await (await req.db())
       .input("MALO", info.IDC)
       .input("MATHUOC", info.IDD)
