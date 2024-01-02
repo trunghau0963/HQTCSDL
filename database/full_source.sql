@@ -2240,60 +2240,12 @@ BEGIN TRAN
         )
         BEGIN
             SET @MSG = N'KHÔNG TÌM THẤY LỊCH LÀM VIỆC TRỐNG NÀO'
-            RAISERROR(@MSG, 16, 1);
         END
 
         SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM
         FROM LICHLAMVIEC LLV
         JOIN NHASI NS ON NS.MANS = LLV.MANS
         WHERE NOT EXISTS(
-            SELECT * 
-            FROM LICHKHAM LK
-            WHERE LK.MANS = LLV.MANS AND LK.GIOKHAM = LLV.GIOKHAM
-                    AND LK.NGAYKHAM = LLV.NGAYKHAM)
-        ORDER BY NS.HOTEN
-
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorSeverity INT;
-        DECLARE @ErrorState INT;
-
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(),
-            @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-            
-        ROLLBACK
-        RAISERROR(@ErrorMessage,
-                @ErrorSeverity, 
-                @ErrorState);
-    END CATCH
-COMMIT TRAN
-
-go 
-CREATE OR ALTER PROC GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE @NGAYKHAM DATE
-AS
-BEGIN TRAN
-    DECLARE @ErrorMessage NVARCHAR(4000);
-    DECLARE @MSG NVARCHAR(64)
-    BEGIN TRY
-        IF NOT EXISTS(SELECT * FROM LICHLAMVIEC LLV WHERE LLV.NGAYKHAM = @NGAYKHAM AND NOT EXISTS(
-            SELECT * FROM CHITIETPHIENKHAM HD 
-            WHERE EXISTS(
-            SELECT * 
-            FROM LICHKHAM LK
-            WHERE LK.MANS = LLV.MANS AND LK.GIOKHAM = LLV.GIOKHAM
-                    AND LK.NGAYKHAM = LLV.NGAYKHAM)
-            )
-        )
-        BEGIN
-            SET @MSG = N'KHÔNG TÌM THẤY LỊCH LÀM VIỆC TRỐNG NÀO'
-        END
-
-        SELECT LLV.MANS, NS.HOTEN, LLV.NGAYKHAM, LLV.GIOKHAM
-        FROM LICHLAMVIEC LLV
-        JOIN NHASI NS ON NS.MANS = LLV.MANS
-        WHERE LLV.NGAYKHAM = @NGAYKHAM AND NOT EXISTS(
             SELECT * 
             FROM LICHKHAM LK
             WHERE LK.MANS = LLV.MANS AND LK.GIOKHAM = LLV.GIOKHAM
