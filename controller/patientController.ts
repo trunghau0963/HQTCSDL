@@ -65,7 +65,7 @@ export const getPatientByName = async (
         .input("HOTEN", name)
         .execute("GET_INFO_BENHNHAN_BY_NAME")
     ).recordset[0];
-    console.log(user);
+    // console.log(user);
     return user;
   } catch (error) {
     if (error instanceof Error) {

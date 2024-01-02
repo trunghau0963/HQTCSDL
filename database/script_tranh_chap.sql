@@ -793,8 +793,6 @@ BEGIN TRAN
     END CATCH
 COMMIT TRAN
 
-exec UPDATE_INFO_BENHNHAN '935CAD12-B381-4F', '098f6bcd', N'Lê Thanh Hòa', '1980-03-10', N'Hải Phòng'
-
 
 --Lost update 01
 --tran01

@@ -27,6 +27,7 @@ import {
   getScheduleIsRegisteredOfDentist,
   addSchedule,
   getScheduleIsFreeOfDentistByDateAndTime,
+  deleteSchedule,
 } from "../../controller/scheduleController";
 import {
   deleteAppointmentHtmx,
@@ -136,7 +137,7 @@ dentistRouter.post("/schedule/search", dentist, async (req, res) => {
   let scheduleRegistered: AppointmentDetail[] = [];
   let scheduleRegistereFinished: AppointmentDetail[] = [];
   let idDentist;
-  
+
   try {
     const token = req.cookies.token as string;
     const data =
@@ -183,8 +184,7 @@ dentistRouter.post(
 );
 
 dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
-  try{
-
+  try {
     let services: serviceIndicators[] = [];
     let prescriptions: Prescription[] = [];
     let nameServices: string[] = (await getNameOfService(req, res)) || [];
@@ -193,7 +193,7 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
       req,
       res
     )) as AppointmentDetail;
-  
+
     const IdInvoice: string = (await getIdInvoiceByIdPatientParameter(
       req,
       res,
@@ -201,7 +201,7 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
       appointment.NGAYKHAM,
       appointment.GIOKHAM
     )) as string;
-  
+
     if (IdInvoice) {
       prescriptions = (await getPrescriptionById(
         req,
@@ -221,14 +221,16 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
       );
       nameServices = nameServices.filter(
         (service) =>
-          !services.some((serviceIndicator) => serviceIndicator.TENDV === service)
+          !services.some(
+            (serviceIndicator) => serviceIndicator.TENDV === service
+          )
       );
     }
-  
+
     if (!appointment.MABN) {
       return res.send(`Không tìm thấy lịch khám trong ngày`);
     }
-  
+
     return res.send(
       <GetSchedule
         appointment={appointment}
@@ -239,11 +241,11 @@ dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
         nameServices={nameServices}
       />
     );
-  }catch(err){
+  } catch (err) {
     return res
-        .header("HX-Redirect", "/dentist/schedule/err")
-        .json({ message: "Fail" })
-        .status(200);
+      .header("HX-Redirect", "/dentist/schedule/err")
+      .json({ message: "Fail" })
+      .status(200);
   }
 });
 
@@ -298,8 +300,9 @@ dentistRouter.post(
 dentistRouter.post("/schedule/add-appointment", dentist, async (req, res) => {
   try {
     const { MANS, TEN, NGAYKHAM, GIOKHAM } = req.body;
-
+    console.log("req.body", req.body);
     const patient: Patient = (await getPatientByName(req, res, TEN)) as Patient;
+    console.log("patient", patient);
     const dob = patient.NGAYSINH.toISOString().split("T")[0];
     const convertTime = `${GIOKHAM}:00`;
 
@@ -314,7 +317,6 @@ dentistRouter.post("/schedule/add-appointment", dentist, async (req, res) => {
         .input("GIOKHAM", convertTime)
         .execute("REGISTER_LICHKHAM")
     ).recordset;
-
 
     return res
       .header("HX-Redirect", "/dentist/schedule")
@@ -345,13 +347,15 @@ dentistRouter.post(
   deleteAppointmentHtmx
 );
 
+dentistRouter.post("/schedule/delete-schedule", dentist, async (req, res) => {
+  deleteSchedule(req, res, "dentist");
+});
+
 dentistRouter.post("/schedule/add-action", dentist, addInvoice);
 
 dentistRouter.get("/schedule/err", dentist, async (req, res) => {
   try {
-    return res.send(
-      <CreateInvoiceError route='dentist'/>
-    );
+    return res.send(<CreateInvoiceError route="dentist" />);
   } catch (err) {
     console.error(err);
   }
@@ -367,9 +371,8 @@ dentistRouter.get("/information", dentist, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-  
-    dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
 
+    dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
   } catch {}
   return res.send(<ProfilePage data={dentist} />);
 });
@@ -380,9 +383,8 @@ dentistRouter.get("/edit-profile", dentist, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-   
+
     dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
-    
   } catch (error) {
     console.log(error);
   }
@@ -392,7 +394,7 @@ dentistRouter.get("/edit-profile", dentist, async (req, res) => {
 dentistRouter.put("/edit-profile", dentist, async (req, res) => {
   try {
     const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
-  
+
     const data: Dentist = (
       await (await req.db())
         .input("MABN", MA)

@@ -35,16 +35,23 @@ export const addSchedule = async (req: Request, res: Response, url: string) => {
   }
 };
 
-export const deleteSchedule = async (req: Request, res: Response) => {
+export const deleteSchedule = async (
+  req: Request,
+  res: Response,
+  url: string
+) => {
   try {
+    const directUrl = `/${url}/schedule`;
     const input = req.body;
+    console.log(input);
     const user = await (await req.db())
       .input("MANS", input.MANS)
       .input("NGAYKHAM", input.NGAYKHAM)
       .input("GIOKHAM", input.GIOKHAM)
       .execute("DROP_LICHLAMVIEC");
+    
     return res
-      .header("HX-Redirect", "/admin/schedule")
+      .header("HX-Redirect", directUrl)
       .status(200)
       .json(user.recordset[0])
       .send("successful delete Schedule");
@@ -267,7 +274,7 @@ export const getScheduleIsFreeOfDentistByDateAndTime = async (
   req: Request,
   res: Response,
   id: string,
-  search: string,
+  search: string
 ) => {
   try {
     const data: Schedule[] = (
@@ -289,7 +296,7 @@ export const getScheduleIsFreeOfDentistByDateAndTime = async (
     );
     return undefined;
   }
-}
+};
 
 export const getScheduleIsRegisteredOfDentist = async (
   req: Request,
