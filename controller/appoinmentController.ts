@@ -463,14 +463,14 @@ export const getAppointmentOfDentistByDate = async (
   res: Response
 ) => {
   try {
-    const { MANS, NGAYKHAM } = req.query;
-    console.log("MANS", MANS);
-    console.log("NGAYKHAM: ", NGAYKHAM);
+    const { MANS, NGAYKHAM, GIOKHAM } = req.query;
+    
 
     const data: AppointmentDetail = (
       await (await req.db())
         .input("MANS", MANS)
         .input("NGAYKHAM", NGAYKHAM)
+        .input("GIOKHAM", GIOKHAM)
         .execute("GET_LICHKHAM_DETAIL_OF_NHASI_BY_DATE")
     ).recordset[0];
 

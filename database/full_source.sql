@@ -1535,12 +1535,12 @@ COMMIT TRAN
 
 ----nay tao viet
 GO
-CREATE OR ALTER PROC GET_LICHKHAM_DETAIL_OF_NHASI_BY_DATE @MANS CHAR(16), @NGAYKHAM DATE
+CREATE OR ALTER PROC GET_LICHKHAM_DETAIL_OF_NHASI_BY_DATE @MANS CHAR(16), @NGAYKHAM DATE, @GIOKHAM TIME
 AS
 BEGIN TRAN
     DECLARE @MSG NVARCHAR(64)
     BEGIN TRY
-        IF NOT EXISTS(SELECT * FROM LICHKHAM LK WHERE MANS = @MANS OR @NGAYKHAM = NGAYKHAM)
+        IF NOT EXISTS(SELECT * FROM LICHKHAM LK WHERE MANS = @MANS AND @NGAYKHAM = NGAYKHAM AND @GIOKHAM = GIOKHAM)
         BEGIN
             SET @MSG = N'KHÔNG TÌM THẤY LỊCH KHÁM NÀO'
             RAISERROR(@MSG, 16, 1);
@@ -1549,7 +1549,7 @@ BEGIN TRAN
         FROM LICHKHAM LK
         JOIN NHASI NS ON NS.MANS = LK.MANS
         JOIN BENHNHAN BN ON BN.MABN = LK.MABN
-        WHERE LK.MANS = @MANS AND LK.NGAYKHAM = @NGAYKHAM
+        WHERE LK.MANS = @MANS AND LK.NGAYKHAM = @NGAYKHAM AND GIOKHAM = @GIOKHAM
         ORDER BY NS.HOTEN
 
     END TRY
@@ -4903,16 +4903,19 @@ GRANT EXEC ON GET_LICHKHAM_DETAIL_DONE_BY_NAME TO QUANTRI
 
 --Nhap lieu
 GO
-EXEC INSERT_INTO_THUOC 'Paracetamol', 'Viên', N'Sưng đỏ, đau răng', 100, '2024-12-31', 1500
-EXEC INSERT_INTO_THUOC 'Amoxicillin', 'Viên', N'Nhiễm trùng hô hấp', 50, '2024-11-30', 3000
-EXEC INSERT_INTO_THUOC 'Ibuprofen', 'Viên', N'Đau bên ngoài', 75, '2024-12-15', 2500
-EXEC INSERT_INTO_THUOC 'Omeprazole', 'Viên', N'Viêm dạ dày', 30, '2024-11-30', 1200
-EXEC INSERT_INTO_THUOC 'Aspirin', 'Viên', N'Giảm đau', 60, '2025-12-20', 1800
-EXEC INSERT_INTO_THUOC 'Lisinopril', 'Viên', N'Hạ huyết áp', 45, '2026-11-30', 6000
-EXEC INSERT_INTO_THUOC 'Simvastatin', 'Viên', N'Giảm cholesterol', 70, '2027-12-15', 5000
-EXEC INSERT_INTO_THUOC 'Metformin', 'Viên', N'Điều trị đái tháo đường', 40, '2028-12-31', 12500
-EXEC INSERT_INTO_THUOC 'Losartan', 'Viên', N'Hạ huyết áp', 55, '2025-11-30', 10900
-EXEC INSERT_INTO_THUOC 'Atorvastatin', 'Viên', N'Giảm cholesterol', 80, '2026-12-15', 12250
+EXEC INSERT_INTO_THUOC 'Paracetamol', N'Viên', N'Sưng đỏ, đau răng', 300, '2024-12-31', 1500
+EXEC INSERT_INTO_THUOC 'Amoxicillin', N'Viên', N'Nhiễm trùng răng', 250, '2024-11-30', 3000
+EXEC INSERT_INTO_THUOC 'Ibuprofen', N'Viên', N'Giảm đau', 375, '2024-12-15', 2500
+EXEC INSERT_INTO_THUOC 'Omeprazole', N'Viên', N'Viêm nướu', 430, '2024-11-30', 1200
+EXEC INSERT_INTO_THUOC 'Aspirin', N'Viên', N'Giảm đau', 560, '2025-12-20', 1800
+EXEC INSERT_INTO_THUOC 'Lisinopril', N'Viên', N'Hạ huyết áp', 645, '2026-11-30', 6000
+EXEC INSERT_INTO_THUOC 'Simvastatin', N'Viên', N'Tẩy trắng răng', 370, '2027-12-15', 5000
+EXEC INSERT_INTO_THUOC 'Metformin', N'Viên', N'Điều trị đái tháo đường', 440, '2028-12-31', 12500
+EXEC INSERT_INTO_THUOC 'Losartan', N'Viên', N'Hạ huyết áp', 550, '2025-11-30', 10900
+EXEC INSERT_INTO_THUOC 'Atorvastatin', N'Viên', N'Khử hôi', 820, '2026-12-15', 12250
+EXEC INSERT_INTO_THUOC 'Chlorhexidine', N'Viên', N'Chống khuẩn', 780, '2028-12-15', 2500
+EXEC INSERT_INTO_THUOC 'Fluoride', N'Chai', N'Sát khuẩn miệng', 50, '2028-12-15', 65000
+EXEC INSERT_INTO_THUOC 'Sensodyne', N'Túyp', N'Sát khuẩn miệng', 100, '2030-12-15', 55000
 
 
 EXEC INSERT_INTO_DICHVU N'Hàn răng', 150000

@@ -67,7 +67,7 @@ export const PostAppointment = ({
         data-bs-target={`#get-registered-${idx}`}
         aria-controls={`get-registered-${idx}`}
         hx-get="/dentist/schedule/appointment"
-        hx-vars={`{'MANS': '${idDentist}', 'NGAYKHAM': '${date.toLocaleDateString()} '}`}
+        hx-vars={`{'MANS': '${idDentist}', 'NGAYKHAM': '${date.toLocaleDateString()}', 'GIOKHAM': '${time.toISOString().split("T")[1].split(".")[0]}'}`}
         hx-target={`.appointment-${idx}`}
       >
         {isDone ? (
@@ -134,7 +134,7 @@ export const AddScheduleFree = ({
   return (
     <div>
       <a
-        class="text-center btn btn-tertiary btn-rounded float-right w-100 py-3 text-white"
+        class="text-center btn btn-danger btn-rounded float-right w-100 py-3 text-white"
         data-toggle="modal"
         data-target=".add-drug"
       >
@@ -252,7 +252,7 @@ export const AddAppointment = ({
         Free
       </button>
       <button
-        class="btn btn-sm btn-tertiary text-light px-2"
+        class="btn btn-sm btn-info text-light px-2"
         id={`registered-appointment-${idx}-button`}
         data-bs-toggle="modal"
         data-bs-target={`#registered-appointment-${idx}`}
@@ -402,7 +402,7 @@ export const GetSchedule = ({
   services: serviceIndicators[];
   nameServices: string[];
 }) => {
-  console.log("drug", nameDrugs);
+
   return (
     <div>
       <form>

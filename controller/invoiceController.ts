@@ -24,13 +24,10 @@ export const addInvoice = async (req: Request, res: Response) => {
       .json(user.recordset[0])
       .send("successful registe Appointment");
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      return res.status(400).send(error.message);
-    }
     return res
-      .status(500)
-      .send("Something went wrong. Please try again later.");
+        .header("HX-Redirect", "/dentist/schedule/err")
+        .json({ message: "Fail" })
+        .status(200);
   }
 };
 

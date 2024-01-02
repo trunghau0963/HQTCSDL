@@ -71,6 +71,7 @@ import {
 import EditProfilePage from "../../app/dentist/Profile/EditProfile";
 import { SearchScheduleResultOfNhasi } from "../../components/Table/functionSearchResult";
 import HomeComponent from "../../components/Home/Home";
+import CreateInvoiceError from "../../components/Error/CreateInvoiceError";
 
 const dentistRouter = Router();
 
@@ -135,7 +136,7 @@ dentistRouter.post("/schedule/search", dentist, async (req, res) => {
   let scheduleRegistered: AppointmentDetail[] = [];
   let scheduleRegistereFinished: AppointmentDetail[] = [];
   let idDentist;
-  console.log("name", name);
+  
   try {
     const token = req.cookies.token as string;
     const data =
@@ -182,69 +183,73 @@ dentistRouter.post(
 );
 
 dentistRouter.get("/schedule/appointment", dentist, async (req, res) => {
-  let services: serviceIndicators[] = [];
-  let prescriptions: Prescription[] = [];
-  let nameServices: string[] = (await getNameOfService(req, res)) || [];
-  let nameDrugs: any[] = (await getNameOfDrug(req, res)) || [];
-  const appointment: AppointmentDetail = (await getAppointmentOfDentistByDate(
-    req,
-    res
-  )) as AppointmentDetail;
-  console.log("appointment: ", appointment);
+  try{
 
-  const IdInvoice: string = (await getIdInvoiceByIdPatientParameter(
-    req,
-    res,
-    appointment.MABN,
-    appointment.NGAYKHAM,
-    appointment.GIOKHAM
-  )) as string;
-
-  console.log("IdInvoice: ", IdInvoice);
-
-  if (IdInvoice) {
-    prescriptions = (await getPrescriptionById(
+    let services: serviceIndicators[] = [];
+    let prescriptions: Prescription[] = [];
+    let nameServices: string[] = (await getNameOfService(req, res)) || [];
+    let nameDrugs: any[] = (await getNameOfDrug(req, res)) || [];
+    const appointment: AppointmentDetail = (await getAppointmentOfDentistByDate(
+      req,
+      res
+    )) as AppointmentDetail;
+  
+    const IdInvoice: string = (await getIdInvoiceByIdPatientParameter(
       req,
       res,
-      IdInvoice
-    )) as Prescription[];
-    services = (await getServiceIndicatorsById(
-      req,
-      res,
-      IdInvoice
-    )) as serviceIndicators[];
-    nameDrugs = nameDrugs.filter(
-      (drug) =>
-        !prescriptions.some(
-          (prescription) => prescription.TENTHUOC === drug.name
-        )
+      appointment.MABN,
+      appointment.NGAYKHAM,
+      appointment.GIOKHAM
+    )) as string;
+  
+    if (IdInvoice) {
+      prescriptions = (await getPrescriptionById(
+        req,
+        res,
+        IdInvoice
+      )) as Prescription[];
+      services = (await getServiceIndicatorsById(
+        req,
+        res,
+        IdInvoice
+      )) as serviceIndicators[];
+      nameDrugs = nameDrugs.filter(
+        (drug) =>
+          !prescriptions.some(
+            (prescription) => prescription.TENTHUOC === drug.name
+          )
+      );
+      nameServices = nameServices.filter(
+        (service) =>
+          !services.some((serviceIndicator) => serviceIndicator.TENDV === service)
+      );
+    }
+  
+    if (!appointment.MABN) {
+      return res.send(`Không tìm thấy lịch khám trong ngày`);
+    }
+  
+    return res.send(
+      <GetSchedule
+        appointment={appointment}
+        IdInvoice={IdInvoice}
+        prescriptions={prescriptions}
+        nameDrugs={nameDrugs}
+        services={services}
+        nameServices={nameServices}
+      />
     );
-    nameServices = nameServices.filter(
-      (service) =>
-        !services.some((serviceIndicator) => serviceIndicator.TENDV === service)
-    );
+  }catch(err){
+    return res
+        .header("HX-Redirect", "/dentist/schedule/err")
+        .json({ message: "Fail" })
+        .status(200);
   }
-
-  if (!appointment.MABN) {
-    return res.send(`Không tìm thấy lịch khám trong ngày`);
-  }
-
-  return res.send(
-    <GetSchedule
-      appointment={appointment}
-      IdInvoice={IdInvoice}
-      prescriptions={prescriptions}
-      nameDrugs={nameDrugs}
-      services={services}
-      nameServices={nameServices}
-    />
-  );
 });
 
 dentistRouter.get("/schedule/add-appointment", dentist, async (req, res) => {
   const { MANS, HOTENNHASI, NGAYKHAM, GIOKHAM } = req.query;
 
-  console.log("query: ", req.query);
   const idDentist = MANS as string;
   const dateOfAppointment = NGAYKHAM as string;
   const hourOfAppointment = GIOKHAM as string;
@@ -310,7 +315,7 @@ dentistRouter.post("/schedule/add-appointment", dentist, async (req, res) => {
         .execute("REGISTER_LICHKHAM")
     ).recordset;
 
-    console.log("user: ", user);
+
     return res
       .header("HX-Redirect", "/dentist/schedule")
       .json({ message: "Success" })
@@ -342,6 +347,16 @@ dentistRouter.post(
 
 dentistRouter.post("/schedule/add-action", dentist, addInvoice);
 
+dentistRouter.get("/schedule/err", dentist, async (req, res) => {
+  try {
+    return res.send(
+      <CreateInvoiceError route='dentist'/>
+    );
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 dentistRouter.get("/schedule/failed", dentist, async (req, res) => {
   return res.send(<NullPage title="Appointment" />);
 });
@@ -352,9 +367,9 @@ dentistRouter.get("/information", dentist, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    console.log("data: ", data.user.HOTEN);
+  
     dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
-    console.log("dentist: ", dentist);
+
   } catch {}
   return res.send(<ProfilePage data={dentist} />);
 });
@@ -365,9 +380,9 @@ dentistRouter.get("/edit-profile", dentist, async (req, res) => {
     const token = req.cookies.token as string;
     const data =
       (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
-    console.log("data: ", data.user.HOTEN);
+   
     dentist = (await getDentistById(req, res, data.user.MANS)) as Dentist;
-    console.log("dentist: ", dentist);
+    
   } catch (error) {
     console.log(error);
   }
@@ -377,7 +392,7 @@ dentistRouter.get("/edit-profile", dentist, async (req, res) => {
 dentistRouter.put("/edit-profile", dentist, async (req, res) => {
   try {
     const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
-    console.log(req.body);
+  
     const data: Dentist = (
       await (await req.db())
         .input("MABN", MA)
