@@ -114,113 +114,7 @@ BEGIN TRAN
     END CATCH
 COMMIT TRAN
 
-
-exec GET_LICHLAMVIEC_DETAIL_FREE_BY_DATE '2023-11-09'
-
---Phantom 02
---TRAN01
-GO
-CREATE OR ALTER PROC INSERT_INTO_TOATHUOC
-    @MACT CHAR(13),
-    @TENTHUOC NVARCHAR(32),
-    @SOLUONG INT,
-    @LIEULUONG NVARCHAR(32)
-AS
-BEGIN TRAN
-    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-    DECLARE @MSG NVARCHAR(128)
-    BEGIN TRY
-        IF NOT EXISTS(SELECT * FROM CHITIETPHIENKHAM WHERE MACT = @MACT)
-        BEGIN
-            ROLLBACK
-            SET @MSG = 'KHÔNG TÌM THẤY HÓA ĐƠN CÓ MÃ ' + CONVERT(NVARCHAR, @MACT, 64)
-            RAISERROR(@MSG, 16, 1)
-        END;
-
-        DECLARE @MALO CHAR(12);
-        DECLARE @MATHUOC CHAR(10);
-
-        SELECT @MALO = MALO FROM THUOC WITH (XLOCK) WHERE @TENTHUOC = TENTHUOC AND @SOLUONG <= SOLUONG AND DAXOA = 0;
-        SELECT @MATHUOC = MATHUOC FROM THUOC WHERE @TENTHUOC = TENTHUOC AND @MALO = MALO AND DAXOA = 0;
-
-        IF @MALO IS NULL
-        BEGIN
-            ROLLBACK
-            RAISERROR(N'KHÔNG TÌM THẤY THUỐC HOẶC KHO KHÔNG ĐỦ SỐ LƯỢNG', 16, 1);
-        END
-
-        WAITFOR delay '00:00:05'
-        
-        IF (SELECT DAXOA FROM THUOC WHERE MALO = @MALO AND @MATHUOC = MATHUOC) = 0
-        BEGIN
-            INSERT INTO TOATHUOC(MACT, MALO, MATHUOC, SOLUONG, LIEULUONG)
-            VALUES (@MACT, @MALO, @MATHUOC, @SOLUONG, @SOLUONG) 
-        END
-
-        EXEC GET_TOATHUOC_DETAIL @MACT
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorMessage NVARCHAR(4000);
-        DECLARE @ErrorSeverity INT;
-        DECLARE @ErrorState INT;
-
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(),
-            @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-            
-        ROLLBACK
-        RAISERROR(@ErrorMessage,
-                @ErrorSeverity, 
-                @ErrorState);
-    END CATCH
-COMMIT TRAN
-
-
---trans02
-go
-CREATE OR ALTER PROC DROP_THUOC
-    @MALO CHAR(12),
-    @MATHUOC CHAR(10)
-AS
-BEGIN TRAN
-    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-    BEGIN TRY
-        DECLARE @ErrorMessage NVARCHAR(4000);
-        DECLARE @MANS CHAR(16)
-        
-        IF  @MALO IS NULL OR @MATHUOC IS NULL 
-        BEGIN
-            RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
-        END
-
-        IF NOT EXISTS(SELECT * FROM THUOC WHERE @MALO = MALO AND MATHUOC = @MATHUOC)
-        BEGIN
-            RAISERROR (N'KHÔNG TÌM THẤY THUỐC', 16, 1);
-        END
-
-        UPDATE THUOC
-        SET DAXOA = 1
-        WHERE MALO = @MALO AND MATHUOC = @MATHUOC
-
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorSeverity INT;
-        DECLARE @ErrorState INT;
-
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(),
-            @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-            
-        ROLLBACK
-        RAISERROR(@ErrorMessage,
-                @ErrorSeverity, 
-                @ErrorState);
-    END CATCH
-COMMIT TRAN
-
---phantom 03
+--phantom 02
 --err 01
 go 
 CREATE OR ALTER PROC GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI_BY_NAME_AND_DATETIME @MANS CHAR(16), @NAME NVARCHAR(64), @SEARCH nvarchar(20)
@@ -319,7 +213,108 @@ BEGIN TRAN
     END CATCH
 COMMIT TRAN
 
-exec GET_LICHKHAM_DETAIL_UNFINISHED_OF_NHASI_BY_NAME_AND_DATETIME 'E2A64F06-7205-4B', N'Yến', N'Yến'
+--Phantom 03
+--TRAN01
+GO
+CREATE OR ALTER PROC INSERT_INTO_TOATHUOC
+    @MACT CHAR(13),
+    @TENTHUOC NVARCHAR(32),
+    @SOLUONG INT,
+    @LIEULUONG NVARCHAR(32)
+AS
+BEGIN TRAN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    DECLARE @MSG NVARCHAR(128)
+    BEGIN TRY
+        IF NOT EXISTS(SELECT * FROM CHITIETPHIENKHAM WHERE MACT = @MACT)
+        BEGIN
+            ROLLBACK
+            SET @MSG = 'KHÔNG TÌM THẤY HÓA ĐƠN CÓ MÃ ' + CONVERT(NVARCHAR, @MACT, 64)
+            RAISERROR(@MSG, 16, 1)
+        END;
+
+        DECLARE @MALO CHAR(12);
+        DECLARE @MATHUOC CHAR(10);
+
+        SELECT @MALO = MALO FROM THUOC WITH (XLOCK) WHERE @TENTHUOC = TENTHUOC AND @SOLUONG <= SOLUONG AND DAXOA = 0;
+        SELECT @MATHUOC = MATHUOC FROM THUOC WHERE @TENTHUOC = TENTHUOC AND @MALO = MALO AND DAXOA = 0;
+
+        IF @MALO IS NULL
+        BEGIN
+            ROLLBACK
+            RAISERROR(N'KHÔNG TÌM THẤY THUỐC HOẶC KHO KHÔNG ĐỦ SỐ LƯỢNG', 16, 1);
+        END
+
+        WAITFOR delay '00:00:05'
+        
+        IF EXISTS(SELECT 1 FROM THUOC WHERE MALO = @MALO AND @MATHUOC = MATHUOC AND @TENTHUOC = TENTHUOC) AND (SELECT DAXOA FROM THUOC WHERE MALO = @MALO AND @MATHUOC = MATHUOC) = 0
+        BEGIN
+            INSERT INTO TOATHUOC(MACT, MALO, MATHUOC, SOLUONG, LIEULUONG)
+            VALUES (@MACT, @MALO, @MATHUOC, @SOLUONG, @SOLUONG) 
+        END
+
+        EXEC GET_TOATHUOC_DETAIL @MACT
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
+
+
+--trans02
+go
+CREATE OR ALTER PROC DROP_THUOC
+    @MALO CHAR(12),
+    @MATHUOC CHAR(10)
+AS
+BEGIN TRAN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    BEGIN TRY
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @MANS CHAR(16)
+        
+        IF  @MALO IS NULL OR @MATHUOC IS NULL 
+        BEGIN
+            RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
+        END
+
+        IF NOT EXISTS(SELECT * FROM THUOC WHERE @MALO = MALO AND MATHUOC = @MATHUOC)
+        BEGIN
+            RAISERROR (N'KHÔNG TÌM THẤY THUỐC', 16, 1);
+        END
+
+        UPDATE THUOC
+        SET DAXOA = 1
+        WHERE MALO = @MALO AND MATHUOC = @MATHUOC
+
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+            
+        ROLLBACK
+        RAISERROR(@ErrorMessage,
+                @ErrorSeverity, 
+                @ErrorState);
+    END CATCH
+COMMIT TRAN
 
 --Phantom 04
 --TRAN01
@@ -340,7 +335,7 @@ BEGIN TRAN
         END
 
         DECLARE @MADV CHAR(9)
-        SELECT @MADV = MADV FROM DICHVU WITH (HOLDLOCK) WHERE @TENDV = TENDV AND DAXOA = 0
+        SELECT @MADV = MADV FROM DICHVU WITH (XLOCK) WHERE @TENDV = TENDV AND DAXOA = 0
 
         IF NOT EXISTS(SELECT * FROM DICHVU WHERE @MADV = MADV)
         BEGIN
@@ -354,10 +349,13 @@ BEGIN TRAN
             RAISERROR ('INPUT KHÔNG ĐƯỢC ĐỂ NULL', 16, 1);
         END
 
-        WAITFOR DELAY '00:00:10'
+        WAITFOR DELAY '00:00:05'
 
-        INSERT INTO DICHVUCHIDINH(MACT, MADV)
-        VALUES (@MACT, @MADV) 
+        IF EXISTS(SELECT 1 FROM DICHVU WHERE @TENDV = TENDV AND @MADV = MADV AND DAXOA = 0)
+        BEGIN
+            INSERT INTO DICHVUCHIDINH(MACT, MADV)
+            VALUES (@MACT, @MADV) 
+        END 
 
         exec GET_DICHVUCHIDINH_DETAIL @MACT
     END TRY
@@ -529,11 +527,6 @@ BEGIN TRAN
                 @ErrorState);
     END CATCH
 COMMIT TRAN
-
-exec INSERT_INTO_TOATHUOC "CD106C70-5814", "Aspirin", 10, "3 lan / ngay"
-exec GET_CHITIETPHIENKHAM_DETAIL_ALL
-exec GET_TOATHUOC_DETAIL "CD106C70-5814"
-exec GET_INFO_THUOC
 
 --Unrepeatable 02
 --trans 1
