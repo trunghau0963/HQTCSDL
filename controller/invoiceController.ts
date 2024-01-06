@@ -8,26 +8,27 @@ export const addInvoice = async (req: Request, res: Response) => {
     const input = req.body;
     console.log("input", input);
 
-    const date = new Date(input.NGAYKHAM);
-    console.log("date", date);
     const user = await (await req.db())
       .input("MABN", input.MABN)
       .input("MANS", input.MANS)
       .input("TRIEUCHUNG", input.TRIEUCHUNG)
       .input("CHANDOAN", input.CHANDOAN)
-      .input("NGAYKHAM", date)
+      .input("NGAYKHAM", input.NGAYKHAM)
       .input("GIOKHAM", input.GIOKHAM)
       .execute("INSERT_INTO_CHITIETPHIENKHAM");
-    res
+    return res
       .header("HX-Redirect", "/dentist/schedule")
       .status(200)
-      .json(user.recordset[0])
       .send("successful registe Appointment");
   } catch (error) {
-    return res
-        .header("HX-Redirect", "/dentist/schedule/err")
-        .json({ message: "Fail" })
-        .status(200);
+    if (error instanceof Error) {
+      console.log(error.message);
+      res
+      .header("HX-Redirect", "/dentist/schedule/err")
+      .status(404)
+      .send("failed registe Appointment");
+    }
+    return undefined;
   }
 };
 

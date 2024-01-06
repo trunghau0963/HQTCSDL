@@ -27,7 +27,11 @@ const Login = () => {
               <div class="col-lg-6 mb-5 mb-lg-0">
                 <div class="card">
                   <div class="card-body py-5 px-md-5">
-                    <form id="login-form" hx-post="/auth/login">
+                    <form
+                      id="login-form"
+                      hx-post="/auth/login"
+                      hx-target-error="#error"
+                    >
                       <div class="form-outline mb-4">
                         <input
                           type="text"
@@ -72,6 +76,8 @@ const Login = () => {
                       >
                         Home
                       </a>
+
+                      <div id="error" class="invalid-feedback d-block"></div>
 
                       <hr class="my-4"></hr>
                       <div class="text-center">

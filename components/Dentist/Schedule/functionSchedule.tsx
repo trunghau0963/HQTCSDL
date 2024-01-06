@@ -98,7 +98,7 @@ export const PostAppointment = ({
                   class="modal-title fw-bold mx-3 my-3 text-center"
                   id="contactInfoModalLabel"
                 >
-                  Appoinmnent Detail
+                  Appointment Detail
                 </h1>
                 <button
                   class="fw-bold btn btn-success rounded-pill text-center"
@@ -164,6 +164,7 @@ export const AddScheduleFree = ({
                       <form
                         id="add-free-schedule-form"
                         hx-post={`/${url}/schedule/freeSchedule`}
+                        hx-target-error="#error"
                       >
                         <div class="col-sm-12">
                           <div class="form-group">
@@ -222,6 +223,7 @@ export const AddScheduleFree = ({
                             Add Schedule
                           </button>
                         </div>
+                        <div id="error" class="invalid-feedback d-block"></div>
                       </form>
                     </div>
                   </div>
@@ -312,7 +314,7 @@ export const AddAppointment = ({
                   class="modal-title fw-bold mx-3 my-3 text-center"
                   id="contactInfoModalLabel"
                 >
-                  Add Appoinmnent
+                  Add Appointment
                 </h1>
                 <button
                   class="fw-bold btn btn-warning rounded-pill text-center"
@@ -385,7 +387,7 @@ export const DeleteAppointment = ({
                   class="modal-title fw-bold mx-3 my-3 text-center"
                   id="contactInfoModalLabel"
                 >
-                  Add Appoinmnent
+                  Add Appointment
                 </h1>
                 <button
                   class="fw-bold btn btn-warning rounded-pill text-center"

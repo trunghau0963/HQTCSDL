@@ -26,8 +26,8 @@ export const addSchedule = async (req: Request, res: Response, url: string) => {
       .send("successful register Schedule");
   } catch (error) {
     if (error instanceof Error) {
-      console.error(error.message);
-      return res.status(400).send(error.message);
+      console.error('Failed register Schedule', error.message);
+      return res.status(400).send('Failed register Schedule, your time or your date is not available');
     }
     return res
       .status(500)

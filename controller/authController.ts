@@ -71,7 +71,11 @@ export const SigninController = async (req: Request, res: Response) => {
 
     if (error instanceof Error) {
       console.error(error.message);
-      return res.status(400).send(error.message);
+      return res.status(400).send(`
+      <div class="alert alert-danger" role="alert">
+        ${error.message}
+      </div>
+      `);
     }
 
     return res.status(500).send("Login failed. Please try again later.");
