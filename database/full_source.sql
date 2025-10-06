@@ -4350,11 +4350,11 @@ COMMIT TRAN
 --Phan quyen
 --Tao login
 GO
-EXEC SP_ADDLOGIN 'benhnhan', 'benhnhan'
-EXEC SP_ADDLOGIN 'nhasi', 'nhasi'
-EXEC SP_ADDLOGIN 'quantri', 'quantri'
-EXEC SP_ADDLOGIN 'nhanvien', 'nhanvien'
-EXEC SP_ADDLOGIN 'khach', 'khach'
+EXEC SP_ADDLOGIN 'benhnhan', 'Benhnhan123!'
+EXEC SP_ADDLOGIN 'nhasi', 'Nhasi123!'
+EXEC SP_ADDLOGIN 'quantri', 'Quantri123!'
+EXEC SP_ADDLOGIN 'nhanvien', 'Nhanvien123!'
+EXEC SP_ADDLOGIN 'khach', 'Khach123!'
 
 --Tao user
 Create User user_1 From Login benhnhan with default_schema = QLPHONGKHAM
