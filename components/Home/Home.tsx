@@ -1,6 +1,18 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-const HomeComponent = () => {
+import { Dentist, Service } from "../../model/model";
+import { AddAppointmentByDentist } from "./functionHome";
+import Calendar from "../calendar";
+import DentistAvailable from "../dentistList";
+const HomeComponent = ({
+  listDentist,
+  listService,
+  role,
+}: {
+  listDentist: Dentist[];
+  listService: Service[];
+  role: string;
+}) => {
   return (
     <BaseHtml>
       <div>
@@ -10,9 +22,15 @@ const HomeComponent = () => {
             <h2>
               We are here to justify your medical needs and secure well being
             </h2>
-            <a href="#about" class="btn-get-started scrollto">
-              Get Started
-            </a>
+            {role === "guest" ? (
+              <a href="/auth/login" class="btn-get-started scrollto">
+                Get Started
+              </a>
+            ) : (
+              <a href="#dentist" class="btn-get-started scrollto">
+                Book Appointment
+              </a>
+            )}
           </div>
         </section>
         <main id="main">
@@ -30,7 +48,7 @@ const HomeComponent = () => {
                       by you to provide you with all forms of medical justice.
                     </p>
                     <div class="text-center">
-                      <a href="#" class="more-btn">
+                      <a href="#service" class="more-btn">
                         Learn More <i class="bx bx-chevron-right"></i>
                       </a>
                     </div>
@@ -44,7 +62,7 @@ const HomeComponent = () => {
                           <i class="bx bx-plus-medical"></i>
                           <h4>Best Services</h4>
                           <p>
-                            If you are at Healthifer, you must be the one values
+                            If you are at HMS Clinic, you must be the one values
                             quality. And you are at the right place for it.
                           </p>
                         </div>
@@ -54,7 +72,7 @@ const HomeComponent = () => {
                           <i class="bx bx-heart"></i>
                           <h4>Trustworthy</h4>
                           <p>
-                            Trust is the pillars on which we stand. Healthifer
+                            Trust is the pillars on which we stand. HMS Clinic
                             ensures you get all the justice for what you pay.
                           </p>
                         </div>
@@ -83,181 +101,96 @@ const HomeComponent = () => {
               </div>
 
               <div class="row">
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-heartbeat"></i>
+                {listService.map((service: Service, idx: number) => (
+                  <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
+                    <div class="icon-box w-100">
+                      <div class="icon">
+                        <i class="bi bi-database-fill-gear"></i>
+                      </div>
+                      <h4>
+                        <a
+                          href="http://localhost/HMS/services.html"
+                          target="_blank"
+                        >
+                          {service.TENDV}
+                        </a>
+                      </h4>
+                      <div class="d-flex justify-content-between mx-5">
+                        <p class="fw-bold text-secondary ms-5">
+                          ID{" "}
+                          <span class="text-sm fw-normal text-dark">
+                            {service.MADV}
+                          </span>
+                        </p>
+                        <p class="fw-bold text-secondary ms-2">
+                          Price{" "}
+                          <span class="text-sm fw-normal text-dark me-5">
+                            {service.DONGIA}
+                          </span>
+                        </p>
+                      </div>
                     </div>
-                    <h4>
-                      <a
-                        href="https://healthifer-multimed.netlify.app/"
-                        target="_blank"
-                      >
-                        Arogya Pro
-                      </a>
-                    </h4>
-                    <p>
-                      Multi-disease prediction, analysis and pathological
-                      laboratory services{" "}
-                    </p>
                   </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-chart-area"></i>
-                    </div>
-                    <h4>
-                      <a
-                        href="https://healthyments.streamlit.app/"
-                        target="_blank"
-                      >
-                        Medisentiments
-                      </a>
-                    </h4>
-                    <p>
-                      Dedicated medical sentiment analysis from Twitter posts.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-hospital-user"></i>
-                    </div>
-                    <h4>
-                      <a href="https://www.who.int/" target="_blank">
-                        Medical Awareness
-                      </a>
-                    </h4>
-                    <p>
-                      A WHO (World Health Organization) powered awareness and
-                      information website.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-hospital"></i>
-                    </div>
-                    <h4>
-                      <a
-                        href="http://localhost/HMS/services.html"
-                        target="_blank"
-                      >
-                        Hospital Management
-                      </a>
-                    </h4>
-                    <p>
-                      Dedicated, efficient and lightweight hospital services
-                      portal for clients.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-syringe"></i>
-                    </div>
-                    <h4>
-                      <a href="http://127.0.0.1:8000/" target="_blank">
-                        Blood Bank
-                      </a>
-                    </h4>
-                    <p>
-                      In house provisions for blood donation and blood reception
-                      from blodd bank.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-dna"></i>
-                    </div>
-                    <h4>
-                      <a
-                        href="https://insure-health.netlify.app/"
-                        target="_blank"
-                      >
-                        Insurance Manager
-                      </a>
-                    </h4>
-                    <p>
-                      Predict insurance premiums and manage insurance portfolios
-                      with secure Blockchain.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-egg"></i>
-                    </div>
-                    <h4>
-                      <a
-                        href="http://localhost/odlms/login.php"
-                        target="_blank"
-                      >
-                        Pathological Labs
-                      </a>
-                    </h4>
-                    <p>
-                      AI based healthy diet recommendation system for patients
-                      who need special diet care.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-peace"></i>
-                    </div>
-                    <h4>
-                      <a href="https://yogasmart.netlify.app/" target="_blank">
-                        Yogafit
-                      </a>
-                    </h4>
-                    <p>
-                      Healthiness application that teaches and trains people to
-                      practice Yoga in a proper way.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-                  <div class="icon-box">
-                    <div class="icon">
-                      <i class="fas fa-pills"></i>
-                    </div>
-                    <h4>
-                      <a
-                        href="https://www.google.com/maps/search/nearest+pharmacy+to+me/@12.8117892,80.0335595,14z/data=!3m1!4b1"
-                        target="_blank"
-                      >
-                        Pharmacy Friend
-                      </a>
-                    </h4>
-                    <p>
-                      Complete Pharmacy management system for better delivery of
-                      drugs and maintenance.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </section>
 
-          <section id="doctors" class="doctors">
-            <div class="container"></div>
+          <section id="dentist" class="services">
+            <div class="container">
+              <div class="section-title">
+                <h2>Dentists</h2>
+              </div>
+
+              <div class="row">
+                {listDentist.map((dentist: Dentist, idx: number) => (
+                  <div class="col-lg-4 col-md-6 d-flex align-items-stretch my-2">
+                    <div class="icon-box w-100">
+                      <div class="icon">
+                        <i class="bi bi-person-circle"></i>
+                      </div>
+                      <h4>
+                        <a
+                          href="https://healthifer-multimed.netlify.app/"
+                          target="_blank"
+                        >
+                          {dentist.HOTEN}
+                        </a>
+                      </h4>
+                      <div class="p-6">
+                        <p class="fw-bold">Contact Information</p>
+                        <p class="text-gray-500 dark:text-gray-400">
+                          {dentist.MANS}
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400">
+                          {dentist.DIENTHOAI}
+                        </p>
+                      </div>
+                      <AddAppointmentByDentist
+                        idDentist={dentist.MANS}
+                        nameOfDentist={dentist.HOTEN}
+                        idx={idx}
+                        role={role}
+                      />
+                      <div class="p-6"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="schedule">
+            <div class="container">
+              <div class="section-title">
+                <h2>Schedules</h2>
+              </div>
+
+              <main class="d-flex align-items-center justify-content-center">
+                <Calendar role={role} />
+                <DentistAvailable />
+              </main>
+            </div>
           </section>
 
           <section id="gallery" class="gallery">
@@ -405,9 +338,6 @@ const HomeComponent = () => {
                 width="600"
                 height="450"
                 style="border:0; width: 100%; height: 350px;"
-                // allowfullscreen=""
-                // loading="lazy"
-                // referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
 
@@ -418,7 +348,9 @@ const HomeComponent = () => {
                     <div class="address">
                       <i class="bi bi-geo-alt"></i>
                       <h4>Location:</h4>
-                      <p>227 Nguyen Van Cu, Ward 4, District 5, Ho Chi Minh City </p>
+                      <p>
+                        227 Nguyen Van Cu, Ward 4, District 5, Ho Chi Minh City{" "}
+                      </p>
                     </div>
 
                     <div class="email">
@@ -480,7 +412,9 @@ const HomeComponent = () => {
                       ></textarea>
                     </div>
                     <div class="text-center">
-                      <button class="btn btn-primary submit-btn my-3">Send Message</button>
+                      <button class="btn btn-primary submit-btn my-3">
+                        Send Message
+                      </button>
                     </div>
                   </form>
                 </div>

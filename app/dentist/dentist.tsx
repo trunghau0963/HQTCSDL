@@ -1,6 +1,6 @@
 import * as elements from "typed-html";
 import BaseHtml from "../../layouts/baseHtml";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../layouts/navbar";
 import { DENTISTNAVIGATIONS } from "../../constant";
 import Footer from "../../components/Footer";
 const DentistPage = ({ children }: elements.Children) => {
@@ -11,7 +11,7 @@ const DentistPage = ({ children }: elements.Children) => {
         url={"/dentist"}
         NAVIGATIONS={DENTISTNAVIGATIONS}
       />
-      <div class="w-100">{children}</div>
+      <div class="w-100  min-vh-100">{children}</div>
       <Footer/>
     </BaseHtml>
   );

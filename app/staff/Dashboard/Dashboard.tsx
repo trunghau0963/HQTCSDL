@@ -23,14 +23,21 @@ const TOOLS = (baseUrl: string): any[] => [
     url: `${baseUrl}/service`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  },  
+  },
   {
     title: "Drug",
     icon: "/icons/drug.svg",
     url: `${baseUrl}/drug`,
     color: "btn btn-outline-danger",
     slug: "drug",
-  },  
+  },
+  {
+    title: "Invoice",
+    icon: "/icons/receipt.svg",
+    url: `${baseUrl}/invoice`,
+    color: "btn btn-outline-warning",
+    slug: "invoice",
+  },
 ];
 
 const Dashboard = () => {
@@ -47,7 +54,7 @@ const Dashboard = () => {
         </div>
       </div>
       <main id="main">
-        <ToolNavigation NAVIGATIONS={TOOLS} url="/staff" numberOfOption={3} />
+        <ToolNavigation NAVIGATIONS={TOOLS} url="/staff" numberOfOption={4} />
       </main>
     </StaffPage>
   );

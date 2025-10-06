@@ -1,11 +1,12 @@
 import * as elements from "typed-html";
 import PatientPage from "../patient";
 import ListRole from "../../../components/ListRole";
+import { Dentist as DentistProps } from "../../../model/model";
 
-const Dentist = () => {
+const Dentist = ({dentists}:{dentists:DentistProps[]}) => {
   return (
     <PatientPage>
-      <ListRole/>
+      <ListRole dentists = {dentists}/>
     </PatientPage>
   );
 };

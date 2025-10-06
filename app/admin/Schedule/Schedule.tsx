@@ -1,13 +1,26 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import Appointment from "../../../components/Appointment/appointment";
+import { AllScheduleComponent } from "../../../components/Dentist/Schedule/ScheduleComponent";
+import { Schedule, AppointmentDetail, AppointmentDetailProps } from "../../../model/model";
 
-const Schedule = () => {
+const SchedulePage = ({
+  Free,
+  Registered,
+  RegisteredFinished,
+}: {
+  Free: Schedule[];
+  Registered: AppointmentDetail[];
+  RegisteredFinished: AppointmentDetailProps[];
+}) => {
   return (
     <AdminPage>
-      <Appointment/>
+      <AllScheduleComponent
+        Free={Free}
+        Registered={Registered}
+        RegisteredFinished={RegisteredFinished}
+      />
     </AdminPage>
   );
 };
 
-export default Schedule;
+export default SchedulePage;

@@ -1,69 +1,620 @@
 import { Router } from "express";
+import { Request, Response } from "express";
 import * as elements from "typed-html";
 import AdminPage from "../../app/admin/admin";
 import DashBoard from "../../app/admin/Dashboard/Dashboard";
-import Drug from "../../app/admin/Drugs/Drugs";
-import Schedule from "../../app/admin/Schedule/Schedule";
-import AddAppointmentPage from "../../app/admin/Schedule/AddAppointment";
-import DeleteAppointmentPage from "../../app/admin/Schedule/DeleteAppointment";
-import EditAppointmentPage from "../../app/admin/Schedule/EditAppointment";
+import DrugPage from "../../app/admin/Drugs/Drugs";
 import DentistPage from "../../app/admin/Dashboard/Dentists/Dentist";
 import StaffPage from "../../app/admin/Dashboard/Staffs/Staff";
 import PatientPage from "../../app/admin/Dashboard/Patients/Patient";
-import Service from "../../app/admin/Service/Service";
-import Profile from "../../components/info/Profile";
+import ServicePage from "../../app/admin/Service/Service";
+import {
+  Admin,
+  drugProps,
+  Patient,
+  Dentist,
+  Staff,
+  Appointment,
+  Service,
+  Invoice,
+  AppointmentDetailProps,
+  Schedule,
+  AppointmentDetail,
+  User,
+} from "../../model/model";
+import { admin } from "../auth/router";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { getAdminById } from "../../controller/adminController";
+import {
+  getAllStaff,
+  createStaff,
+  getStaffByNameCharacter,
+} from "../../controller/staffController";
+import {
+  createPatient,
+  getAllPatient,
+  getPatientByNameChar,
+  updatePatient,
+} from "../../controller/patientController";
+import {
+  getAllDentist,
+  createDentist,
+  getDentistByNameChar,
+} from "../../controller/dentistController";
+import ProfilePage from "../../app/admin/Profile/Profile";
+import {
+  addDrug,
+  editDrugQuantity,
+  deleteDrug,
+  getDrugByName,
+  getDrugByNameChar,
+  getDrugInfo,
+  updateInfoDrug,
+} from "../../controller/drugController";
+import {
+  getService,
+  getServiceById,
+  getServiceByName,
+  deleteService,
+  updateService,
+  addService,
+  getServiceByNameChar,
+} from "../../controller/serviceController";
 
+import {
+  registerAppointment,
+  deleteAppointment,
+  updateAppointment,
+  getAppointment,
+  getAppointmentIsDoneOfDentist,
+  getAppointmentIsDone,
+  getAppointmentUnfinished,
+  getAppointmentUnfinishedByName,
+  getAppointmentIsDoneByName,
+} from "../../controller/appoinmentController";
+
+import { getInvoice } from "../../controller/invoiceController";
+import EditProfile from "../../app/patient/Profile/EditProfile";
+import EditProfilePage from "../../app/admin/Profile/EditProfile";
+import {
+  getFreeSchedule,
+  getFreeScheduleByName,
+} from "../../controller/scheduleController";
+import SchedulePage from "../../app/admin/Schedule/Schedule";
+import {
+  SearchDrugResult,
+  SearchResult,
+  SearchScheduleResult,
+  SearchServiceResult,
+} from "../../components/Table/functionSearchResult";
 const adminRouter = Router();
-
-adminRouter.get("/", async (req, res) => {
-  return res.send(<AdminPage />);
+adminRouter.get("/dashboard", admin, async (req, res) => {
+  try {
+    return res.send(<DashBoard />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-adminRouter.get("/dashboard", async (req, res) => {
-  return res.send(<DashBoard />);
+adminRouter.get("/drug", [
+  admin,
+  async (req: any, res: any) => {
+    try {
+      const drugs: drugProps[] = (await getDrugInfo(req, res)) || [];
+      const invoices: Invoice[] = (await getInvoice(req, res)) || [];
+      return res.send(<DrugPage drugs={drugs} invoices={invoices} />);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send("Internal Server Error");
+    }
+  },
+]);
+
+adminRouter.post("/drug", admin, async (req: any, res: any) => {
+  try {
+    addDrug(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+adminRouter.delete("/drug", admin, async (req: any, res: any) => {
+  try {
+    deleteDrug(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+adminRouter.put("/drug", admin, async (req: any, res: any) => {
+  try {
+    updateInfoDrug(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
+adminRouter.get("/dentist", admin, async (req, res) => {
+  try {
+    const input = req.query;
+    const searchValue = input.search as string;
 
-adminRouter.get("/drug", async (req, res) => {
-  return res.send(<Drug />);
+    console.log("Search value in get:", searchValue);
+    const dentists: Dentist[] = (
+      await (await req.db()).execute("GET_INFO_NHASI")
+    ).recordset;
+    return res.send(<DentistPage />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-adminRouter.get("/schedule", async (req, res) => {
-  return res.send(<Schedule />);
+adminRouter.post("/dentist/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let dentist: Dentist[] = [];
+  console.log("name", name);
+  try {
+    dentist = (await getDentistByNameChar(req, res, name)) as Dentist[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchResult users={dentist} role="dentist" />);
 });
 
-adminRouter.get("/schedule/add_appointment", async (req, res) => {
-  return res.send(<AddAppointmentPage />);
+adminRouter.post("/patient/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Patient: Patient[] = [];
+  console.log("name", name);
+  try {
+    Patient = (await getPatientByNameChar(req, res, name)) as Patient[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchResult users={Patient} role="patient" />);
 });
 
-adminRouter.get("/schedule/delete_appointment", async (req, res) => {
-  return res.send(<DeleteAppointmentPage />);
+adminRouter.post("/staff/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Staff: Staff[] = [];
+  console.log("name", name);
+  try {
+    Staff = (await getStaffByNameCharacter(req, res, name)) as Staff[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchResult users={Staff} role="staff" />);
 });
 
-adminRouter.get("/schedule/edit_appointment", async (req, res) => {
-  return res.send(<EditAppointmentPage />);
+adminRouter.post("/drug/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Drug: drugProps[] = [];
+  console.log("name", name);
+  try {
+    Drug = (await getDrugByNameChar(req, res, name)) as drugProps[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<SearchDrugResult drugs={Drug} role="drug" url="admin" />);
 });
 
-adminRouter.get("/dentist", async (req, res) => {
-  return res.send(<DentistPage />);
+adminRouter.post("/service/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let Service: Service[] = [];
+  console.log("name", name);
+  try {
+    Service = (await getServiceByNameChar(req, res, name)) as Service[];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(
+    <SearchServiceResult services={Service} role="service" url="admin" />
+  );
 });
 
-adminRouter.get("/staff", async (req, res) => {
-  return res.send(<StaffPage />);
+adminRouter.post("/schedule/search", admin, async (req, res) => {
+  const { name } = req.body;
+  let scheduleFree: Schedule[] = [];
+  let scheduleRegistered: AppointmentDetail[] = [];
+  let scheduleRegistereFinished: AppointmentDetail[] = [];
+  console.log("name", name);
+  try {
+    scheduleFree = (await getFreeScheduleByName(req, res, name)) || [];
+    scheduleRegistered = (await getAppointmentUnfinishedByName(
+      req,
+      res,
+      name
+    )) as [];
+    scheduleRegistereFinished = (await getAppointmentIsDoneByName(
+      req,
+      res,
+      name
+    )) as [];
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(
+    <SearchScheduleResult
+      Free={scheduleFree}
+      Registered={scheduleRegistered}
+      RegisteredFinished={scheduleRegistereFinished}
+      role="schedule"
+    />
+  );
 });
 
+adminRouter.put("/dentist", admin, async (req, res) => {
+  try {
+    const { id, name, pwd, dob, address } = req.body;
+    const dentist: Dentist[] = (
+      await (await req.db())
+        .input("MANS", id)
+        .input("MATKHAU", pwd)
+        .input("HOTEN", name)
+        .input("NGAYSINH", dob)
+        .input("DIACHI", address)
+        .execute("UPDATE_INFO_NHASI")
+    ).recordset;
 
-adminRouter.get("/patient", async (req, res) => {
-  return res.send(<PatientPage />);
+    return res
+      .header("HX-Redirect", `/admin/dentist`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-adminRouter.get("/service", async (req, res) => {
-  return res.send(<Service />);
+adminRouter.post("/dentist", admin, createDentist);
+
+adminRouter.get("/staff", admin, async (req, res) => {
+  try {
+    const input = req.body;
+    console.log(input);
+    const staffs: Staff[] = (
+      await (await req.db()).execute("GET_INFO_NHANVIEN")
+    ).recordset;
+    return res.send(<StaffPage staffs={staffs} />);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-adminRouter.get("/profile", async (req, res) => {
-  return res.send(<Profile />);
+adminRouter.post("/staff", admin, createStaff);
+
+adminRouter.put("/staff", admin, async (req, res) => {
+  try {
+    const { id, name, pwd, dob, address } = req.body;
+    const patient: Patient[] = (
+      await (await req.db())
+        .input("MANV", id)
+        .input("MATKHAU", pwd)
+        .input("HOTEN", name)
+        .input("NGAYSINH", dob)
+        .input("DIACHI", address)
+        .execute("UPDATE_INFO_NHANVIEN")
+    ).recordset;
+
+    return res
+      .header("HX-Redirect", `/admin/staff`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
+adminRouter.get("/patient", admin, async (req, res) => {
+  try {
+    const input = req.body;
+    console.log(input);
+    const patients: Patient[] = (
+      await (await req.db()).execute("GET_INFO_BENHNHAN")
+    ).recordset;
+
+    return res.send(<PatientPage patients={patients} />);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.post("/patient", admin, createPatient);
+
+adminRouter.put("/patient", admin, async (req, res) => {
+  try {
+    const { id, name, pwd, dob, address } = req.body;
+    const patient: Patient[] = (
+      await (await req.db())
+        .input("MABN", id)
+        .input("MATKHAU", pwd)
+        .input("HOTEN", name)
+        .input("NGAYSINH", dob)
+        .input("DIACHI", address)
+        .execute("UPDATE_INFO_BENHNHAN")
+    ).recordset;
+
+    return res
+      .header("HX-Redirect", `/admin/patient`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.get("/service", admin, async (req, res) => {
+  let data: Service[] = [];
+  try {
+    data = (await getService(req, res)) as Service[];
+    return res.send(<ServicePage services={data} />);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.post("/service", admin, async (req: Request, res: Response) => {
+  try {
+    addService(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+adminRouter.put("/service", admin, async (req: Request, res: Response) => {
+  try {
+    updateService(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+adminRouter.delete("/service", admin, async (req: Request, res: Response) => {
+  try {
+    deleteService(req, res, "admin");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.get("/information", admin, async (req, res) => {
+  let admin: Admin | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    admin = (await getAdminById(req, res, data.user.MAQT)) as Admin;
+  } catch (error) {
+    console.log(error);
+  }
+  return res.send(<ProfilePage data={admin} />);
+});
+
+adminRouter.get("/edit-profile", admin, async (req, res) => {
+  let data: Admin | undefined;
+  try {
+    const token = req.cookies.token as string;
+    const admin =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
+    data = (await getAdminById(req, res, admin.user.MAQT)) as Admin;
+    return res.send(<EditProfilePage data={data} />);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.put("/edit-profile", admin, async (req, res) => {
+  try {
+    const { MA, HOTEN, DIACHI, NGAYSINH, MATKHAU } = req.body;
+
+    const data: Patient = (
+      await (await req.db())
+        .input("MAQT", MA)
+        .input("MATKHAU", MATKHAU)
+        .input("HOTEN", HOTEN)
+        .input("NGAYSINH", NGAYSINH)
+        .input("DIACHI", DIACHI)
+        .execute("UPDATE_INFO_QUANTRI")
+    ).recordset[0];
+
+    return res
+      .header("HX-Redirect", `/admin/information`)
+      .json("Directed")
+      .status(200);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+adminRouter.put("/manageAccount", admin, async (req, res) => {
+  try {
+    let { id, role, isBlock } = req.body;
+
+    let viRole;
+    if (role === "patient") {
+      viRole = "BENHNHAN";
+    } else if (role === "dentist") {
+      viRole = "NHASI";
+    } else if (role === "staff") {
+      viRole = "NHANVIEN";
+    }
+
+    if (isBlock === "false") {
+      const result: User[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", viRole)
+          .execute("BLOCK_ACCOUNT")
+      ).recordset;
+    } else {
+      const result: User[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", viRole)
+          .execute("UNBLOCK_ACCOUNT")
+      ).recordset;
+    }
+    return res
+      .header("HX-Redirect", `/admin/${role}`)
+      .json("Directed")
+      .status(200);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+adminRouter.put("/manageAccount", admin, async (req, res) => {
+  try {
+    let { id, role, isBlock } = req.body;
+
+    if (isBlock === "false") {
+      const result: Dentist[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", role)
+          .execute("BLOCK_ACCOUNT")
+      ).recordset;
+    } else {
+      const result: Dentist[] = (
+        await (await req.db())
+          .input("MA", id)
+          .input("ROLE", role)
+          .execute("UNBLOCK_ACCOUNT")
+      ).recordset;
+    }
+    if (role === "BENHNHAN") {
+      role = "patient";
+    } else if (role === "NHASI") {
+      role = "dentist";
+    } else if (role === "NHANVIEN") {
+      role = "staff";
+    }
+    return res
+      .header("HX-Redirect", `/admin/${role}`)
+      .json("Directed")
+      .status(200);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+adminRouter.get("/edit-drug-quantity", admin, async (req, res) => {
+  const input = req.query;
+
+  const quantity = (input.SOLUONG as any).trim();
+  const id = `SOLUONG${input.idx}` || "SOLUONG";
+
+  return res.send(
+    <div class={`d-flex w-50 ${id}`}>
+      <span class="input-group-btn">
+        <button
+          onclick={`
+          if(document.getElementById('${id}').value == 0 || document.getElementById('${id}').value == null){
+            document.getElementById('${id}').value = ${quantity};  
+          }
+          var quantityInput = document.getElementById('${id}');
+          console.log(quantityInput.value);
+          var currentQuantity = parseInt(quantityInput.value, 10);
+          quantityInput.value = currentQuantity - 1;    
+          `}
+          class="quantity-left-minus btn btn-danger btn-number"
+        >
+          <i class="bi bi-arrow-down-short"></i>
+        </button>
+      </span>
+      <input
+        type="text"
+        id={`${id}`}
+        class="form-control"
+        name="SOLUONG"
+        value={quantity}
+        placeholder={`${quantity}`}
+        required=""
+        min="0"
+      />
+      <span class="input-group-btn">
+        <button
+          onclick={`
+          if(document.getElementById('${id}').value == 0 || document.getElementById('${id}').value == null){
+            document.getElementById('${id}').value = ${quantity};  
+          }  
+          var quantityInput = document.getElementById('${id}');
+          console.log(quantityInput.value);
+          var currentQuantity = parseInt(quantityInput.value, 10);
+          quantityInput.value = currentQuantity + 1;
+          `}
+          class="quantity-right-plus btn btn-tertiary btn-number text-white"
+        >
+          <i class="bi bi-arrow-up-short"></i>
+        </button>
+      </span>
+      <button
+        class="btn btn-success mx-2"
+        hx-post="/admin/edit-drug-quantity"
+        hx-vars={`{'MALO': '${input.MALO}', 'id': '${input.idx}', 'MATHUOC': '${input.MATHUOC}', 
+        'SOLUONG': '${quantity}',
+        'SOLUONGPROPS': document.getElementById('${id}').value }`}
+        hx-target={`#button-change-quantity-${input.MATHUOC}`}
+      >
+        Save
+      </button>
+    </div>
+  );
+});
+
+adminRouter.post("/edit-drug-quantity", admin, async (req, res) => {
+  const data: drugProps | undefined = await editDrugQuantity(req, res, "admin");
+
+  if (data === undefined) {
+    // Handle the case where data is undefined
+    return res.status(404).send("Drug information not found.");
+  }
+
+  const input = req.body;
+
+  const quantity = input.SOLUONG as any;
+  const id = input.id;
+
+  console.log(input);
+  console.log(id);
+
+  return res.send(
+    <div
+      id={`button-change-quantity-${data.MATHUOC}`}
+      class="d-flex align-items-center"
+    >
+      {/* <div id={`button-change-quantity-${data.MATHUOC}`}></div> */}
+      <button
+        class="btn btn-link text-decoration-none text-dark px-0"
+        hx-get={`/admin/edit-drug-quantity`}
+        hx-vars={`{'MALO': '${data.MALO}', 'MATHUOC': '${data.MATHUOC}', 'SOLUONG': '${data.SOLUONG}', 'idx': ${id}} `}
+        hx-target={`#button-change-quantity-${data.MATHUOC}`}
+      >
+        <div class="d-flex">
+          <p>{data.SOLUONG}</p>
+          <img
+            src="/icons/warning.svg"
+            class="mx-2"
+            style="width: 15px; height: 15px;"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Click to edit quantity"
+          />
+        </div>
+      </button>
+    </div>
+  );
+});
+
+adminRouter.get("/schedule", admin, async (req, res) => {
+  let scheduleFree: Schedule[] = [];
+  let scheduleRegistered: AppointmentDetail[] = [];
+  let scheduleRegistereFinished: AppointmentDetailProps[] = [];
+  scheduleFree = (await getFreeSchedule(req, res)) || [];
+  scheduleRegistered = (await getAppointmentUnfinished(req, res)) as [];
+  scheduleRegistereFinished = (await getAppointmentIsDone(req, res)) as [];
+
+  return res.send(
+    <SchedulePage
+      Free={scheduleFree}
+      Registered={scheduleRegistered}
+      RegisteredFinished={scheduleRegistereFinished}
+    />
+  );
+});
 
 export default adminRouter;

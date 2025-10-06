@@ -1,11 +1,12 @@
 import * as elements from "typed-html";
 import AdminPage from "../admin";
-import Service from "../../../components/Service/service";
+import ServiceComponent from "../../../components/Service/service";
+import { Service } from "../../../model/model";
 
-const ServicePage = () => {
+const ServicePage = ({ services }: { services: Service[] }) => {
   return (
     <AdminPage>
-      <Service/>
+      <ServiceComponent Data={services} url="admin" />
     </AdminPage>
   );
 };

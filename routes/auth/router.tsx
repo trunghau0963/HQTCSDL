@@ -1,36 +1,27 @@
 import { NextFunction, Request, Response, Router } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import mssql from "mssql";
-import { DbName, getDb } from "../../dbs";
+import { Role, getDatabase } from "../../config/config";
 import * as elements from "typed-html";
+import Error from "../../components/Error/ErrorPage";
 import Signup from "../../app/auth/Signup/Signup";
 import Login from "../../app/auth/Login/Login";
-
-const cookieOptions = {
-  secure: true,
-  httpOnly: true,
-  signed: true,
-};
-
-export type User = {
-  id: number;
-  name: string;
-  password: string;
-  phone: string;
-
-  gender?: string;
-  isLocked?: boolean;
-  dob?: Date;
-  address?: string;
-
-  role: DbName;
-};
+import {
+  SignupController,
+  SigninController,
+  LogoutController,
+} from "../../controller/authController";
+import { Dentist, User } from "../../model/model";
+import middlewareToken from "../../middleware/tokenMiddleware";
+import LandingPage from "../../app/landing/landing";
+import HomeComponent from "../../components/Home/Home";
+import { getAllDentist } from "../../controller/dentistController";
 
 declare global {
   namespace Express {
     interface Request {
       user?: User;
-      db: mssql.Request;
+      db: () => Promise<mssql.Request>;
     }
   }
 }
@@ -39,7 +30,7 @@ declare module "jsonwebtoken" {
   export interface JwtPayload {
     phone: string;
     password: string;
-    role: DbName;
+    role: Role;
   }
 }
 
@@ -48,33 +39,26 @@ export const getRole = async (
   res: Response,
   next: NextFunction
 ) => {
-  req.db = await getDb("guest");
+  req.db = async () => await getDatabase("KHACH");
 
   try {
-    const token = req.signedCookies.token;
-    const {
-      phone: phone,
-      password: password,
-      role: role,
-    } = (jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload) || {};
+    const token = req.cookies.token as string;
+    const data =
+      (jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload) || {};
 
+    const { DIENTHOAI, MATKHAU, role } = data.user;
     const user: User = {
       ...(
-        await req.db
-          .input("phone", phone)
-          .input("password", password)
-          .input("role", role)
-          .execute("getUserByCred")
+        await (await req.db())
+          .input("DIENTHOAI", DIENTHOAI)
+          .input("MATKHAU", MATKHAU)
+          .input("ROLE", role)
+          .execute("SIGN_IN")
       ).recordset[0],
       role,
     };
-
-    if (phone == null || password == null || user == null || user.id == null) {
-      throw null;
-    }
-
     req.user = user;
-    req.db = await getDb(role);
+    req.db = async () => await getDatabase(user.role);
     return next();
   } catch {
     return next();
@@ -82,19 +66,18 @@ export const getRole = async (
 };
 
 const role = async (
-  role: DbName,
+  role: Role,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   getRole(req, res, async () => {
     if (req.user?.role === role) {
+      console.log("user role : ", req.user?.role);
       return next();
     }
 
-    return res
-      .status(402)
-      .send("You are not authorized to perform this action");
+    return res.status(402).send(<Error />);
   });
 };
 
@@ -104,27 +87,26 @@ export const patient = async (
   next: NextFunction
 ) => {
   getRole(req, res, async () => {
-    if (req.user?.role !== "guest") {
+    if (req.user?.role !== "KHACH" && req.user?.role !== undefined) {
+      console.log("user role : ", req.user?.role);
       return next();
     }
 
-    return res
-      .status(401)
-      .send("You have to be logged in to perform this action");
+    return res.status(401).send(<Error />);
   });
 };
 
 export const admin = async (req: Request, res: Response, next: NextFunction) =>
-  role("admin", req, res, next);
+  role("QUANTRI", req, res, next);
 
 export const staff = async (req: Request, res: Response, next: NextFunction) =>
-  role("staff", req, res, next);
+  role("NHANVIEN", req, res, next);
 
 export const dentist = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => role("dentist", req, res, next);
+) => role("NHASI", req, res, next);
 
 const authRouter = Router();
 
@@ -136,84 +118,15 @@ authRouter.get("/login", async (req, res) => {
   return res.send(<Login />);
 });
 
-authRouter.post("/signup", async (req, res) => {
-  try {
-    const input = req.body;
-    const user: User = {
-      ...(
-        await req.db
-          .input("name", input.name)
-          .input("password", input.password)
-          .input("phone", input.phone)
-          .input("gender", input.gender)
-          .input("dob", input.dob)
-          .input("address", input.address)
-          .execute("createPatient")
-      ).recordset[0],
-      role: "patient",
-    };
+authRouter.post("/signup", SignupController);
 
-    res.cookie(
-      "token",
-      jwt.sign(
-        { phone: user.phone, password: user.password, role: user.role },
-        process.env.JWT_SECRET!
-      ),
-      cookieOptions
-    );
+authRouter.post("/login", SigninController);
 
-    return res.json({ ...user, password: undefined });
-  } catch (error: any) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      return res.status(400).send(error.message);
-    }
-
-    return res.status(500).send("Signup failed. Please try again later");
-  }
-});
-
-authRouter.post("/login", async (req, res) => {
-  try {
-    const { phone, password, role } = req.body;
-
-    const user: User = {
-      ...(
-        await req.db
-          .input("phone", phone)
-          .input("password", password)
-          .input("role", role)
-          .execute("getUserByCred")
-      ).recordset[0],
-      role,
-    };
-
-    if (phone == null || password == null || user == null || user.id == null) {
-      return res.status(401).send("Phone and password do not match");
-    }
-
-    res.cookie(
-      "token",
-      jwt.sign(
-        { phone: user.phone, password: user.password, role: user.role },
-        process.env.JWT_SECRET!
-      ),
-      cookieOptions
-    );
-
-    return res.json({ ...user, password: undefined });
-  } catch (error: any) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      return res.status(400).send(error.message);
-    }
-
-    return res.status(500).send("Signup failed. Please try again later");
-  }
-});
-
-authRouter.get("/logout", patient, async (req, res) => {
-  return res.clearCookie("token").end();
-});
+authRouter.post(
+  "/logout",
+  patient,
+  middlewareToken.verifyTokenMiddleware,
+  LogoutController
+);
 
 export default authRouter;
